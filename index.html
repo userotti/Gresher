@@ -144,7 +144,7 @@
 
 	var towers = [];
 	
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 6; i++) {
 	
 		towers.push(makeAndReturn());
 	}	
@@ -177,6 +177,7 @@
 	for (var i = 0; i < towers.length; i++) {
 			
 		towers[i].getChildAt(1).rotation = count * towers[i].reload;
+		towers[i].getChildAt(0).rotation = -(count * towers[i].reload/4) 
 
 
 	}	
