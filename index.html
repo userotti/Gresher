@@ -27,6 +27,26 @@
 	// add render view to DOM
 	document.body.appendChild(renderer.view);
 	
+
+	color_rooi1 = function(level){
+				
+
+
+				return '0x' + (function co(lor){   return (lor +=
+					  [level.toString(16),level.toString(16)][1])
+					  && (lor.length == 1) ?  lor : co(lor); })('') + 'b2211';
+	}
+
+	color_rooi2 = function(level){
+				
+
+
+				return '0x' + (function co(lor){   return (lor +=
+					  [level.toString(16),level.toString(16)][1])
+					  && (lor.length == 1) ?  lor : co(lor); })('') + 'b6622';
+	}
+
+
 	makeAndReturn = function() {
 
 
@@ -65,18 +85,16 @@
 
 			var body = new PIXI.Graphics();
 			var color;
-			var x,y
+			var x,y;
+
+
 
 
 				for (var i = 0; i <  5; i++) {
 
-					color = '0x' + (function co(lor){   return (lor +=
-					  ['a',5,5,'a',5,5,6,7,8,9,'a','b','c','a','a','a'][Math.floor(Math.random()*16)])
-					  && (lor.length == 2) ?  lor : co(lor); })('') + '3333'
-
-					x = Math.floor(Math.random() * tower.health/1.5)-tower.health/3;
-					y = Math.floor(Math.random() * tower.health/1.5)-tower.health/3;
-					radius = tower.health/(6.5+i);
+					x = Math.floor(Math.random() * 30)-15;
+					y = Math.floor(Math.random() * 30)-15;
+					radius = 5;
 
 					
 					/*body.lineStyle(radius/2, color, 1);
@@ -86,9 +104,15 @@
 					body.lineStyle(0, 0x000000, 0.0);*/
 
 
+
+					color = color_rooi1(i+4);
+
 					body.beginFill(color, 1);
 					body.drawCircle(x, y, radius);
 					body.endFill();		
+
+
+					color = color_rooi1(i+5);
 
 					body.beginFill(color, 1);
 					body.drawCircle(x/2, y/2, radius*1.5);
