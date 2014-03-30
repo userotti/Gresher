@@ -10,9 +10,12 @@
 		}
 	</style>
 	
+	<script src="js/libs/gamecore.min.js"></script>
 	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
 
-	<script src="js/towercreation.js"></script>
+	<script src="js/colorfuncs.js"></script>
+	<script src="js/towerpresets.js"></script>
+	<script src="js/tower.js"></script>
 	
 </head>
 <body>
@@ -29,37 +32,38 @@
 	// add render view to DOM
 	document.body.appendChild(renderer.view);
 	
-
-
-
 	
-
-
-
-	var towers = [];
-	
-	for (var i = 0; i < 6; i++) {
-	
-		towers.push(makeCrystalAndReturn());
-	}	
-
-
-
-	for (var i = 0; i < 6; i++) {
-	
-		towers.push(makeJellieAndReturn());
-	}	
-
-	for (var i = 0; i < towers.length; i++) {
-	
-
-		stage.addChild(towers[i]);
-
-	}	
-	//stage adding	
-
+	for (var i = 0; i < 5; i++) {
+		
+		
+		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", stage);
+		//stage.addChild(t.sprite);
+		
 	
 	
+	};
+
+	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", stage);
+
+	//t2.startMoving(100,100);
+	
+	//console.log(gamecore.DualPool.getPool(Tower).getUsedList() );
+	//console.log(gamecore.DualPool.getPool(Tower).getFreeList() );
+
+	
+	stage.click = stage.tap = function()
+	{
+		if (t2.moving == false){
+			
+			pos = stage.getMousePosition();
+			t2.startMoving(pos.x,pos.y);
+		}
+
+		
+	}
+	
+	
+
 
 	
 	var count = 0;
@@ -72,16 +76,15 @@
 
 	function loop() {
 		
-		count += 0.03;
+	
 		
-	for (var i = 0; i < towers.length; i++) {
-			
-		towers[i].getChildAt(1).rotation = count * towers[i].reload;
-		towers[i].getChildAt(0).rotation = -(count * towers[i].reload/4) 
 
-		towers[i].position.x = towers[i].position.x + towers[i].velx;
-		towers[i].position.y = towers[i].position.y + towers[i].vely;
-	}	
+		var next = gamecore.DualPool.getPool(Tower).getUsedList().first;
+		while( next )
+		{
+		    next.obj.update();
+		    next = next.nextLinked;
+		}
 
 	    	renderer.render(stage);
 	    	requestAnimFrame( loop );
