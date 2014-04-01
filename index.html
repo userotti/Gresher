@@ -12,7 +12,7 @@
 	
 	<script src="js/libs/gamecore.min.js"></script>
 	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
-
+	<script src="js/world.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
 	<script src="js/tower.js"></script>
@@ -31,19 +31,52 @@
 	 
 	// add render view to DOM
 	document.body.appendChild(renderer.view);
+
+
+
+
+	world1 = new PIXI.World();
+
+	Camera = new PIXI.DisplayObjectContainer();
+
+
+	stage.addChild(world1);
+
+	/*zerozeroworld = new PIXI.Graphics();
+
+
+
+	zerozeroworld.beginFill(0xffffff, 1);
+	zerozeroworld.drawCircle(0, 0,10);
+	zerozeroworld.endFill();
+
+	World.addChild(zerozeroworld);*/
+
+	world1.scale.x = 1;
+	world1.scale.y = 1;
+
+
+	
+
+	//console.log(world1.localTransform);
+
+
+
+	stage.addChild(Camera);
+	
 	
 	
 	for (var i = 0; i < 5; i++) {
 		
 		
-		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", stage);
+		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world1);
 		//stage.addChild(t.sprite);
 		
 	
 	
 	};
 
-	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", stage);
+	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world1);
 
 	//t2.startMoving(100,100);
 	
@@ -56,9 +89,14 @@
 		if (t2.moving == false){
 			
 			pos = stage.getMousePosition();
-			t2.startMoving(pos.x,pos.y);
+			t2.startMoving(t2.sprite.position.x - (500 - pos.x), t2.sprite.position.y - (150 - pos.y));
+
+			
+			
 		}
 
+		
+		console.log("stage clicked");
 		
 	}
 	
@@ -71,6 +109,11 @@
 
 	// run the render loop
 	requestAnimFrame(loop);
+
+	world1.position.x = world1.position.x + 10;
+	world1.position.y = world1.position.y + 10;
+	console.log(world1.position.x);
+	console.log(world1.position.y);
 
 
 
@@ -85,6 +128,9 @@
 		    next.obj.update();
 		    next = next.nextLinked;
 		}
+
+		world1.position.x = (500 - t2.sprite.position.x);
+		world1.position.y = (150 - t2.sprite.position.y);
 
 	    	renderer.render(stage);
 	    	requestAnimFrame( loop );
