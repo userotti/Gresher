@@ -29,7 +29,7 @@ BASICSTALAGMITE = {
 	"character_class" : "stalagmite",
 	"mass" : 100,
 	"health" : 2,
-	"speed" : 1,
+	"speed" : 0.5,
  	"shield": 0,
  	"shielrecharge": 0,
  	"range": 70,
