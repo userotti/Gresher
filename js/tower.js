@@ -113,15 +113,12 @@ Tower = gamecore.DualPooled('Tower',
 
  	setPos: function(posparams){
 
- 		this.pos.x = posparams.posx*1000;
-		this.pos.y = posparams.posy*300;
+ 		this.pos.x = posparams.posx;
+		this.pos.y = posparams.posy;
 
 		this.sprite.position.x = this.pos.x;
 		this.sprite.position.y = this.pos.y;
-			
-
-		
-
+	
 
 
  	},
@@ -211,7 +208,11 @@ Tower = gamecore.DualPooled('Tower',
 
 
  	linearTween: function (t, b, c, d) {
-	return c * Math.sin(t/d * (Math.PI/2)) + b;
+	t /= (d);
+	t--;
+
+	
+	return c*(t*t*t + 1) + b;
 	},
 
  	updateAnimation: function(){
@@ -222,6 +223,11 @@ Tower = gamecore.DualPooled('Tower',
  		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
  		this.body.rotation = this.body.rotation + (this.bodyrotation_speed);
  		this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
+
+ 		if (this.moving)
+ 		this.body.rotation += 0.05;
+
+ 		this.body.rotation += this.bodyrotation_speed;
 
  	},
 
@@ -240,18 +246,10 @@ Tower = gamecore.DualPooled('Tower',
  		}
  	},
 
- 	stopMoving: function(){
+ 	startMoving: function(x,y){
 
- 		this.moving = false;
- 		this.movingframe = 0;
  		this.pos.x = this.sprite.position.x;
 		this.pos.y = this.sprite.position.y;
-
-		this.bodyrotation_speed = this.bodyrotation_speed - 0.05;
-
- 	},
-
- 	startMoving: function(x,y){
 
  		this.moving = true;
  		this.movingframe = 0;
@@ -261,10 +259,24 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.moveframes = Math.sqrt(Math.pow(this.movevect.x, 2) + Math.pow(this.movevect.y, 2)) * this.speed;
 
-		this.bodyrotation_speed = this.bodyrotation_speed + 0.05;
+
+		//this.bodyrotation_speed = this.bodyrotation_speed + 0.05;
 
 
  	},
+
+ 	stopMoving: function(){
+
+ 		this.moving = false;
+ 		this.movingframe = 0;
+ 		this.pos.x = this.sprite.position.x;
+		this.pos.y = this.sprite.position.y;
+
+		//this.bodyrotation_speed = this.bodyrotation_speed - 0.05;
+
+ 	},
+
+ 	
 
 
  	update: function(){

@@ -9,10 +9,12 @@
 			background-color: #000000;
 		}
 	</style>
-	
+
+	<script src="js/globals.js"> </script>
+	<script src="js/libs/sylvester.js"></script>
 	<script src="js/libs/gamecore.min.js"></script>
 	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
-	<script src="js/world.js"></script>
+	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
 	<script src="js/tower.js"></script>
@@ -20,6 +22,7 @@
 </head>
 <body>
 	<script>
+
 	
 	
 	var stage = new PIXI.Stage(0x15284c, true);
@@ -35,102 +38,71 @@
 
 
 
-	world1 = new PIXI.World();
+	camera = new PIXI.Camera();
 
-	Camera = new PIXI.DisplayObjectContainer();
-
-
-	stage.addChild(world1);
-
-	/*zerozeroworld = new PIXI.Graphics();
+	world = new PIXI.DisplayObjectContainer();
 
 
-
-	zerozeroworld.beginFill(0xffffff, 1);
-	zerozeroworld.drawCircle(0, 0,10);
-	zerozeroworld.endFill();
-
-	World.addChild(zerozeroworld);*/
-
-	world1.scale.x = 1;
-	world1.scale.y = 1;
-
-
-	
-
-	//console.log(world1.localTransform);
-
-
-
-	stage.addChild(Camera);
 	
 	
 	
 	for (var i = 0; i < 5; i++) {
-		
-		
-		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world1);
+		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
 		//stage.addChild(t.sprite);
-		
-	
-	
 	};
 
-	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world1);
+	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
 
-	//t2.startMoving(100,100);
+	camera.following = t2;
+	camera.addChild(world);
+	stage.addChild(camera);
 	
+
+	
+	//t2.startMoving(100,100);
 	//console.log(gamecore.DualPool.getPool(Tower).getUsedList() );
 	//console.log(gamecore.DualPool.getPool(Tower).getFreeList() );
 
-	
+	var hoek;
+	var dist;
+
+
 	stage.click = stage.tap = function()
 	{
-		if (t2.moving == false){
+		if (true/*t2.moving == false*/){
 			
 			pos = stage.getMousePosition();
-			t2.startMoving(t2.sprite.position.x - (500 - pos.x), t2.sprite.position.y - (150 - pos.y));
 
+			dist = Math.sqrt(Math.pow((camera.screen_midx - pos.x),2) + Math.pow((camera.screen_midy - pos.y),2));
+
+			hoek = Math.atan((camera.screen_midy - pos.y) / (camera.screen_midx - pos.x)) - camera.rotation;
+
+			if ((camera.screen_midx - pos.x) > 0){
+
+				t2.startMoving(t2.sprite.position.x - (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y - (Math.sin(hoek)*dist)/camera.zoom);
 			
-			
+			}
+			else{	
+
+				t2.startMoving(t2.sprite.position.x + (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y + (Math.sin(hoek)*dist)/camera.zoom);
+			}
 		}
-
-		
-		console.log("stage clicked");
 		
 	}
-	
-	
-
-
-	
-	var count = 0;
 
 
 	// run the render loop
 	requestAnimFrame(loop);
 
-	world1.position.x = world1.position.x + 10;
-	world1.position.y = world1.position.y + 10;
-	console.log(world1.position.x);
-	console.log(world1.position.y);
-
-
 
 	function loop() {
-		
 	
-		
-
 		var next = gamecore.DualPool.getPool(Tower).getUsedList().first;
 		while( next )
 		{
 		    next.obj.update();
 		    next = next.nextLinked;
 		}
-
-		world1.position.x = (500 - t2.sprite.position.x);
-		world1.position.y = (150 - t2.sprite.position.y);
 
 	    	renderer.render(stage);
 	    	requestAnimFrame( loop );

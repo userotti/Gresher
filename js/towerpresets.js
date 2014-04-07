@@ -74,8 +74,8 @@ ONSCREENRANDOM = function(){
 
 	return({
 	
-	"posx" : Math.random(),
-	"posy" : Math.random(),
+	"posx" : Math.random() * (SCREEN_MIDX*2) ,
+	"posy" : Math.random() * (SCREEN_MIDY*2),
 	"velx" : Math.random()-0.5,
 	"vely" : Math.random()-0.5,
  	"accx" : 0,
