@@ -42,6 +42,9 @@ Tower = gamecore.DualPooled('Tower',
  	energyrecharge: 0,
  	magneticcharge: 0,
  	magneticrange: 0,
+ 	
+ 	maxboostpower: 0,
+
 
 
  	//visual aspects
@@ -61,6 +64,14 @@ Tower = gamecore.DualPooled('Tower',
  	pos: 0,
  	vel: 0,
  	acc: 0,
+ 	boostforce: 0,
+ 	frictionforce: 0,
+ 	
+ 	boosttarget: 0,
+ 	boostpower: 0,	
+ 	boostangle: 0,
+
+ 	//tween 
  	moving: false,
  	movingframe: 0,
  	movevect: 0,
@@ -82,9 +93,16 @@ Tower = gamecore.DualPooled('Tower',
  		this.hud = new PIXI.Graphics();
 		
 		this.pos = new PIXI.Point();
-		this.movevect = new PIXI.Point();
 		this.vel = new PIXI.Point();
 	 	this.acc = new PIXI.Point();
+	 	
+	 	this.boostforce = new PIXI.Point();
+	 	this.frictionforce = new PIXI.Point();
+
+
+	 	this.boosttarget = new PIXI.Point();
+
+	 	this.movevect = new PIXI.Point();
 	},
  
 
@@ -106,6 +124,7 @@ Tower = gamecore.DualPooled('Tower',
  		this.scale = charparams.mass/100;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
+    	this.maxboostpower = charparams.maxboostpower;
  		
 
 
@@ -118,7 +137,18 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.sprite.position.x = this.pos.x;
 		this.sprite.position.y = this.pos.y;
-	
+
+		this.vel.x = 0;
+		this.vel.y = 0;
+		
+		this.acc.x = 0;
+		this.acc.y = 0;
+
+		this.boosttarget.x = 0;
+		this.boosttarget.y = 0;
+
+		this.boostpower = 0;
+				
 
 
  	},
@@ -207,7 +237,7 @@ Tower = gamecore.DualPooled('Tower',
 
 
 
- 	linearTween: function (t, b, c, d) {
+ 	basicTween: function (t, b, c, d) {
 	t /= (d);
 	t--;
 
@@ -231,22 +261,24 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	updateMovement: function(){
+ 	updateTweenMovement: function(){
 
- 		if (this.moving == true){
+ 		/*if (this.moving == true){
  		
- 		  this.sprite.position.x = this.linearTween(this.movingframe, this.pos.x, this.movevect.x, this.moveframes);
- 		  this.sprite.position.y = this.linearTween(this.movingframe, this.pos.y, this.movevect.y, this.moveframes);
+ 		  this.sprite.position.x = this.basicTween(this.movingframe, this.pos.x, this.movevect.x, this.moveframes);
+ 		  this.sprite.position.y = this.basicTween(this.movingframe, this.pos.y, this.movevect.y, this.moveframes);
 
  		  this.movingframe += 1;
 
  		  if (this.movingframe >= this.moveframes)
  		  	this.stopMoving(); 
 
- 		}
+ 		}*/
  	},
 
- 	startMoving: function(x,y){
+
+ 	
+ 	startTweenMoving: function(x,y){
 
  		this.pos.x = this.sprite.position.x;
 		this.pos.y = this.sprite.position.y;
@@ -265,7 +297,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	stopMoving: function(){
+ 	stopTweenMoving: function(){
 
  		this.moving = false;
  		this.movingframe = 0;
@@ -277,6 +309,73 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
  	
+ 	checkboostdist: function(){
+
+
+		  return ( (Math.abs(this.boosttarget.x - this.pos.x) * 2 < (50)) && (Math.abs(this.boosttarget.y - this.pos.y) * 2 < (50)) );
+		
+ 	},
+
+ 	startBoost: function(px,py){
+
+ 		this.boosttarget.x = px;
+ 		this.boosttarget.y = py;
+
+ 		this.boostpower = this.maxboostpower;
+ 	},
+
+ 	stopBoost: function(px,py){
+
+ 		this.boostpower = 0;
+ 	},
+
+
+
+
+ 	updatePhysicsMovement: function(){
+
+ 		
+ 		
+
+ 		
+
+ 			if (this.checkboostdist()) this.stopBoost();
+
+	 		this.boostangle = Math.atan((this.boosttarget.y-this.pos.y) / (this.boosttarget.x-this.pos.x));
+
+	 		if ((this.boosttarget.x-this.pos.x) > 0) {
+	 				this.boostforce.x = Math.cos(this.boostangle)*this.boostpower;
+			 		this.boostforce.y = Math.sin(this.boostangle)*this.boostpower;
+			
+	 		}else
+	 		{
+
+	 			this.boostforce.x = -Math.cos(this.boostangle)*this.boostpower;
+			 	this.boostforce.y = -Math.sin(this.boostangle)*this.boostpower;
+	 		}
+	 
+			this.frictionforce.x = -(this.vel.x * 0.11);
+	 		this.frictionforce.y = -(this.vel.y * 0.11);
+	 		
+	 		this.acc.x = this.boostforce.x + this.frictionforce.x;
+	 		this.acc.y = this.boostforce.y + this.frictionforce.y;
+
+
+
+	 		this.vel.x += this.acc.x;
+	 		this.vel.y += this.acc.y;
+	 		
+	 		this.pos.x += this.vel.x;
+	 		this.pos.y += this.vel.y;
+
+	 		this.sprite.position.x = this.pos.x;
+	 		this.sprite.position.y = this.pos.y;
+	 		
+ 		
+
+ 		
+ 	},
+
 
 
  	update: function(){
@@ -284,7 +383,9 @@ Tower = gamecore.DualPooled('Tower',
  		
  		this.age += 1;
 
- 		this.updateMovement();
+ 		//this.updateTweenMovement();
+
+ 		this.updatePhysicsMovement();
 		this.updateAnimation();
  		 
 

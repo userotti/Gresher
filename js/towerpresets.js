@@ -16,8 +16,9 @@ BASICJELLY = {
 
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
- 	
 
+ 	
+ 	"maxboostpower" : 1,
  	
 
 
@@ -42,6 +43,8 @@ BASICSTALAGMITE = {
 
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
+ 	
+ 	"maxboostpower" : 1,
  
 
 }
@@ -66,6 +69,8 @@ BASICSTRUCT = {
 
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.1,
+ 	
+ 	"maxboostpower" : 1,
  
 
 }
