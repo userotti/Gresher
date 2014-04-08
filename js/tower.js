@@ -121,7 +121,7 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.energyrecharge = charparams.energyrecharge;
 	 	this.magneticcharge = charparams.magneticcharge;
  		this.magneticrange = charparams.magneticrange;
- 		this.scale = charparams.mass/100;
+ 		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
@@ -251,7 +251,7 @@ Tower = gamecore.DualPooled('Tower',
 
  		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
  		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
- 		this.body.rotation = this.body.rotation + (this.bodyrotation_speed);
+ 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);
  		this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
 
  		if (this.moving)
@@ -260,10 +260,10 @@ Tower = gamecore.DualPooled('Tower',
  		this.body.rotation += this.bodyrotation_speed;
 
  	},
-
+/*
  	updateTweenMovement: function(){
 
- 		/*if (this.moving == true){
+ 		if (this.moving == true){
  		
  		  this.sprite.position.x = this.basicTween(this.movingframe, this.pos.x, this.movevect.x, this.moveframes);
  		  this.sprite.position.y = this.basicTween(this.movingframe, this.pos.y, this.movevect.y, this.moveframes);
@@ -273,7 +273,7 @@ Tower = gamecore.DualPooled('Tower',
  		  if (this.movingframe >= this.moveframes)
  		  	this.stopMoving(); 
 
- 		}*/
+ 		}
  	},
 
 
@@ -306,7 +306,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		//this.bodyrotation_speed = this.bodyrotation_speed - 0.05;
 
- 	},
+ 	},*/
 
  	
  	checkboostdist: function(){
@@ -331,36 +331,41 @@ Tower = gamecore.DualPooled('Tower',
 
 
 
-
- 	updatePhysicsMovement: function(){
-
- 		
- 		
-
- 		
+ 	updateBoost: function(){
 
  			if (this.checkboostdist()) this.stopBoost();
+ 			
 
-	 		this.boostangle = Math.atan((this.boosttarget.y-this.pos.y) / (this.boosttarget.x-this.pos.x));
+ 			if ((this.boostpower) > 0) {
+ 				
+		 		this.boostangle = Math.atan2((this.boosttarget.y-this.pos.y), (this.boosttarget.x-this.pos.x));
+	
 
-	 		if ((this.boosttarget.x-this.pos.x) > 0) {
-	 				this.boostforce.x = Math.cos(this.boostangle)*this.boostpower;
-			 		this.boostforce.y = Math.sin(this.boostangle)*this.boostpower;
+
+		 	}	
+
+		 	this.boostforce.x = Math.cos(this.boostangle)*this.boostpower;
+			this.boostforce.y = Math.sin(this.boostangle)*this.boostpower;
 			
-	 		}else
-	 		{
 
-	 			this.boostforce.x = -Math.cos(this.boostangle)*this.boostpower;
-			 	this.boostforce.y = -Math.sin(this.boostangle)*this.boostpower;
-	 		}
+ 	},
+
+ 	updateFric: function(){
+
+
+		this.frictionforce.x = -(this.vel.x * 0.066);
+	 	this.frictionforce.y = -(this.vel.y * 0.066);
+	
+
+ 	},
+
+
+ 	updateMove: function(){
+
+
 	 
-			this.frictionforce.x = -(this.vel.x * 0.11);
-	 		this.frictionforce.y = -(this.vel.y * 0.11);
-	 		
-	 		this.acc.x = this.boostforce.x + this.frictionforce.x;
-	 		this.acc.y = this.boostforce.y + this.frictionforce.y;
-
-
+	 		this.acc.x = (this.boostforce.x + this.frictionforce.x)/this.mass;
+	 		this.acc.y = (this.boostforce.y + this.frictionforce.y)/this.mass;
 
 	 		this.vel.x += this.acc.x;
 	 		this.vel.y += this.acc.y;
@@ -370,8 +375,24 @@ Tower = gamecore.DualPooled('Tower',
 
 	 		this.sprite.position.x = this.pos.x;
 	 		this.sprite.position.y = this.pos.y;
-	 		
+
+	 	
  		
+
+ 	},
+
+
+ 	updatePhysicsMovement: function(){
+
+ 			this.updateBoost();
+
+ 			this.updateFric();
+ 			
+ 			this.updateMove();
+ 			
+
+
+ 			
 
  		
  	},
