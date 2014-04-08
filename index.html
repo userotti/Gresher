@@ -69,24 +69,28 @@
 
 	stage.click = stage.tap = function()
 	{
-		if (true/*t2.moving == false*/){
 			
 			pos = stage.getMousePosition();
-
+			
+			
+		
 			dist = Math.sqrt(Math.pow((camera.screen_midx - pos.x),2) + Math.pow((camera.screen_midy - pos.y),2));
-
 			hoek = Math.atan((camera.screen_midy - pos.y) / (camera.screen_midx - pos.x)) - camera.rotation;
 
 			if ((camera.screen_midx - pos.x) > 0){
 
-				t2.startMoving(t2.sprite.position.x - (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y - (Math.sin(hoek)*dist)/camera.zoom);
+				//t2.startTweenMoving(t2.sprite.position.x - (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y - (Math.sin(hoek)*dist)/camera.zoom);
+				t2.startBoost(t2.pos.x - (Math.cos(hoek)*dist)/camera.zoom, t2.pos.y - (Math.sin(hoek)*dist)/camera.zoom);
 			
 			}
 			else{	
 
-				t2.startMoving(t2.sprite.position.x + (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y + (Math.sin(hoek)*dist)/camera.zoom);
+				//t2.startTweenMoving(t2.sprite.position.x + (Math.cos(hoek)*dist)/camera.zoom, t2.sprite.position.y + (Math.sin(hoek)*dist)/camera.zoom);
+				t2.startBoost(t2.pos.x + (Math.cos(hoek)*dist)/camera.zoom, t2.pos.y + (Math.sin(hoek)*dist)/camera.zoom);
 			}
-		}
+
+
+		
 		
 	}
 
