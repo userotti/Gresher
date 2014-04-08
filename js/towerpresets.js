@@ -1,7 +1,7 @@
 BASICJELLY = {
 	
 	"character_class" : "jelly",
-	"mass" : 100,
+	"mass" : 1,
 	"health" : 5,
 	"speed" : 0.2,
  	"shield": 0,
@@ -18,7 +18,7 @@ BASICJELLY = {
  	"bodyrotation_speed": 0,
 
  	
- 	"maxboostpower" : 1,
+ 	"maxboostpower" : 0.5,
  	
 
 
@@ -28,7 +28,7 @@ BASICJELLY = {
 BASICSTALAGMITE = {
 	
 	"character_class" : "stalagmite",
-	"mass" : 100,
+	"mass" : 1,
 	"health" : 2,
 	"speed" : 0.5,
  	"shield": 0,
@@ -44,7 +44,7 @@ BASICSTALAGMITE = {
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
  	
- 	"maxboostpower" : 1,
+ 	"maxboostpower" : 0.5,
  
 
 }
@@ -54,7 +54,7 @@ BASICSTALAGMITE = {
 BASICSTRUCT = {
 	
 	"character_class" : "stalagmite",
-	"mass" : 100,
+	"mass" : 1,
 	"health" : 3,
 	"speed" : 1,
  	"shield": 0,
@@ -70,7 +70,7 @@ BASICSTRUCT = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.1,
  	
- 	"maxboostpower" : 1,
+ 	"maxboostpower" : 0.5,
  
 
 }
