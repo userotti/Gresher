@@ -1,16 +1,19 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Gresher</title>
+	<title>Gresher Alpha</title>
 
 
-    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
 
-	<script src="js/globals.js"> </script>
-	<script src="js/libs/sylvester.js"></script>
-	<script src="js/libs/gamecore.min.js"></script>
-	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
+    <!-- Libraries -->
+    <script src="bower_components/pixi/bin/pixi.dev.js"></script>
     <script src="js/libs/jquery-1.11.0.min.js"></script>
+    <script src="js/libs/sylvester.js"></script>
+    <script src="js/libs/gamecore.min.js"></script>
+
+    <!-- Gresher Javascript -->
+	<script src="js/globals.js"></script>
 	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
@@ -119,12 +122,8 @@
 
 
     function resize() {
-
-
         console.log( 'w: ' +$(window).width() );
         console.log( 'h: ' + $(window).height() );
-
-
     }
 
 
