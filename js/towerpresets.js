@@ -44,7 +44,7 @@ BASICSTALAGMITE = {
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
  	
- 	"maxboostpower" : 0.5,
+ 	"maxboostpower" : 0.5
  
 
 }

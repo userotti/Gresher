@@ -1,19 +1,16 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>pixi.js example 13 - Graphics</title>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			background-color: #000000;
-		}
-	</style>
+	<title>Gresher</title>
+
+
+    <link rel="stylesheet" href="styles.css" type="text/css" />
 
 	<script src="js/globals.js"> </script>
 	<script src="js/libs/sylvester.js"></script>
 	<script src="js/libs/gamecore.min.js"></script>
 	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
+    <!--<script src="js/libs/jquery-1.11.0.min.js"></script>-->
 	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
@@ -23,29 +20,45 @@
 <body>
 	<script>
 
-	
-	
-	var stage = new PIXI.Stage(0x15284c, true);
-	
+    //$(window).resize(resize)
+    //window.onorientationchange = resize;
+
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    var SCREEN_MIDX = 400;
+    var SCREEN_MIDY = 300;
+
+    if(w >= 800){
+        w = 800;
+        SCREEN_MIDX = 400;
+    } else {
+        SCREEN_MIDX = window.innerWidth/2;
+    }
+
+    if(h >= 600){
+        h = 600;
+        SCREEN_MIDY = 300;
+    } else {
+        SCREEN_MIDY = window.innerHeight/2;
+    }
+
+
+
+    var stage = new PIXI.Stage(0x15284c, true);
+
 	stage.setInteractive(true);
-	var renderer = PIXI.autoDetectRenderer(1000, 300);
-	
+	var renderer = PIXI.autoDetectRenderer(w, h);
+    renderer.view.id = "main-canvas";
 	renderer.view.style.display = "block";
 	 
 	// add render view to DOM
 	document.body.appendChild(renderer.view);
 
-
-
-
 	camera = new PIXI.Camera();
 
 	world = new PIXI.DisplayObjectContainer();
 
-
-	
-	
-	
 	for (var i = 0; i < 5; i++) {
 		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
 		//stage.addChild(t.sprite);
@@ -105,7 +118,7 @@
 	}
 
 
-	</script>
+    </script>
 
 	</body>
 </html>

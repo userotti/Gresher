@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+}
+
+#main-canvas {
+    position: fixed;
+    top:50%;
+    margin-top: -300px;
+    left: 50%;
+    margin-left: -400px;
+}
+
+@media only screen and (max-width:800px){
+
+   #main-canvas {
+        left: 0;
+        margin-left: 0;
+    }
+
+
+}
+
+@media only screen and (max-height:600px){
+
+    #main-canvas {
+        top: 0;
+        margin-top: 0;
+    }
+
+
+}

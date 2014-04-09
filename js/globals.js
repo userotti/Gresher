@@ -1,2 +1,1 @@
-var SCREEN_MIDX = 500;
-var SCREEN_MIDY = 150;
+/* Moved to index */
