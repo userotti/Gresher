@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
 
     <!-- Libraries -->
+    <script src="js/libs/stats.min.js"></script>
     <script src="bower_components/pixi/bin/pixi.dev.js"></script>
     <script src="js/libs/jquery-1.11.0.min.js"></script>
     <script src="js/libs/sylvester.js"></script>
@@ -54,6 +55,15 @@
 	var renderer = PIXI.autoDetectRenderer(w, h);
     renderer.view.id = "main-canvas";
 	renderer.view.style.display = "block";
+
+    stats = new Stats();
+
+
+    document.body.appendChild( stats.domElement );
+    stats.domElement.style.position = "fixed";
+    stats.domElement.style.zIndex = "999";
+    stats.domElement.style.bottom = "0px";
+    stats.domElement.style.right = "0px";
 	 
 	// add render view to DOM
 	document.body.appendChild(renderer.view);
@@ -102,11 +112,12 @@
 
 
 	// run the render loop
-	requestAnimFrame(loop);
+	requestAnimFrame(update);
 
+	function update() {
 
-	function loop() {
-		
+        stats.begin();
+
 		camera.zoom = 0.8 + 0.5 / ( ( Math.pow(t2.vel.x,2) + Math.pow(t2.vel.y,2) + 1))
 
 		var next = gamecore.DualPool.getPool(Tower).getUsedList().first;
@@ -116,8 +127,10 @@
 		    next = next.nextLinked;
 		}
 
-	    	renderer.render(stage);
-	    	requestAnimFrame( loop );
+        renderer.render(stage);
+        requestAnimFrame( update );
+
+        stats.end();
 	}
 
 
