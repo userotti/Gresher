@@ -65,7 +65,8 @@ Tower = gamecore.DualPooled('Tower',
  	vel: 0,
  	acc: 0,
  	boostforce: 0,
- 	frictionforce: 0,
+ 	movementfric: 0,
+ 	staticfric: 0,
  	
  	boosttarget: 0,
  	boostpower: 0,	
@@ -97,7 +98,8 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.acc = new PIXI.Point();
 	 	
 	 	this.boostforce = new PIXI.Point();
-	 	this.frictionforce = new PIXI.Point();
+	 	this.movementfric = new PIXI.Point();
+	 	this.staticfric = new PIXI.Point();
 
 
 	 	this.boosttarget = new PIXI.Point();
@@ -353,10 +355,11 @@ Tower = gamecore.DualPooled('Tower',
  	updateFric: function(){
 
 
-		this.frictionforce.x = -(this.vel.x * 0.066);
-	 	this.frictionforce.y = -(this.vel.y * 0.066);
-	
-
+		this.movementfric.x = -((this.vel.x * 0.20)); 
+	 	this.movementfric.y = -((this.vel.y * 0.20));
+ 		
+ 		
+ 			
  	},
 
 
@@ -364,8 +367,8 @@ Tower = gamecore.DualPooled('Tower',
 
 
 	 
-	 		this.acc.x = (this.boostforce.x + this.frictionforce.x)/this.mass;
-	 		this.acc.y = (this.boostforce.y + this.frictionforce.y)/this.mass;
+	 		this.acc.x = (this.boostforce.x + this.movementfric.x) / (this.mass*4); 
+	 		this.acc.y = (this.boostforce.y + this.movementfric.y) / (this.mass*4);
 
 	 		this.vel.x += this.acc.x;
 	 		this.vel.y += this.acc.y;
@@ -387,7 +390,7 @@ Tower = gamecore.DualPooled('Tower',
  			this.updateBoost();
 
  			this.updateFric();
- 			
+
  			this.updateMove();
  			
 
