@@ -10,7 +10,7 @@
 	<script src="js/libs/sylvester.js"></script>
 	<script src="js/libs/gamecore.min.js"></script>
 	<script src="bower_components/pixi/bin/pixi.dev.js"></script>
-    <!--<script src="js/libs/jquery-1.11.0.min.js"></script>-->
+    <script src="js/libs/jquery-1.11.0.min.js"></script>
 	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
@@ -20,7 +20,7 @@
 <body>
 	<script>
 
-    //$(window).resize(resize)
+    $(window).resize(resize)
     //window.onorientationchange = resize;
 
     var w = window.innerWidth;
@@ -116,6 +116,17 @@
 	    	renderer.render(stage);
 	    	requestAnimFrame( loop );
 	}
+
+
+    function resize() {
+
+
+        console.log( 'w: ' +$(window).width() );
+        console.log( 'h: ' + $(window).height() );
+
+
+    }
+
 
 
     </script>
