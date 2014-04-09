@@ -72,7 +72,7 @@
 
 	world = new PIXI.DisplayObjectContainer();
 
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 500; i++) {
 		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
 		//stage.addChild(t.sprite);
 	};
@@ -80,6 +80,7 @@
 	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
 
 	camera.following = t2;
+	t2.controlled = true;
 	camera.addChild(world);
 	stage.addChild(camera);
 	

@@ -78,6 +78,9 @@ Tower = gamecore.DualPooled('Tower',
  	movevect: 0,
  	moveframes: 0,
 
+ 	//AI
+ 	controlled: false,
+
  			
 
  	//misc
@@ -400,6 +403,22 @@ Tower = gamecore.DualPooled('Tower',
  		
  	},
 
+ 	updateAI: function(){
+
+ 		
+
+ 		if (((this.age % 100) == 0) && (!this.controlled)){
+
+ 			console.log("yof");
+
+ 			this.startBoost(this.pos.x+(Math.random()*500 - 250), this.pos.y+(Math.random()*500 - 250));
+
+
+ 		}
+
+
+ 	},
+
 
 
  	update: function(){
@@ -411,6 +430,8 @@ Tower = gamecore.DualPooled('Tower',
 
  		this.updatePhysicsMovement();
 		this.updateAnimation();
+
+		this.updateAI();
  		 
 
  	},
