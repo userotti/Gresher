@@ -51,9 +51,17 @@ PIXI.Camera = function()
 };
 
 // constructor
+
 PIXI.Camera.prototype = Object.create( PIXI.DisplayObjectContainer.prototype );
 PIXI.Camera.prototype.constructor = PIXI.Camera;
 
+
+PIXI.Camera.prototype.screenCenterView = function(mx,my){
+
+  this.screen_midx = mx;
+  this.screen_midy = my;
+
+}
 
 PIXI.Camera.prototype.printmymatrix = function()
 {

@@ -30,23 +30,12 @@
     var w = window.innerWidth;
     var h = window.innerHeight;
 
-    var SCREEN_MIDX = 400;
-    var SCREEN_MIDY = 300;
+    var SCREEN_MIDX = w/2;
+    var SCREEN_MIDY = h/2;
 
-    if(w >= 800){
-        w = 800;
-        SCREEN_MIDX = 400;
-    } else {
-        SCREEN_MIDX = window.innerWidth/2;
-    }
-
-    if(h >= 600){
-        h = 600;
-        SCREEN_MIDY = 300;
-    } else {
-        SCREEN_MIDY = window.innerHeight/2;
-    }
-
+    
+       
+  
 
 
     var stage = new PIXI.Stage(0x15284c, true);
@@ -80,6 +69,7 @@
 	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
 
 	camera.following = t2;
+	camera.screenCenterView(w/2,h/2);
 	t2.controlled = true;
 	camera.addChild(world);
 	stage.addChild(camera);
@@ -136,8 +126,16 @@
 
 
     function resize() {
-        console.log( 'w: ' +$(window).width() );
-        console.log( 'h: ' + $(window).height() );
+        //console.log( 'w: ' +$(window).width() );
+        //console.log( 'h: ' + $(window).height() );
+        
+        var w = $(window).width();
+   		var h = $(window).height();
+
+
+        camera.screenCenterView(w/2,h/2);
+        renderer.resize(w, h);
+
     }
 
 
