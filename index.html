@@ -15,6 +15,7 @@
 
     <!-- Gresher Javascript -->
 	<script src="js/globals.js"></script>
+	<script src="js/smaatclasses.js"></script>
 	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
@@ -61,7 +62,7 @@
 
 	world = new PIXI.DisplayObjectContainer();
 
-	for (var i = 0; i < 500; i++) {
+	for (var i = 0; i < 20; i++) {
 		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
 		//stage.addChild(t.sprite);
 	};
@@ -126,8 +127,7 @@
 
 
     function resize() {
-        //console.log( 'w: ' +$(window).width() );
-        //console.log( 'h: ' + $(window).height() );
+  
         
         var w = $(window).width();
    		var h = $(window).height();
