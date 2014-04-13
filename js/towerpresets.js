@@ -16,6 +16,7 @@ BASICJELLY = {
 
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
+ 	"fric_coeff": 0.20,
 
  	
  	"maxboostpower" : 0.5,
@@ -43,6 +44,7 @@ BASICSTALAGMITE = {
 
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
+ 	"fric_coeff": 0.20,
  	
  	"maxboostpower" : 0.95,
  
@@ -69,6 +71,7 @@ BASICSTRUCT = {
 
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.1,
+ 	"fric_coeff": 0.20,
  	
  	"maxboostpower" : 0.5,
  
@@ -81,8 +84,8 @@ ONSCREENRANDOM = function(){
 	
 	"posx" : Math.random() * (SCREEN_MIDX*2) ,
 	"posy" : Math.random() * (SCREEN_MIDY*2),
-	"velx" : Math.random()-0.5,
-	"vely" : Math.random()-0.5,
+	"velx" : 0,
+	"vely" : 0,
  	"accx" : 0,
  	"accy" : 0, });
  	

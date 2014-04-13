@@ -19,6 +19,8 @@
 	<script src="js/camera.js"></script>
 	<script src="js/colorfuncs.js"></script>
 	<script src="js/towerpresets.js"></script>
+	<script src="js/shrappresets.js"></script>
+	<script src="js/shrap.js"></script>
 	<script src="js/tower.js"></script>
 	
 </head>
@@ -97,7 +99,7 @@
 			t2.startBoost(t2.pos.x - (Math.cos(hoek)*dist)/camera.zoom, t2.pos.y - (Math.sin(hoek)*dist)/camera.zoom);
 			
 			
-
+			t2.bodyHitFlash();
 		
 		
 	}
@@ -110,15 +112,51 @@
 
         stats.begin();
 
-		camera.zoom = 0.8 + 0.5 / ( ( Math.pow(t2.vel.x,2) + Math.pow(t2.vel.y,2) + 1))
+		camera.zoom = 0.8; //+ 0.5 / ( ( Math.pow(t2.vel.x,2) + Math.pow(t2.vel.y,2) + 1))
 
-		var next = gamecore.DualPool.getPool(Tower).getUsedList().first;
-		while( next )
+		var nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
+		while( nextTower )
 		{
-		    next.obj.update();
-		    next = next.nextLinked;
+		    nextTower.obj.update();
+		    nextTower = nextTower.nextLinked;
 		}
 
+		if (gamecore.DualPool.getPool(Shrap) != null){
+
+
+			var nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
+			
+
+			while( nextShrap )
+			{
+			    
+			    nextShrap.obj.update();
+				nextShrap = nextShrap.nextLinked;
+	
+			}
+
+			nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
+
+			while( nextShrap )
+			{
+			    
+			    if (nextShrap.obj.releaseMeFromList) {
+
+
+			    	nextShrap.obj.release();
+			    	nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
+
+			    }else{
+				
+				nextShrap = nextShrap.nextLinked;
+				
+				}
+			}
+			
+
+		
+		}
+			
         renderer.render(stage);
         requestAnimFrame( update );
 

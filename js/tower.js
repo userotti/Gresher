@@ -14,6 +14,7 @@ Tower = gamecore.DualPooled('Tower',
 	   t.buildHud();
 
        t.sprite.addChild(t.body);
+       t.body.addChild(t.body_flash);
        //t.sprite.addChild(t.weapon);
 
 
@@ -50,6 +51,7 @@ Tower = gamecore.DualPooled('Tower',
  	//visual aspects
  	sprite: 0,
  	body: 0,
+ 	body_flash: 0,
  	weapon: 0,
  	hud: 0,
  	scale: 0,
@@ -66,6 +68,7 @@ Tower = gamecore.DualPooled('Tower',
  	acc: 0,
  	boostforce: 0,
  	movementfric: 0,
+ 	fric_coeff: 0,
  	staticfric: 0,
  	
  	boosttarget: 0,
@@ -93,6 +96,7 @@ Tower = gamecore.DualPooled('Tower',
 	    
 	    this.sprite = new PIXI.SmaatObjectContainer();
  		this.body = new PIXI.SmaatGraphics();
+ 		this.body_flash = new PIXI.SmaatGraphics();
  		this.weapon = new PIXI.SmaatGraphics();
  		this.hud = new PIXI.SmaatGraphics();
 		
@@ -130,6 +134,7 @@ Tower = gamecore.DualPooled('Tower',
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
+    	this.fric_coeff = charparams.fric_coeff;
  		
 
 
@@ -143,8 +148,8 @@ Tower = gamecore.DualPooled('Tower',
 		this.sprite.position.x = this.pos.x;
 		this.sprite.position.y = this.pos.y;
 
-		this.vel.x = 0;
-		this.vel.y = 0;
+		this.vel.x = posparams.velx;
+		this.vel.y = posparams.vely;
 		
 		this.acc.x = 0;
 		this.acc.y = 0;
@@ -166,6 +171,9 @@ Tower = gamecore.DualPooled('Tower',
  		
  		this.body.scale.x = this.scale;
 		this.body.scale.y = this.scale;	
+
+		this.body_flash.visible = false;
+		this.body_flash.counter = 0;
 		
 		switch (this.character_class){
 
@@ -179,13 +187,29 @@ Tower = gamecore.DualPooled('Tower',
 
 					this.body.beginFill(color_rooi1(i+4), 1);
 					this.body.drawCircle(x, y, 5);
-					this.body.endFill();		
-		
+					this.body.endFill();
+
+						
+					this.body_flash.beginFill('0xffffff', 1);
+					this.body_flash.drawCircle(x, y, 5);
+					this.body_flash.endFill();	
+					 
+
 					this.body.beginFill(color_rooi1(i+5), 1);
 					this.body.drawCircle(x/2, y/2, 7.5);
 					this.body.endFill();	
+
+					this.body_flash.beginFill('0xffffff', 1);
+					this.body_flash.drawCircle(x/2, y/2, 7.5);
+					this.body_flash.endFill();
+
+
 			
 				}
+
+			
+
+
 
 				
 				break;
@@ -214,6 +238,15 @@ Tower = gamecore.DualPooled('Tower',
 						
 				this.body.endFill();	
 
+				this.body_flash.beginFill('0xffffff', 1);	
+						
+					this.body_flash.moveTo(x1,y1);
+					this.body_flash.lineTo(x2,y2);
+					this.body_flash.lineTo(-x1-x2,-y1-y2);
+					this.body_flash.lineTo(x1,y1);
+						
+				this.body_flash.endFill();	
+
 			};	
 		
 			
@@ -241,28 +274,43 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
 
-
+ 	/*
  	basicTween: function (t, b, c, d) {
 	t /= (d);
 	t--;
 
 	
 	return c*(t*t*t + 1) + b;
-	},
+	},*/
+
+	
 
  	updateAnimation: function(){
 
  		this.animcounter += this.animcounterstep;
 
- 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
- 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
- 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);
- 		this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
+ 		if (this.bodybounce > 0){
 
- 		if (this.moving)
- 		this.body.rotation += 0.05;
+	 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
+	 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
+	 		
+ 		}
 
+ 		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
+
+ 		if (this.boostpower == 0)
  		this.body.rotation += this.bodyrotation_speed;
+ 		else
+ 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);	
+ 		
+
+ 		if (this.body_flash.counter > 0){
+ 			
+
+ 			this.body_flash.counter--;
+ 		}else{
+			this.body_flash.visible = false;
+		}
 
  	},
 /*
@@ -313,15 +361,19 @@ Tower = gamecore.DualPooled('Tower',
 
  	},*/
 
- 	
- 	checkboostdist: function(){
+ 	/*ANIMATION FUNCTIONS */
 
 
-		  return ( (Math.abs(this.boosttarget.x - this.pos.x) * 2 < (50)) && (Math.abs(this.boosttarget.y - this.pos.y) * 2 < (50)) );
-		
- 	},
+ 	bodyHitFlash: function(){
 
- 	startBoost: function(px,py){
+		this.body_flash.visible = true;
+		this.body_flash.counter = 5;
+
+
+
+	},
+
+	startBoost: function(px,py){
 
  		this.boosttarget.x = px;
  		this.boosttarget.y = py;
@@ -334,6 +386,17 @@ Tower = gamecore.DualPooled('Tower',
  		this.boostpower = 0;
  	},
 
+
+ 	/* UTILITY FUNCTIONS */
+
+ 	checkboostdist: function(){
+
+
+		  return ( (Math.abs(this.boosttarget.x - this.pos.x) * 2 < (50)) && (Math.abs(this.boosttarget.y - this.pos.y) * 2 < (50)) );
+		
+ 	},
+
+ 
 
 
  	updateBoost: function(){
@@ -358,8 +421,8 @@ Tower = gamecore.DualPooled('Tower',
  	updateFric: function(){
 
 
-		this.movementfric.x = -((this.vel.x * 0.20)); 
-	 	this.movementfric.y = -((this.vel.y * 0.20));
+		this.movementfric.x = -((this.vel.x * this.fric_coeff)); 
+	 	this.movementfric.y = -((this.vel.y * this.fric_coeff));
  		
  		
  			
@@ -405,11 +468,32 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateAI: function(){
 
- 		
+		if (this.age % 100 == 0){ 		
+	 		this.bodyHitFlash();
+
+	 		if (this.character_class == "jelly"){
+
+		 		for (var i = 0; i < 3; i++){
+		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+	 		if (this.character_class == "stalagmite"){
+
+		 		for (var i = 0; i < 3; i++){
+		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+	 		if (this.character_class == "struct"){
+	 			for (var i = 0; i < 3; i++){
+		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+	 			
+	 	}
 
  		if (((this.age % 100) == 0) && (!this.controlled)){
 
- 			console.log("yof");
+ 			
 
  			this.startBoost(this.pos.x+(Math.random()*500 - 250), this.pos.y+(Math.random()*500 - 250));
 
@@ -436,12 +520,17 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
+
+
+
  	releaseMe: function(){
 
  		this.body.clear();
+
+ 		this.body_flash.clear();
  		this.hud.clear();
  		this.weapon.clear();
- 		this.removeFromStage();
+ 		this.removeFromWorld();
 		this.release();
 
 
@@ -455,7 +544,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	removeFromStage: function(){
+ 	removeFromWorld: function(){
 
  		this.myworld.removeChild(this.sprite);
 
