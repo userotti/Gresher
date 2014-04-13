@@ -468,7 +468,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateAI: function(){
 
-		if (this.age % 100 == 0){ 		
+		if (this.age % 50 == 0){ 		
 	 		this.bodyHitFlash();
 
 	 		if (this.character_class == "jelly"){

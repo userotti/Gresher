@@ -144,6 +144,7 @@
 
 
 			    	nextShrap.obj.release();
+			    	world.removeChild(nextShrap.obj.sprite)
 			    	nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
 
 			    }else{
