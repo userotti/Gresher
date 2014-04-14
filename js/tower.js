@@ -373,6 +373,32 @@ Tower = gamecore.DualPooled('Tower',
 
 	},
 
+	iveBeenHitBy: function(attacker){
+
+			this.bodyHitFlash();
+
+	 		//switch (this.character_class) 
+
+	 		if (this.character_class == "jelly"){
+
+		 		for (var i = 0; i < 3; i++){
+		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+	 		if (this.character_class == "stalagmite"){
+
+		 		for (var i = 0; i < 3; i++){
+		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+	 		if (this.character_class == "struct"){
+	 			for (var i = 0; i < 3; i++){
+		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 		}
+	 		}
+
+	},
+
 	startBoost: function(px,py){
 
  		this.boosttarget.x = px;
@@ -468,28 +494,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateAI: function(){
 
-		if (this.age % 50 == 0){ 		
-	 		this.bodyHitFlash();
-
-	 		if (this.character_class == "jelly"){
-
-		 		for (var i = 0; i < 3; i++){
-		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
-		 		}
-	 		}
-	 		if (this.character_class == "stalagmite"){
-
-		 		for (var i = 0; i < 3; i++){
-		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
-		 		}
-	 		}
-	 		if (this.character_class == "struct"){
-	 			for (var i = 0; i < 3; i++){
-		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
-		 		}
-	 		}
-	 			
-	 	}
+	
 
  		if (((this.age % 100) == 0) && (!this.controlled)){
 
@@ -504,6 +509,20 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
 
+ 	updatePeriodic: function(){
+
+		if (this.age % 50 == 0){ 		
+	 		this.iveBeenHitBy();
+	 			
+	 	}
+
+ 		
+
+
+ 	},
+
+
+
 
  	update: function(){
 
@@ -516,6 +535,8 @@ Tower = gamecore.DualPooled('Tower',
 		this.updateAnimation();
 
 		this.updateAI();
+
+		this.updatePeriodic();
  		 
 
  	},
