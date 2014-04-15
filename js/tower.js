@@ -70,6 +70,7 @@ Tower = gamecore.DualPooled('Tower',
  	movementfric: 0,
  	fric_coeff: 0,
  	staticfric: 0,
+ 	myfakespeed: 0,
  	
  	boosttarget: 0,
  	boostpower: 0,	
@@ -381,18 +382,18 @@ Tower = gamecore.DualPooled('Tower',
 
 	 		if (this.character_class == "jelly"){
 
-		 		for (var i = 0; i < 3; i++){
+		 		for (var i = 0; i < 4; i++){
 		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
 	 		if (this.character_class == "stalagmite"){
 
-		 		for (var i = 0; i < 3; i++){
+		 		for (var i = 0; i < 4; i++){
 		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
 	 		if (this.character_class == "struct"){
-	 			for (var i = 0; i < 3; i++){
+	 			for (var i = 0; i < 4; i++){
 		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
@@ -472,7 +473,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.sprite.position.y = this.pos.y;
 
 	 	
- 		
+ 			this.myfakespeed = (Math.abs(this.vel.x) + Math.abs(this.vel.y));
 
  	},
 
@@ -511,10 +512,42 @@ Tower = gamecore.DualPooled('Tower',
 
  	updatePeriodic: function(){
 
-		if (this.age % 50 == 0){ 		
-	 		this.iveBeenHitBy();
+		if (this.age % 200 == 0){ 		
+	 		//this.iveBeenHitBy();
 	 			
 	 	}
+
+	 	
+	 	if (Math.floor(this.myfakespeed)  > 7.5){
+
+	 			if (this.age % 1 == 0)
+	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	
+
+	 	}else
+	 		
+
+	 	if (Math.floor(this.myfakespeed)  > 4.5){
+
+	 			if (this.age % 2 == 0)
+	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	
+
+	 	}else
+	 		
+
+	 	if (Math.floor(this.myfakespeed)  > 1.5){
+
+	 			if (this.age % 4 == 0)
+	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	
+
+	 	}
+	 		
+
+	 	
+
+
 
  		
 

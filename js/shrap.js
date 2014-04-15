@@ -11,7 +11,7 @@ Shrap = gamecore.DualPooled('Shrap',
        s.setPos(posparams);
 	   s.buildBody();
 	   
-       s.sprite.addChild(s.body);
+       //s.sprite.addChild(s.body);
        s.addToWorld();
        
        s.animcounter = Math.random()*Math.PI;
@@ -36,6 +36,9 @@ Shrap = gamecore.DualPooled('Shrap',
  	//animation
  	bodybounce: 0,
  	bodyrotation_speed: 0,
+ 	velsumremove: 0,
+ 	drawmefullalpha: 0,
+
  	
  	//movement
  	pos: 0,
@@ -58,7 +61,7 @@ Shrap = gamecore.DualPooled('Shrap',
 	{
 	   
 	    console.log("new shraps");
-	    this.sprite = new PIXI.SmaatObjectContainer();
+	    //this.sprite = new PIXI.SmaatObjectContainer();
  		this.body = new PIXI.SmaatGraphics();
  	
 		
@@ -82,6 +85,8 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.scale = 1;
  		this.fric_coeff = charparams.fric_coeff;
  		this.releaseMeFromList = false;
+ 		this.velsumremove = charparams.velsumremove;
+ 		this.drawmefullalpha = charparams.drawmefullalpha;
 
  	},
 
@@ -90,8 +95,8 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.pos.x = posparams.posx;
 		this.pos.y = posparams.posy;
 
-		this.sprite.position.x = this.pos.x;
-		this.sprite.position.y = this.pos.y;
+		this.body.position.x = this.pos.x;
+		this.body.position.y = this.pos.y;
 
 		this.vel.x = posparams.velx;
 		this.vel.y = posparams.vely;
@@ -169,7 +174,27 @@ Shrap = gamecore.DualPooled('Shrap',
 			};	
 		
 			
-			break;			
+			break;	
+
+		case "track" :	
+
+					this.body.beginFill(0xffee44, 1);
+					this.body.drawRect(-1.5,-4, 3, 8);
+					this.body.drawRect(-4,-1.5, 8, 3);
+					this.body.endFill();
+					
+				
+		
+				/*this.body.beginFill(0xFFFFFF, 1);	
+				
+					this.body.drawEllipse((Math.random()*4) -2, (Math.random()*4) -2, Math.random()*30, Math.random()*30);
+
+				this.body.endFill();	
+		*/
+		
+			
+		break;			
+				
 	
 		}
 
@@ -179,18 +204,15 @@ Shrap = gamecore.DualPooled('Shrap',
 
  	updateAnimation: function(){
 
- 		this.animcounter += this.animcounterstep;
-
- 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
- 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
+ 		this.body.rotation += this.bodyrotation_speed; 
  		
- 		if (Math.abs(this.vel.x) + Math.abs(this.vel.y) > 4){
+ 		if ((Math.abs(this.vel.x) + Math.abs(this.vel.y)) > this.drawmefullalpha){
 
- 			this.sprite.alpha = 1;
+ 			this.body.alpha = 1;
 
  		}else{
 
- 			this.sprite.alpha = (Math.abs(this.vel.x) + Math.abs(this.vel.y)) * 0.25;
+ 			this.body.alpha = (Math.abs(this.vel.x) + Math.abs(this.vel.y)) * (1/this.drawmefullalpha);
 
  		}	
 
@@ -226,8 +248,8 @@ Shrap = gamecore.DualPooled('Shrap',
 	 		this.pos.x += this.vel.x;
 	 		this.pos.y += this.vel.y;
 
-	 		this.sprite.position.x = this.pos.x;
-	 		this.sprite.position.y = this.pos.y;
+	 		this.body.position.x = this.pos.x;
+	 		this.body.position.y = this.pos.y;
 
 	 		
 	
@@ -253,7 +275,7 @@ Shrap = gamecore.DualPooled('Shrap',
 		this.updateAnimation();
 
 
-		if (Math.abs(this.vel.x+this.vel.y)   <  0.1) this.releaseMePlease(); 
+		if (Math.abs(this.vel.x+this.vel.y)   <  this.velsumremove) this.releaseMePlease(); 
 
 	
 
@@ -273,14 +295,14 @@ Shrap = gamecore.DualPooled('Shrap',
 
  	addToWorld: function(){
 
- 		this.myworld.addChild(this.sprite);
+ 		this.myworld.addChildAt(this.body, 0);
 
 
  	},
 
  	removeFromWorld: function(){
 
- 		this.myworld.removeChild(this.sprite);
+ 		this.myworld.removeChild(this.body);
 
 
  	},

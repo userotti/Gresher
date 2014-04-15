@@ -41,7 +41,7 @@
   
 
 
-    var stage = new PIXI.Stage(0x15284c, true);
+    var stage = new PIXI.Stage(0x0a1c43, true);
 
 	stage.setInteractive(true);
 	var renderer = PIXI.autoDetectRenderer(w, h);
@@ -98,7 +98,7 @@
 			hoek = Math.atan2((camera.screen_midy - pos.y), (camera.screen_midx - pos.x) ) - camera.rotation;
 			t2.startBoost(t2.pos.x - (Math.cos(hoek)*dist)/camera.zoom, t2.pos.y - (Math.sin(hoek)*dist)/camera.zoom);
 			
-			
+			t2.iveBeenHitBy();
 			
 		
 		
@@ -144,7 +144,7 @@
 
 
 			    	nextShrap.obj.release();
-			    	world.removeChild(nextShrap.obj.sprite)
+			    	world.removeChild(nextShrap.obj.body)
 			    	nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
 
 			    }else{

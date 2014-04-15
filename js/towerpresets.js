@@ -46,7 +46,7 @@ BASICSTALAGMITE = {
  	"bodyrotation_speed": 0.01,
  	"fric_coeff": 0.20,
  	
- 	"maxboostpower" : 0.95,
+ 	"maxboostpower" : 1.95,
  
 
 }
