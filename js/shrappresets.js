@@ -6,6 +6,8 @@ JELLYSHRAP = {
  	"fric_coeff": 0.07,
     "velsumremove" : 0.1,
     "drawmefullalpha" : 4,
+    "scaleup_speed" : 0.0,
+    "scale" : 1,
 
 
 }
@@ -18,6 +20,9 @@ STALAGSHRAP = {
  	"fric_coeff": 0.070,
  	"velsumremove" : 0.1,
  	"drawmefullalpha" : 4,
+ 	"scaleup_speed" : 0.0,
+ 	"scale" : 1,
+    
 
 }
 
@@ -32,18 +37,36 @@ STRUCTSHRAP = {
  	"fric_coeff": 0.20,
  	"velsumremove" : 0.1,
  	"drawmefullalpha" : 4,
+ 	"scaleup_speed" : 0.0,
+ 	"scale" : 1,
+    
  
 
 }
 
-BASICTRACKSHRAP = {
+BASICSMOKESHRAP = {
 	
-	"shrap_class" : "track",
+	"shrap_class" : "smoke",
  	"bodybounce" : 0.00,
- 	"bodyrotation_speed": 0.1,
+ 	"bodyrotation_speed": 0.2,
  	"fric_coeff": 0.070,
  	"velsumremove" : 0.1,
- 	"drawmefullalpha" : 3,
+ 	"drawmefullalpha" : 4,
+ 	"scaleup_speed" : 0.05,
+    "scale" : 1.6,
+
+}
+
+BASICSPARKSHRAP = {
+	
+	"shrap_class" : "spark",
+ 	"bodybounce" : 0.00,
+ 	"bodyrotation_speed": 0.0,
+ 	"fric_coeff": 0.070,
+ 	"velsumremove" : 0.1,
+ 	"drawmefullalpha" : 1,
+ 	"scaleup_speed" : 0.00,
+    "scale" : 1,
 
 }
 
@@ -66,22 +89,35 @@ FROMMESHRAP = function(px,py){
 	
 	"posx" : px,
 	"posy" : py,
-	"velx" : (Math.random()*10)-5,
-	"vely" : (Math.random()*10)-5,
+	"velx" : (Math.random()*15)-7.5,
+	"vely" : (Math.random()*15)-7.5,
+ 	"accx" : 0,
+ 	"accy" : 0, });
+ 	
+}
+
+SPARKSHRAP = function(px,py){ 
+
+	return({
+	
+	"posx" : px,
+	"posy" : py,
+	"velx" : (Math.random()*4)-2,
+	"vely" : (Math.random()*4)-2,
  	"accx" : 0,
  	"accy" : 0, });
  	
 }
 
 
-MYTRACKSHRAP = function(px,py){ 
+SMOKESHRAP = function(px,py){ 
 
 	return({
 	
 	"posx" : px,
 	"posy" : py,
-	"velx" : (Math.random()*3)-1.5,
-	"vely" : (Math.random()*3)-1.5,
+	"velx" : (Math.random()*2)-2,
+	"vely" : (Math.random()*2)-2,
  	"accx" : 0,
  	"accy" : 0, });
  	
