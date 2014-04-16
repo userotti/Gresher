@@ -517,33 +517,15 @@ Tower = gamecore.DualPooled('Tower',
 	 			
 	 	}
 
-	 	
-	 	if (Math.floor(this.myfakespeed)  > 7.5){
 
-	 			if (this.age % 1 == 0)
-	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	if (this.age % 3 == 0)
+	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), "placeholder", this.myworld);
 	 	
 
-	 	}else
-	 		
-
-	 	if (Math.floor(this.myfakespeed)  > 4.5){
-
-	 			if (this.age % 2 == 0)
-	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	if (this.age % 4 == 0)
+	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 	 	
-
-	 	}else
-	 		
-
-	 	if (Math.floor(this.myfakespeed)  > 1.5){
-
-	 			if (this.age % 4 == 0)
-	 			Shrap.create(BASICTRACKSHRAP, MYTRACKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
-	 	
-
-	 	}
-	 		
+	
 
 	 	
 
