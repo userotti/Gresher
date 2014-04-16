@@ -33,6 +33,7 @@ Tower = gamecore.DualPooled('Tower',
  	character_class:'',
  	age: 0,
  	health: 0,
+ 	maxhealth: 0,
  	speed: 0,
  	shield: 0,
  	shielrecharge: 0,
@@ -43,8 +44,9 @@ Tower = gamecore.DualPooled('Tower',
  	energyrecharge: 0,
  	magneticcharge: 0,
  	magneticrange: 0,
- 	
  	maxboostpower: 0,
+ 	alive: false,
+ 	dying: false,
 
 
 
@@ -61,6 +63,7 @@ Tower = gamecore.DualPooled('Tower',
  	bodybounce: 0,
  	bodyrotation_speed: 0,
  	weaponrotation_speed: 0,
+ 	dyinganimationcounter: 0,
 
  	//movement
  	pos: 0,
@@ -120,7 +123,7 @@ Tower = gamecore.DualPooled('Tower',
 
  		this.character_class = charparams.character_class;
  		this.mass = charparams.mass;
-	 	this.health = charparams.name;
+	 	this.maxhealth = charparams.maxhealth;
 	 	this.speed = charparams.speed;
 	 	this.shield = charparams.shield;
 	 	this.shielrecharge = charparams.shieldrecharge;
@@ -136,6 +139,9 @@ Tower = gamecore.DualPooled('Tower',
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
     	this.fric_coeff = charparams.fric_coeff;
+    	this.alive = true;
+    	this.dying = false;
+    	
  		
 
 
@@ -286,34 +292,7 @@ Tower = gamecore.DualPooled('Tower',
 
 	
 
- 	updateAnimation: function(){
 
- 		this.animcounter += this.animcounterstep;
-
- 		if (this.bodybounce > 0){
-
-	 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
-	 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
-	 		
- 		}
-
- 		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
-
- 		if (this.boostpower == 0)
- 		this.body.rotation += this.bodyrotation_speed;
- 		else
- 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);	
- 		
-
- 		if (this.body_flash.counter > 0){
- 			
-
- 			this.body_flash.counter--;
- 		}else{
-			this.body_flash.visible = false;
-		}
-
- 	},
 /*
  	updateTweenMovement: function(){
 
@@ -365,40 +344,78 @@ Tower = gamecore.DualPooled('Tower',
  	/*ANIMATION FUNCTIONS */
 
 
- 	bodyHitFlash: function(){
+ 	bodyHitFlash: function(length){
 
 		this.body_flash.visible = true;
-		this.body_flash.counter = 5;
+		this.body_flash.counter = length;
 
 
 
 	},
 
-	iveBeenHitBy: function(attacker){
+	makeSparks: function(amount){
 
-			this.bodyHitFlash();
+		for (var i = 0; i < amount; i++){
+			Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		}
 
-	 		//switch (this.character_class) 
+	},
+
+
+	makeHitShards: function(amount){
+
 
 	 		if (this.character_class == "jelly"){
 
-		 		for (var i = 0; i < 4; i++){
+		 		for (var i = 0; i < amount; i++){
 		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
 	 		if (this.character_class == "stalagmite"){
 
-		 		for (var i = 0; i < 4; i++){
+		 		for (var i = 0; i < amount; i++){
 		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
 	 		if (this.character_class == "struct"){
-	 			for (var i = 0; i < 4; i++){
+	 			for (var i = 0; i < amount; i++){
 		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
 		 		}
 	 		}
 
 	},
+
+	iveBeenHitBy: function(attacker){
+
+			this.bodyHitFlash(5);
+
+	 		//switch (this.character_class) 
+
+	 		this.makeHitShards(4);
+
+	},
+
+	startDying:function(){
+
+		this.dying = true;
+		this.bodyHitFlash(6);	
+		this.dyinganimationcounter = 30;
+		this.makeSparks(8);
+		this.makeHitShards(9);
+
+
+
+	},
+
+	timeToDieAndBeRemoved:function(){
+		
+		this.alive = false;
+
+	},
+
+
+
+
 
 	startBoost: function(px,py){
 
@@ -423,7 +440,56 @@ Tower = gamecore.DualPooled('Tower',
 		
  	},
 
- 
+ 	
+ 	updateAnimation: function(){
+
+ 		this.animcounter += this.animcounterstep;
+
+ 		if (this.bodybounce > 0){
+
+	 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
+	 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
+	 		
+ 		}
+
+ 		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
+
+ 		if (this.boostpower == 0)
+ 		this.body.rotation += this.bodyrotation_speed;
+ 		else
+ 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);	
+ 		
+
+ 		if (this.body_flash.counter > 0){
+ 			
+
+ 			this.body_flash.counter--;
+ 		}else{
+			this.body_flash.visible = false;
+		}
+
+		if (this.dying == true){
+
+			this.scale += 0.07;
+			this.body.alpha += -0.07;
+			
+
+		}
+
+
+			
+
+ 	},
+
+ 	updateStatus: function(){
+
+ 		if (this.health == 0) this.startDying();
+
+
+
+ 		if (this.body.alpha <= 0) this.timeToDieAndBeRemoved();
+
+ 	},
 
 
  	updateBoost: function(){
@@ -512,20 +578,35 @@ Tower = gamecore.DualPooled('Tower',
 
  	updatePeriodic: function(){
 
-		if (this.age % 200 == 0){ 		
-	 		//this.iveBeenHitBy();
-	 			
+		
+	 	
+	 	this.health = 15;
+	 	this.healthpercentage = (this.health/this.maxhealth) * 100;
+
+	 	if (this.healthpercentage != 100) {
+
+	 	if ( (this.age) % Math.floor((2+ ((0.0005)*Math.pow(this.healthpercentage,3)))) == 0){
+	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), "placeholder", this.myworld);
+	 		if (this.health < 30){
+	 			if ((this.age % 2)== 0)
+	 				Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	
+	 		}
+	 	}
+
+	 	/*if (this.age % 4 == 0)
+	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 	*/
+		
+
+
 	 	}
 
 
-	 	if (this.age % 3 == 0)
-	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), "placeholder", this.myworld);
-	 	
-
-	 	if (this.age % 4 == 0)
-	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
-	 	
-	
+		if ((this.age == 300) && (this.controlled == false)){ 		
+		 	
+		 	this.startDying();
+		}
 
 	 	
 
@@ -552,6 +633,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.updateAI();
 
 		this.updatePeriodic();
+		this.updateStatus();
  		 
 
  	},

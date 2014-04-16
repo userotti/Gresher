@@ -61,7 +61,9 @@ Shrap = gamecore.DualPooled('Shrap',
  	init: function()
 	{
 	   
-	  //  console.log("new shraps");
+	  // 
+
+	   console.log("new shraps");
 	    //this.sprite = new PIXI.SmaatObjectContainer();
  		this.body = new PIXI.SmaatGraphics();
  	

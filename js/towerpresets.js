@@ -2,7 +2,7 @@ BASICJELLY = {
 	
 	"character_class" : "jelly",
 	"mass" : 1,
-	"health" : 5,
+	"maxhealth" : 100,
 	"speed" : 0.2,
  	"shield": 0,
  	"shielrecharge": 0,
@@ -30,7 +30,7 @@ BASICSTALAGMITE = {
 	
 	"character_class" : "stalagmite",
 	"mass" : 1,
-	"health" : 2,
+	"maxhealth" : 100,
 	"speed" : 0.5,
  	"shield": 0,
  	"shielrecharge": 0,
@@ -57,7 +57,7 @@ BASICSTRUCT = {
 	
 	"character_class" : "stalagmite",
 	"mass" : 1,
-	"health" : 3,
+	"maxhealth" : 100,
 	"speed" : 1,
  	"shield": 0,
  	"shielrecharge": 0,

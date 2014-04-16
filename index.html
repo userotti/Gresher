@@ -114,11 +114,38 @@
 
 		camera.zoom = 0.8; //+ 0.5 / ( ( Math.pow(t2.vel.x,2) + Math.pow(t2.vel.y,2) + 1))
 
-		var nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-		while( nextTower )
-		{
-		    nextTower.obj.update();
-		    nextTower = nextTower.nextLinked;
+		
+		if (gamecore.DualPool.getPool(Tower) != null){
+
+
+			var nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
+			while( nextTower )
+			{
+			    nextTower.obj.update();
+			    nextTower = nextTower.nextLinked;
+			}
+
+			nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
+
+			while( nextTower )
+			{
+								    
+			    if (nextTower.obj.alive == false) {
+
+			    	console.log("halloffff");
+
+			    	nextTower.obj.release();
+			    	world.removeChild(nextTower.obj.sprite)
+			    	nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
+
+			    }else{
+				
+				nextTower = nextTower.nextLinked;
+				
+				}
+			}
+
+
 		}
 
 		if (gamecore.DualPool.getPool(Shrap) != null){
