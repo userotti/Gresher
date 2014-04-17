@@ -64,8 +64,14 @@
 
 	world = new PIXI.DisplayObjectContainer();
 
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 3; i++) {
 		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
+		//stage.addChild(t.sprite);
+	};
+
+
+	for (var i = 0; i < 2; i++) {
+		t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
 		//stage.addChild(t.sprite);
 	};
 
@@ -86,7 +92,12 @@
 	var hoek;
 	var dist;
 
+	t2.click = function(){
 
+		console.log("clicked");
+
+	}
+	
 	stage.click = stage.tap = function()
 	{
 			

@@ -87,6 +87,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	//AI
  	controlled: false,
+ 	ai_timepercall: 0,
 
  			
 
@@ -96,7 +97,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	init: function()
 	{
-	    console.log("news");
+	    console.log("tower news");
 	    
 	    this.sprite = new PIXI.SmaatObjectContainer();
  		this.body = new PIXI.SmaatGraphics();
@@ -124,6 +125,7 @@ Tower = gamecore.DualPooled('Tower',
  		this.character_class = charparams.character_class;
  		this.mass = charparams.mass;
 	 	this.maxhealth = charparams.maxhealth;
+	 	this.health = this.maxhealth*Math.random();
 	 	this.speed = charparams.speed;
 	 	this.shield = charparams.shield;
 	 	this.shielrecharge = charparams.shieldrecharge;
@@ -141,6 +143,8 @@ Tower = gamecore.DualPooled('Tower',
     	this.fric_coeff = charparams.fric_coeff;
     	this.alive = true;
     	this.dying = false;
+
+    	this.ai_timepercall = charparams.ai_timepercall;
     	
  		
 
@@ -563,7 +567,7 @@ Tower = gamecore.DualPooled('Tower',
 
 	
 
- 		if (((this.age % 100) == 0) && (!this.controlled)){
+ 		if (((this.age % this.ai_timepercall) == 0) && (!this.controlled)){
 
  			
 
@@ -580,7 +584,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		
 	 	
-	 	this.health = 15;
+	
 	 	this.healthpercentage = (this.health/this.maxhealth) * 100;
 
 	 	if (this.healthpercentage != 100) {
@@ -603,7 +607,7 @@ Tower = gamecore.DualPooled('Tower',
 	 	}
 
 
-		if ((this.age == 300) && (this.controlled == false)){ 		
+		if ((this.age == 500) && (this.controlled == false)){ 		
 		 	
 		 	this.startDying();
 		}
