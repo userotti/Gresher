@@ -74,8 +74,8 @@ ONSCREENRANDOMSHRAP = function(){
 
 	return({
 	
-	"posx" : Math.random() * (SCREEN_MIDX*2) ,
-	"posy" : Math.random() * (SCREEN_MIDY*2),
+	"posx" : Math.random() * ($(window).width()/2*2) ,
+	"posy" : Math.random() * ($(window).height()/2*2),
 	"velx" : (Math.random()*10)-5,
 	"vely" : (Math.random()*10)-5,
  	"accx" : 0,

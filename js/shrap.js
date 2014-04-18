@@ -1,18 +1,19 @@
 Shrap = gamecore.DualPooled('Shrap',
   {
     // Static constructor
-    create:function (charparams, posparams, miscparams, worldparam)
+    create:function (charparams, posparams, effectlayerparam)
     {
        var s = this._super();
        
-       s.myworld = worldparam;
+      // console.log(effectlayerparam);
+       s.mylayer = effectlayerparam;
        
        s.setStats(charparams);
        s.setPos(posparams);
 	   s.buildBody();
 	   
        //s.sprite.addChild(s.body);
-       s.addToWorld();
+       s.addToLayer();
        
        s.animcounter = Math.random()*Math.PI;
        
@@ -31,7 +32,7 @@ Shrap = gamecore.DualPooled('Shrap',
  	sprite: 0,
  	body: 0,
  	scale: 0,
- 	myworld: 0,
+ 	mylayer: 0,
 
  	//animation
  	bodybounce: 0,
@@ -61,10 +62,8 @@ Shrap = gamecore.DualPooled('Shrap',
  	init: function()
 	{
 	   
-	  // 
-
-	  // console.log("new shraps");
-	    //this.sprite = new PIXI.SmaatObjectContainer();
+	
+    
  		this.body = new PIXI.SmaatGraphics();
  	
 		
@@ -193,7 +192,6 @@ Shrap = gamecore.DualPooled('Shrap',
 					this.body.endFill();
 					
 				
-		
 				/*this.body.beginFill(0xFFFFFF, 1);	
 				
 					this.body.drawEllipse((Math.random()*4) -2, (Math.random()*4) -2, Math.random()*30, Math.random()*30);
@@ -339,16 +337,17 @@ Shrap = gamecore.DualPooled('Shrap',
 
  	},
 
- 	addToWorld: function(){
+ 	addToLayer: function(){
 
- 		this.myworld.addChild(this.body);
+ 		
+ 		this.mylayer.addChild(this.body);
 
 
  	},
 
  	removeFromWorld: function(){
 
- 		this.myworld.removeChild(this.body);
+ 		this.mylayer.removeChild(this.body);
 
 
  	},

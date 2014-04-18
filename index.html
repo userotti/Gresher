@@ -22,198 +22,61 @@
 	<script src="js/shrappresets.js"></script>
 	<script src="js/shrap.js"></script>
 	<script src="js/tower.js"></script>
+	<script src="js/level.js"></script>
+	<script src="js/gamescene.js"></script>
+	<script src="js/gresher.js"></script>
+	
 	
 </head>
 <body>
 	<script>
 
-    $(window).resize(resize)
-    //window.onorientationchange = resize;
-
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-
-    var SCREEN_MIDX = w/2;
-    var SCREEN_MIDY = h/2;
-
-    
-       
-  
+	//device resize call
+	$(window).resize(resize);
 
 
-    var stage = new PIXI.Stage(0x0a1c43, true);
-
-	stage.setInteractive(true);
-	var renderer = PIXI.autoDetectRenderer(w, h);
-    renderer.view.id = "main-canvas";
-	renderer.view.style.display = "block";
-
-    stats = new Stats();
-
-
+	//make the fps stats
+	stats = new Stats();
     document.body.appendChild( stats.domElement );
     stats.domElement.style.position = "fixed";
     stats.domElement.style.zIndex = "999";
     stats.domElement.style.bottom = "0px";
     stats.domElement.style.right = "0px";
-	 
-	// add render view to DOM
-	document.body.appendChild(renderer.view);
-
-	camera = new PIXI.Camera();
-
-	world = new PIXI.DisplayObjectContainer();
-
-	for (var i = 0; i < 3; i++) {
-		t2 = Tower.create(BASICJELLY, ONSCREENRANDOM(), "placeholder", world);
-		//stage.addChild(t.sprite);
-	};
 
 
-	for (var i = 0; i < 2; i++) {
-		t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
-		//stage.addChild(t.sprite);
-	};
-
-	t2 = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), "placeholder", world);
-
-	camera.following = t2;
-	camera.screenCenterView(w/2,h/2);
-	t2.controlled = true;
-	camera.addChild(world);
-	stage.addChild(camera);
-	
+    //make the game instance
+	gresher = new Gresher();
 
 	
-	//t2.startMoving(100,100);
-	//console.log(gamecore.DualPool.getPool(Tower).getUsedList() );
-	//console.log(gamecore.DualPool.getPool(Tower).getFreeList() );
+	//setup the event mouse handler
+	gresher.stage.click = gresher.stage.tap = function(){
 
-	var hoek;
-	var dist;
-
-	t2.click = function(){
-
-		console.log("clicked");
+		gresher.handleMouse();
 
 	}
+
 	
-	stage.click = stage.tap = function()
-	{
-			
-			pos = stage.getMousePosition();
-			
-			
-		
-			dist = Math.sqrt(Math.pow((camera.screen_midx - pos.x),2) + Math.pow((camera.screen_midy - pos.y),2));
-			hoek = Math.atan2((camera.screen_midy - pos.y), (camera.screen_midx - pos.x) ) - camera.rotation;
-			t2.startBoost(t2.pos.x - (Math.cos(hoek)*dist)/camera.zoom, t2.pos.y - (Math.sin(hoek)*dist)/camera.zoom);
-			
-			t2.iveBeenHitBy();
-			
-		
-		
-	}
-
-
-	// run the render loop
+    // THIS FUNCTION CALL KICKS OFF THE WHOLE RENDER LOOP PARTY 
 	requestAnimFrame(update);
 
+
+	//the main loop function
 	function update() {
-
-        stats.begin();
-
-		camera.zoom = 0.8; //+ 0.5 / ( ( Math.pow(t2.vel.x,2) + Math.pow(t2.vel.y,2) + 1))
-
 		
-		if (gamecore.DualPool.getPool(Tower) != null){
+		stats.begin();	
 
+		gresher.gameupdate();
+		requestAnimFrame( update );
 
-			var nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-			while( nextTower )
-			{
-			    nextTower.obj.update();
-			    nextTower = nextTower.nextLinked;
-			}
-
-			nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-
-			while( nextTower )
-			{
-								    
-			    if (nextTower.obj.alive == false) {
-
-			    	console.log("halloffff");
-
-			    	nextTower.obj.release();
-			    	world.removeChild(nextTower.obj.sprite)
-			    	nextTower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-
-			    }else{
-				
-				nextTower = nextTower.nextLinked;
-				
-				}
-			}
-
-
-		}
-
-		if (gamecore.DualPool.getPool(Shrap) != null){
-
-
-			var nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
-			
-
-			while( nextShrap )
-			{
-			    
-			    nextShrap.obj.update();
-				nextShrap = nextShrap.nextLinked;
-	
-			}
-
-			nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
-
-			while( nextShrap )
-			{
-			    
-			    if (nextShrap.obj.releaseMeFromList) {
-
-
-			    	nextShrap.obj.release();
-			    	world.removeChild(nextShrap.obj.body)
-			    	nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
-
-			    }else{
-				
-				nextShrap = nextShrap.nextLinked;
-				
-				}
-			}
-			
-
-		
-		}
-			
-        renderer.render(stage);
-        requestAnimFrame( update );
 
         stats.end();
 	}
 
-
-    function resize() {
-  
-        
-        var w = $(window).width();
-   		var h = $(window).height();
-
-
-        camera.screenCenterView(w/2,h/2);
-        renderer.resize(w, h);
-
-    }
+	//the main resize function
+	function resize() {
+		
+		gresher.resize();
+	}
 
 
 

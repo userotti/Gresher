@@ -2,11 +2,12 @@
 Tower = gamecore.DualPooled('Tower',
   {
     // Static constructor
-    create:function (charparams, posparams, miscparams, worldparam)
+    create:function (charparams, posparams, effectlayerparam, colidelayerparam)
     {
        var t = this._super();
        
-       t.myworld = worldparam;
+       t.mylayer = colidelayerparam;
+       t.effects_layer = effectlayerparam;
 
        t.setStats(charparams);
        t.setPos(posparams);
@@ -57,7 +58,7 @@ Tower = gamecore.DualPooled('Tower',
  	weapon: 0,
  	hud: 0,
  	scale: 0,
- 	myworld: 0,
+ 	mylayer: 0,
 
  	//animation
  	bodybounce: 0,
@@ -360,7 +361,7 @@ Tower = gamecore.DualPooled('Tower',
 	makeSparks: function(amount){
 
 		for (var i = 0; i < amount; i++){
-			Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+			Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y),  this.effects_layer);
 		}
 
 	},
@@ -372,18 +373,18 @@ Tower = gamecore.DualPooled('Tower',
 	 		if (this.character_class == "jelly"){
 
 		 		for (var i = 0; i < amount; i++){
-		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 			Shrap.create(JELLYSHRAP, FROMMESHRAP(this.pos.x, this.pos.y),  this.effects_layer);
 		 		}
 	 		}
 	 		if (this.character_class == "stalagmite"){
 
 		 		for (var i = 0; i < amount; i++){
-		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 			Shrap.create(STALAGSHRAP, FROMMESHRAP(this.pos.x, this.pos.y),  this.effects_layer);
 		 		}
 	 		}
 	 		if (this.character_class == "struct"){
 	 			for (var i = 0; i < amount; i++){
-		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+		 			Shrap.create(STRUCTSHRAP, FROMMESHRAP(this.pos.x, this.pos.y),  this.effects_layer);
 		 		}
 	 		}
 
@@ -590,16 +591,16 @@ Tower = gamecore.DualPooled('Tower',
 	 	if (this.healthpercentage != 100) {
 
 	 	if ( (this.age) % Math.floor((2+ ((0.0005)*Math.pow(this.healthpercentage,3)))) == 0){
-	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), "placeholder", this.myworld);
+	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), this.effects_layer);
 	 		if (this.health < 30){
 	 			if ((this.age % 2)== 0)
-	 				Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 				Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), this.effects_layer);
 	 	
 	 		}
 	 	}
 
 	 	/*if (this.age % 4 == 0)
-	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.myworld);
+	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.mylayer);
 	 	*/
 		
 
@@ -661,14 +662,14 @@ Tower = gamecore.DualPooled('Tower',
 
  	addToWorld: function(){
 
- 		this.myworld.addChild(this.sprite);
+ 		this.mylayer.addChild(this.sprite);
 
 
  	},
 
  	removeFromWorld: function(){
 
- 		this.myworld.removeChild(this.sprite);
+ 		this.mylayer.removeChild(this.sprite);
 
 
  	},

@@ -3,23 +3,21 @@ PIXI.Camera = function()
     PIXI.DisplayObjectContainer.call( this );
 
     this.renderable = true;
-
     this.following = 0;
+    this.screen_midx = 0;
+    this.screen_midy = 0;
 
-    this.screen_midx = SCREEN_MIDX;
-    this.screen_midy = SCREEN_MIDY;
-
+    
     this.zoom = 0.5;
 
     this.maxzoom = 2.5;
 
     this.minzoom = 0.7;
 
-
-
     this.rotation = 0;
 
     
+
 
     this.alpha_matrix = [1,0,0,
                          0,1,0,
