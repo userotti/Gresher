@@ -107,6 +107,8 @@ Gamescene.prototype.sceneUpdate = function()
 
         this.updateAttacks();
 
+        this.level.doLevel();
+
         
     
 };

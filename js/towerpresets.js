@@ -16,11 +16,11 @@ BASICJELLY = {
 
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
- 	"fric_coeff": 0.20,
+ 	"fric_coeff": 0.60,
  	"ai_timepercall": 100, 
 
  	
- 	"maxboostpower" : 1.5,
+ 	"maxboostpower" : 3.5,
  	
 
 
