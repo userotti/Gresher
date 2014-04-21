@@ -2,13 +2,13 @@ BASICJELLY = {
 	
 	"character_class" : "jelly",
 	"mass" : 1.4,
-	"maxhealth" : 150,
+	"maxhealth" : 350,
 	"speed" : 0.2,
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 90,
- 	"reload": 20,
- 	"damage": 15,
+ 	"range": 70,
+ 	"reload": 10,
+ 	"damage": 30,
  	"energy": 0,
  	"energyrecharge": 0,
  	"magneticcharge": 0,
@@ -20,7 +20,7 @@ BASICJELLY = {
  	"ai_timepercall": 100, 
 
  	
- 	"maxboostpower" : 0.3,
+ 	"maxboostpower" : 1.5,
  	
 
 
@@ -48,7 +48,7 @@ BASICSTALAGMITE = {
  	"fric_coeff": 0.20,
  	"ai_timepercall": 50,
  	
- 	"maxboostpower" : 1.25,
+ 	"maxboostpower" : 0.25,
  
 
 }

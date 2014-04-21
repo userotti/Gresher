@@ -34,3 +34,11 @@
 					  [level.toString(16),level.toString(16)][1])
 					  && (lor.length == 1) ?  lor : co(lor); })('') + 'b6622';
 	}
+
+	color_background_rubble = function(){
+				
+
+
+				return '0x2a3c63'
+	}
+//0x0a1c43

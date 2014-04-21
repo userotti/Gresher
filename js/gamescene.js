@@ -19,7 +19,7 @@ Gamescene = function(stage)
 
     this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,1)
 
-    this.player = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
 
 
