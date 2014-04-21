@@ -12,12 +12,11 @@ Tower = gamecore.DualPooled('Tower',
        t.setStats(charparams);
        t.setPos(posparams);
 	   t.buildBody();
-	   t.buildHud();
-
+	   
        t.sprite.addChild(t.body);
-       t.body.addChild(t.body_flash);
-       //t.sprite.addChild(t.weapon);
+       t.sprite.addChild(t.weapon);
 
+       
 
        t.addToWorld();
         
@@ -40,6 +39,7 @@ Tower = gamecore.DualPooled('Tower',
  	shielrecharge: 0,
  	range: 0,
  	reload: 0,
+ 	reload_time_left: 0,
  	damage: 0,
  	energy: 0,
  	energyrecharge: 0,
@@ -90,7 +90,10 @@ Tower = gamecore.DualPooled('Tower',
  	controlled: false,
  	ai_timepercall: 0,
 
- 			
+ 	//attacking
+ 	current_target_distance_nosqrt: 0,	
+	current_target_angle: 0,	
+
 
  	//misc
  	animcounter: 0,
@@ -126,7 +129,7 @@ Tower = gamecore.DualPooled('Tower',
  		this.character_class = charparams.character_class;
  		this.mass = charparams.mass;
 	 	this.maxhealth = charparams.maxhealth;
-	 	this.health = this.maxhealth*Math.random();
+	 	this.health = this.maxhealth;
 	 	this.speed = charparams.speed;
 	 	this.shield = charparams.shield;
 	 	this.shielrecharge = charparams.shieldrecharge;
@@ -267,21 +270,35 @@ Tower = gamecore.DualPooled('Tower',
 		}
 
 		
-
+		this.body.addChild(this.body_flash);	
  	},
 
 
- 	buildHud: function(){
+ 	redrawWeapon: function(){
+			
+		this.weapon.clear();	
+		
+/*
+		this.weapon.beginFill(0xffffff, 0.03);
+		this.weapon.drawCircle(0,0,this.range);//Math.cos(((Math.PI * 2) / this.damage)*i)*this.range, Math.sin(((Math.PI * 2) / this.damage)*i)*this.range, (this.damage/2)+1);
+		this.weapon.endFill();	*/
 
- 		for (var i = 0; i < this.damage; i++) {
-							
-			this.weapon.beginFill(0xFFFFFF, 0.2);
-			this.weapon.drawCircle(Math.cos(((Math.PI * 2) / this.damage)*i)*this.range, Math.sin(((Math.PI * 2) / this.damage)*i)*this.range, (this.damage/2)+1);
-			this.weapon.endFill();		
+		
+	
+		this.weapon.lineStyle(4, 0xffffff, 0.6);
+		this.weapon.drawCircle(0,0,Math.sqrt(this.current_target_distance_nosqrt));//Math.cos(((Math.PI * 2) / this.damage)*i)*this.range, Math.sin(((Math.PI * 2) / this.damage)*i)*this.range, (this.damage/2)+1);
+		
+		
+		this.weapon.lineStyle(2, 0xffffff, 0.6);
+		this.weapon.moveTo(0,0);
+		this.weapon.lineTo(this.range,0);
+		this.weapon.endFill();	
+	
+		this.weapon.alpha = 1;
 
-		};
-
-		this.weapon.rotation = Math.random()*Math.PI;		
+		this.weapon.rotation = this.current_target_angle;
+	
+		
 
  	},
 
@@ -349,6 +366,20 @@ Tower = gamecore.DualPooled('Tower',
  	/*ANIMATION FUNCTIONS */
 
 
+ 	shoot: function(target_tower){
+
+		
+		if (this.reload_time_left == 0){
+			
+			target_tower.iveBeenHitBy(this);
+
+			this.redrawWeapon();
+			this.reload_time_left = this.reload;
+		}	
+
+
+	},
+
  	bodyHitFlash: function(length){
 
 		this.body_flash.visible = true;
@@ -391,6 +422,8 @@ Tower = gamecore.DualPooled('Tower',
 	},
 
 	iveBeenHitBy: function(attacker){
+
+			this.health = this.health - attacker.damage;
 
 			this.bodyHitFlash(5);
 
@@ -466,12 +499,13 @@ Tower = gamecore.DualPooled('Tower',
  		
 
  		if (this.body_flash.counter > 0){
- 			
-
  			this.body_flash.counter--;
  		}else{
 			this.body_flash.visible = false;
 		}
+
+		if (this.weapon.alpha > 0)
+			this.weapon.alpha = this.weapon.alpha - 0.08;
 
 		if (this.dying == true){
 
@@ -488,11 +522,12 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateStatus: function(){
 
- 		if (this.health == 0) this.startDying();
-
+ 		if ((this.dying == false) && (this.health <= 0)) this.startDying();
 
 
  		if (this.body.alpha <= 0) this.timeToDieAndBeRemoved();
+
+ 		if (this.reload_time_left > 0) this.reload_time_left--;
 
  	},
 
@@ -590,14 +625,14 @@ Tower = gamecore.DualPooled('Tower',
 
 	 	if (this.healthpercentage != 100) {
 
-	 	if ( (this.age) % Math.floor((2+ ((0.0005)*Math.pow(this.healthpercentage,3)))) == 0){
-	 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), this.effects_layer);
-	 		if (this.health < 30){
-	 			if ((this.age % 2)== 0)
-	 				Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), this.effects_layer);
-	 	
-	 		}
-	 	}
+		 	if ( (this.age) % Math.floor((2+ ((0.0005)*Math.pow(this.healthpercentage,3)))) == 0){
+		 		Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(this.pos.x-3, this.pos.y-3), this.effects_layer);
+		 		if (this.health < 30){
+		 			if ((this.age % 2)== 0)
+		 				Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), this.effects_layer);
+		 	
+		 		}
+		 	}
 
 	 	/*if (this.age % 4 == 0)
 	 		Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(this.pos.x, this.pos.y), "placeholder", this.mylayer);
@@ -607,11 +642,11 @@ Tower = gamecore.DualPooled('Tower',
 
 	 	}
 
-
+/*
 		if ((this.age == 500) && (this.controlled == false)){ 		
 		 	
 		 	this.startDying();
-		}
+		}*/
 
 	 	
 

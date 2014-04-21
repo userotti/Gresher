@@ -45,6 +45,57 @@ Gamescene = function(stage)
 
 Gamescene.prototype.constructor = Gamescene;
 
+
+Gamescene.prototype.checkInRangeCollision = function(at,tt){
+
+    if (this.checkBoundingboxCollision(at,tt)){
+
+        return this.checkDistCollision(at,tt);
+
+    }else
+    return false;
+    
+}
+
+
+Gamescene.prototype.checkBoundingboxCollision = function(at,tt){
+
+    return  !(
+        (at.pos.y+at.range < tt.pos.y) ||
+        (at.pos.y-at.range > tt.pos.y) ||
+        (at.pos.x-at.range > tt.pos.x) ||
+        (at.pos.x+at.range < tt.pos.x) )
+
+};
+
+Gamescene.prototype.checkDistCollision = function(at,tt){
+
+    
+    at.current_target_distance_nosqrt = Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2);
+    at.current_target_angle = Math.atan2(at.pos.y - tt.pos.y, at.pos.x - tt.pos.x) + Math.PI;
+
+    if (at.current_target_distance_nosqrt < Math.pow(at.range, 2)){
+
+           
+
+        return true;
+
+    } else{
+
+          
+        at.current_target_distance_nosqrt = Math.pow(at.range, 2);
+        at.current_target_angle = 0;
+        return false;
+    }
+
+
+
+
+
+};
+
+
+
 Gamescene.prototype.sceneUpdate = function()
 {
     
@@ -53,6 +104,8 @@ Gamescene.prototype.sceneUpdate = function()
         
         this.updateTowers();
         this.updateEffects();
+
+        this.updateAttacks();
 
         
     
@@ -130,6 +183,41 @@ Gamescene.prototype.updateTowers = function(){
 
 };
 
+Gamescene.prototype.updateAttacks = function(){
+
+    if (gamecore.DualPool.getPool(Tower) != null){
+
+
+            this.attacker_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
+            while( this.attacker_tower )
+            {
+                
+                this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
+                
+                while( this.target_tower )
+                {
+                    if (this.attacker_tower != this.target_tower){
+                        
+                        if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
+
+                            this.attacker_tower.obj.shoot(this.target_tower.obj);
+
+                        }
+                    }    
+
+                this.target_tower = this.target_tower.nextLinked;
+                }
+
+                this.attacker_tower  =  this.attacker_tower.nextLinked;
+
+            }
+
+
+
+        }
+
+};    
+
 Gamescene.prototype.mouseClick = function(mousepos)
 {
      this.mouseclickpos = mousepos;
@@ -138,7 +226,9 @@ Gamescene.prototype.mouseClick = function(mousepos)
     this.mouseclickposhoek = Math.atan2((this.camera.screen_midy - this.mouseclickpos.y), (this.camera.screen_midx - this.mouseclickpos.x) ) - this.camera.rotation;
     this.player.startBoost(this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
             
-    this.player.iveBeenHitBy();
+   // this.player.iveBeenHitBy();
+   // this.player.shoot();
+
 
 };   
 

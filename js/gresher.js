@@ -17,15 +17,11 @@ Gresher.prototype.constructor = Gresher;
 Gresher.prototype.setupPIXI = function()
 {
     
-   
-   // pFilter.size.y = 1;
-    //pFilter.dirty = false;
-    
+
 
     this.stage = new PIXI.Stage(0x0a1c43, true);
     this.stage.setInteractive(true);
 
-    //this.stage.filters = [pFilter];
     this.renderer = PIXI.autoDetectRenderer($(window).width(), $(window).height());
     this.renderer.view.id = "main-canvas";
     this.renderer.view.style.display = "block";
