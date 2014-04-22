@@ -285,18 +285,24 @@ Tower = gamecore.DualPooled('Tower',
 
 		
 	
-		this.weapon.lineStyle(4, 0xffffff, 0.6);
+		this.weapon.lineStyle(4, 0xffffff, 0.4);
 		this.weapon.drawCircle(0,0,Math.sqrt(this.current_target_distance_nosqrt));//Math.cos(((Math.PI * 2) / this.damage)*i)*this.range, Math.sin(((Math.PI * 2) / this.damage)*i)*this.range, (this.damage/2)+1);
 		
-		
-		this.weapon.lineStyle(2, 0xffffff, 0.6);
+		this.weapon.endFill();	
+
+		this.weapon.lineStyle(2, 0xffffff, 0.3);
 		this.weapon.moveTo(0,0);
 		this.weapon.lineTo(this.range,0);
-		this.weapon.endFill();	
+		this.weapon.moveTo(0,0);
+		this.weapon.lineTo(-this.range,0);
+		/*this.weapon.moveTo(0,0);
+		this.weapon.lineTo(0,this.range);*/
+		
 	
 		this.weapon.alpha = 1;
 
-		this.weapon.rotation = this.current_target_angle;
+		this.weapon.rotation = this.current_target_angle + Math.PI/2;
+		//this.weapon.rotation = this.current_target_angle
 	
 		
 
