@@ -85,8 +85,8 @@ ONSCREENRANDOM = function(){
 
 	return({
 	
-	"posx" : Math.random() * ($(window).width()/2*2) ,
-	"posy" : Math.random() * ($(window).height()/2*2),
+	"posx" : Math.random() * ((window.innerWidth*1)/2*2) ,
+	"posy" : Math.random() * ((window.innerHeight*1)/2*2),
 	"velx" : 0,
 	"vely" : 0,
  	"accx" : 0,

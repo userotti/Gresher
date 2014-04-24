@@ -6,7 +6,7 @@ Shrap = gamecore.DualPooled('Shrap',
        var s = this._super();
        
       // console.log(effectlayerparam);
-       s.mylayer = effectlayerparam;
+      s.mylayer = effectlayerparam;
        
        s.setStats(charparams);
        s.setPos(posparams);
@@ -237,6 +237,8 @@ Shrap = gamecore.DualPooled('Shrap',
 				
 	
 		}
+
+		//this.body.cacheAsBitmap = true;
 
 		
 

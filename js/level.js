@@ -22,13 +22,13 @@ Level.prototype.buildLevel = function()
 	case 1:	
 		
 
-		for (var i = 0; i < 0; i++) {
+		for (var i = 0; i < 20; i++) {
 	         Tower.create(BASICJELLY, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
 	        
 	    };
 
 
-	    for (var i = 0; i < 10; i++) {
+	    for (var i = 0; i < 0; i++) {
 	         Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
 	        
 	    };
@@ -103,6 +103,11 @@ Level.prototype.buildBackground = function()
 	this.background_layer.addChild(this.space_rubble);
 	this.space_rubble.position.x = (Math.random()*1500) - 750;
 	this.space_rubble.position.y = (Math.random()*1500) - 750;
+
+
+	//this.space_rubble.cacheAsBitmap = true;
+	//this.space_rubble_deeper.cacheAsBitmap = true;
+
 
 
 };

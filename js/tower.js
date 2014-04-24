@@ -269,6 +269,8 @@ Tower = gamecore.DualPooled('Tower',
 	
 		}
 
+		this.body.cacheAsBitmap = true;
+		this.body_flash.cacheAsBitmap = true;
 		
 		this.body.addChild(this.body_flash);	
  	},
@@ -304,7 +306,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.weapon.rotation = this.current_target_angle + Math.PI/2;
 		//this.weapon.rotation = this.current_target_angle
 	
-		
+		//this.weapon.cacheAsBitmap = true;
 
  	},
 

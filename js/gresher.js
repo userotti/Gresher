@@ -20,11 +20,23 @@ Gresher.prototype.setupPIXI = function()
 
 
     this.stage = new PIXI.Stage(0x0a1c43, true);
+    
+    console.log("window.innerWidth" + window.innerWidth);
+    console.log("window.innerHeight" + window.innerHeight);
+    
     this.stage.setInteractive(true);
 
-    this.renderer = PIXI.autoDetectRenderer($(window).width(), $(window).height());
+    console.log("window.devicePixelRatio" + window.devicePixelRatio);
+
+    this.renderer = PIXI.autoDetectRenderer(window.innerWidth/*window.devicePixelRatio*/,window.innerHeight/*window.devicePixelRatio*/);//, document.getElementById("main-canvas"), true, true);
     this.renderer.view.id = "main-canvas";
     this.renderer.view.style.display = "block";
+
+
+    this.renderer.view.screencanvas = true;
+
+    console.log(this.renderer.gl);
+
 
     document.body.appendChild(this.renderer.view);
     
@@ -32,9 +44,12 @@ Gresher.prototype.setupPIXI = function()
 
 //mouse input function
 
-Gresher.prototype.handleMouse = function(){
 
-    this.currentscene.mouseClick(this.stage.getMousePosition());           
+
+Gresher.prototype.handleClickTap = function(data){
+
+    
+    this.currentscene.mouseClick(data);           
 
             
    
@@ -60,7 +75,7 @@ Gresher.prototype.resize = function(){
 
         this.currentscene.resizeScene();
 
-        this.renderer.resize($(window).width(), $(window).height());
+        this.renderer.resize(window.innerWidth,window.innerHeight);
 
 };
 
