@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
 
     <!-- Libraries -->
-   <!--  <script src="js/libs/stats.min.js"></script>-->
+    <script src="js/libs/stats.min.js"></script>
     <script src="bower_components/pixi/bin/pixi.dev.js"></script>
     <!--<script src="js/libs/jquery-1.11.0.min.js"></script> -->
    
@@ -39,30 +39,22 @@
 
 	//make the fps stats
 
-	/*stats = new Stats();
+	stats = new Stats();
     document.body.appendChild( stats.domElement );
     stats.domElement.style.position = "fixed";
     stats.domElement.style.zIndex = "999";
     stats.domElement.style.bottom = "0px";
     stats.domElement.style.right = "0px";
 
-*/
+
     //make the game instance
 
 	gresher = new Gresher();
 
-	
-	//setup the event mouse handler
-	/*gresher.stage.click = gresher.stage.tap = function(){
 
-		gresher.handleMouse();
-
-	}*/
 	
 	gresher.stage.click = function(mouseData){
-		//console.log(mouseData.originalEvent.x);
-		//console.log(mouseData.originalEvent.y);
-		
+
 		gresher.handleClickTap(mouseData.originalEvent);
 
 	}
@@ -82,13 +74,13 @@
 	//the main loop function
 	function update() {
 		
-		//stats.begin();	
+		stats.begin();	
 
 		gresher.gameupdate();
 		requestAnimFrame( update );
 
 
-        //stats.end();
+        stats.end();
 	}
 
 	//the main resize function

@@ -21,9 +21,6 @@ BASICJELLY = {
 
  	
  	"maxboostpower" : 3.5,
- 	
-
-
 
 }
 
@@ -85,11 +82,24 @@ ONSCREENRANDOM = function(){
 
 	return({
 	
-	"posx" : Math.random() * ((window.innerWidth*1)/2*2) ,
-	"posy" : Math.random() * ((window.innerHeight*1)/2*2),
+	"posx" : Math.random() * ((window.innerWidth*1)/3) ,
+	"posy" : Math.random() * ((window.innerHeight*1)/3),
 	"velx" : 0,
 	"vely" : 0,
  	"accx" : 0,
  	"accy" : 0, });
  	
 }
+
+//TEAMS
+
+JELLIESTEAM = ["jellies"];
+
+STALAGMITETEAM = ["stalagmites"];
+
+STRUCTSTEAM = ["structs"];
+
+FRIENDSOFALL = ["jellies", "stalagmites", "structs"];
+
+NOTEAM = [];
+

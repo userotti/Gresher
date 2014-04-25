@@ -4,9 +4,13 @@ JELLYSHRAP = {
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.07,
-    "velsumremove" : 0.1,
-    "drawmefullalpha" : 4,
+
+    "startalpha" : 1,
+    "alphadecrease" : 0.05,
+    
     "scaleup_speed" : 0.0,
+
+
     "scale" : 1,
 
 
@@ -18,8 +22,13 @@ STALAGSHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.070,
- 	"velsumremove" : 0.1,
- 	"drawmefullalpha" : 4,
+ 	
+
+ 	
+
+    "startalpha" : 1,
+ 	"alphadecrease" : 0.05,
+
  	"scaleup_speed" : 0.0,
  	"scale" : 1,
     
@@ -35,8 +44,11 @@ STRUCTSHRAP = {
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
  	"fric_coeff": 0.20,
- 	"velsumremove" : 0.1,
- 	"drawmefullalpha" : 4,
+ 
+
+    "startalpha" : 1,
+ 	"alphadecrease" : 0.05,
+
  	"scaleup_speed" : 0.0,
  	"scale" : 1,
     
@@ -50,8 +62,11 @@ BASICSMOKESHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.2,
  	"fric_coeff": 0.070,
- 	"velsumremove" : 0.1,
- 	"drawmefullalpha" : 4,
+
+
+    "startalpha" : 0.5,
+ 	"alphadecrease" : 0.02,
+
  	"scaleup_speed" : 0.05,
     "scale" : 1.6,
 
@@ -63,8 +78,11 @@ BASICSPARKSHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.070,
- 	"velsumremove" : 0.1,
- 	"drawmefullalpha" : 1,
+ 	
+
+    "startalpha" : 2,
+ 	"alphadecrease" : 0.2,
+
  	"scaleup_speed" : 0.00,
     "scale" : 1,
 
@@ -102,8 +120,8 @@ SPARKSHRAP = function(px,py){
 	
 	"posx" : px,
 	"posy" : py,
-	"velx" : (Math.random()*4)-2,
-	"vely" : (Math.random()*4)-2,
+	"velx" : (Math.random()*8)-4,
+	"vely" : (Math.random()*8)-4,
  	"accx" : 0,
  	"accy" : 0, });
  	

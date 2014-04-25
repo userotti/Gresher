@@ -37,8 +37,8 @@ Shrap = gamecore.DualPooled('Shrap',
  	//animation
  	bodybounce: 0,
  	bodyrotation_speed: 0,
- 	velsumremove: 0,
- 	drawmefullalpha: 0,
+ 	startalpha: 0,
+ 	alphadecrease: 0,
  	scaleup_speed: 0,
 
  	
@@ -87,9 +87,12 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.scale = charparams.scale;
  		this.fric_coeff = charparams.fric_coeff;
  		this.releaseMeFromList = false;
- 		this.velsumremove = charparams.velsumremove;
- 		this.drawmefullalpha = charparams.drawmefullalpha;
+ 		
+ 		this.startalpha = charparams.startalpha;
+ 		this.alphadecrease = charparams.alphadecrease;
+
  		this.scaleup_speed = charparams.scaleup_speed;
+ 		
 
  	},
 
@@ -119,13 +122,17 @@ Shrap = gamecore.DualPooled('Shrap',
  		var x1,y1,x2,y2;
 
  		this.body.scale.x = this.scale;
-		this.body.scale.y = this.scale;	
+		this.body.scale.y = this.scale;
 
+		this.body.alpha = this.startalpha;
+
+		this.body.clear();
 		
 		
 		switch (this.shrap_class){
 
 		case "jelly" : 
+
 
 				for (var i = 0; i <  3; i++) {
 
@@ -150,7 +157,8 @@ Shrap = gamecore.DualPooled('Shrap',
 
 		case "stalagmite" :	
 
-	
+			
+
 			for (var i = 0; i <  5; i++) {
 
 
@@ -180,6 +188,7 @@ Shrap = gamecore.DualPooled('Shrap',
 			break;	
 
 		case "smoke" :	
+
 
 					var x,y
 
@@ -252,17 +261,15 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.body.scale.y += this.scaleup_speed;
  		
  		
- 		if ((Math.abs(this.vel.x) + Math.abs(this.vel.y)) > this.drawmefullalpha){
+ 		if (this.body.alpha > 0) {
 
- 			this.body.alpha = 1;
+ 			this.body.alpha = this.body.alpha - this.alphadecrease;
+ 			//console.log(this.body.alpha);	
+ 		}
 
- 		}else{
 
- 			this.body.alpha = (Math.abs(this.vel.x) + Math.abs(this.vel.y)) * (1/this.drawmefullalpha);
 
- 		}	
-
- 	
+ 		
 
 
  	},
@@ -321,7 +328,7 @@ Shrap = gamecore.DualPooled('Shrap',
 		this.updateAnimation();
 
 
-		if (Math.abs(this.vel.x+this.vel.y)   <  this.velsumremove) this.releaseMePlease(); 
+		if (this.body.alpha  <= 0) this.releaseMePlease(); 
 
 	
 

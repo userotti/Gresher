@@ -21,12 +21,11 @@ Gresher.prototype.setupPIXI = function()
 
     this.stage = new PIXI.Stage(0x0a1c43, true);
     
-    console.log("window.innerWidth" + window.innerWidth);
-    console.log("window.innerHeight" + window.innerHeight);
+  
     
     this.stage.setInteractive(true);
 
-    console.log("window.devicePixelRatio" + window.devicePixelRatio);
+   
 
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth/*window.devicePixelRatio*/,window.innerHeight/*window.devicePixelRatio*/);//, document.getElementById("main-canvas"), true, true);
     this.renderer.view.id = "main-canvas";
@@ -35,7 +34,6 @@ Gresher.prototype.setupPIXI = function()
 
     this.renderer.view.screencanvas = true;
 
-    console.log(this.renderer.gl);
 
 
     document.body.appendChild(this.renderer.view);

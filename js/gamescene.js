@@ -17,11 +17,13 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,1)
-
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM,this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
+    
 
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"firstlevel", this.player)
+
+    
 
 
 
@@ -136,7 +138,7 @@ Gamescene.prototype.updateEffects = function(){
 
 
                     nextShrap.obj.release();
-                    //this.effects_layer.removeChild(nextShrap.obj.body)
+                    this.effects_layer.removeChild(nextShrap.obj.body)
                     nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
 
                 }else{
@@ -202,8 +204,8 @@ Gamescene.prototype.updateAttacks = function(){
                         
                         if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
 
-                            this.attacker_tower.obj.shoot(this.target_tower.obj);
-
+                            //this.attacker_tower.obj.shoot(this.target_tower.obj);
+                              this.attacker_tower.obj.checkTeamAndAct(this.target_tower.obj);  
                         }
                     }    
 
@@ -228,8 +230,7 @@ Gamescene.prototype.mouseClick = function(mousepos)
     this.mouseclickposhoek = Math.atan2(((this.camera.screen_midy) - this.mouseclickpos.y), ((this.camera.screen_midx) - this.mouseclickpos.x) ) - this.camera.rotation;
     this.player.startBoost(this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
             
-   // this.player.iveBeenHitBy();
-   // this.player.shoot();
+   
 
 
 };   

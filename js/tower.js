@@ -2,7 +2,7 @@
 Tower = gamecore.DualPooled('Tower',
   {
     // Static constructor
-    create:function (charparams, posparams, effectlayerparam, colidelayerparam)
+    create:function (charparams, posparams, teamparams, effectlayerparam, colidelayerparam)
     {
        var t = this._super();
        
@@ -11,9 +11,10 @@ Tower = gamecore.DualPooled('Tower',
 
        t.setStats(charparams);
        t.setPos(posparams);
+       t.setTeams(teamparams);
 	   t.buildBody();
 	   
-       t.sprite.addChild(t.body);
+       t.sprite.addChild(t.towerbody);
        t.sprite.addChild(t.weapon);
 
        
@@ -89,6 +90,7 @@ Tower = gamecore.DualPooled('Tower',
  	//AI
  	controlled: false,
  	ai_timepercall: 0,
+ 	teams: 0,
 
  	//attacking
  	current_target_distance_nosqrt: 0,	
@@ -101,13 +103,15 @@ Tower = gamecore.DualPooled('Tower',
 
  	init: function()
 	{
-	    console.log("tower news");
+	  
 	    
 	    this.sprite = new PIXI.SmaatObjectContainer();
+	    this.towerbody = new PIXI.SmaatObjectContainer();
  		this.body = new PIXI.SmaatGraphics();
  		this.body_flash = new PIXI.SmaatGraphics();
  		this.weapon = new PIXI.SmaatGraphics();
  		this.hud = new PIXI.SmaatGraphics();
+
 		
 		this.pos = new PIXI.Point();
 		this.vel = new PIXI.Point();
@@ -119,8 +123,11 @@ Tower = gamecore.DualPooled('Tower',
 
 
 	 	this.boosttarget = new PIXI.Point();
+		this.movevect = new PIXI.Point();
+		
+		this.teams = [];
 
-	 	this.movevect = new PIXI.Point();
+
 	},
  
 
@@ -178,14 +185,33 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
+ 	setTeams: function(teamparams){
+
+ 		while (this.teams.length != 0){
+
+ 			this.teams.pop();
+ 		
+ 		}
+
+ 		for (var i=0; i <= teamparams.length-1; i++){
+
+ 			this.teams.push(teamparams[i]);
+
+ 		}
+
+
+
+
+ 	},
+
  	buildBody: function(){
 
  		var x,y;
  		var x1,y1,x2,y2;
 
  		
- 		this.body.scale.x = this.scale;
-		this.body.scale.y = this.scale;	
+ 		this.towerbody.scale.x = this.scale;
+		this.towerbody.scale.y = this.scale;	
 
 		this.body_flash.visible = false;
 		this.body_flash.counter = 0;
@@ -269,10 +295,12 @@ Tower = gamecore.DualPooled('Tower',
 	
 		}
 
-		this.body.cacheAsBitmap = true;
+		this.towerbody.addChild(this.body);
+		this.towerbody.addChild(this.body_flash);	
+ 		
+ 		this.body.cacheAsBitmap = true;
 		this.body_flash.cacheAsBitmap = true;
 		
-		this.body.addChild(this.body_flash);	
  	},
 
 
@@ -388,6 +416,31 @@ Tower = gamecore.DualPooled('Tower',
 
 	},
 
+	checkTeamAndAct: function(target_tower){
+
+		var isteammate;
+
+		isteammate = -1;
+
+		for (var i=0; i < this.teams.length; i++){
+
+			isteammate = target_tower.teams.indexOf(this.teams[i]);
+
+		}
+
+		if (isteammate == -1){
+
+			this.shoot(target_tower);
+
+		}else
+		{
+
+
+		}
+
+
+	},
+
  	bodyHitFlash: function(length){
 
 		this.body_flash.visible = true;
@@ -435,9 +488,8 @@ Tower = gamecore.DualPooled('Tower',
 
 			this.bodyHitFlash(5);
 
-	 		//switch (this.character_class) 
-
 	 		this.makeHitShards(4);
+	 		this.makeSparks(6);
 
 	},
 
@@ -493,17 +545,17 @@ Tower = gamecore.DualPooled('Tower',
 
  		if (this.bodybounce > 0){
 
-	 		this.body.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
-	 		this.body.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
+	 		this.towerbody.scale.x = this.scale+(Math.sin(this.animcounter))*(this.bodybounce*this.scale);
+	 		this.towerbody.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
 	 		
  		}
 
  		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
 
  		if (this.boostpower == 0)
- 		this.body.rotation += this.bodyrotation_speed;
+ 		this.towerbody.rotation += this.bodyrotation_speed;
  		else
- 		this.body.rotation =  Math.atan2(this.vel.y, this.vel.x);	
+ 		this.towerbody.rotation =  Math.atan2(this.vel.y, this.vel.x);	
  		
 
  		if (this.body_flash.counter > 0){
@@ -518,7 +570,7 @@ Tower = gamecore.DualPooled('Tower',
 		if (this.dying == true){
 
 			this.scale += 0.07;
-			this.body.alpha += -0.07;
+			this.towerbody.alpha += -0.07;
 			
 
 		}
@@ -533,7 +585,7 @@ Tower = gamecore.DualPooled('Tower',
  		if ((this.dying == false) && (this.health <= 0)) this.startDying();
 
 
- 		if (this.body.alpha <= 0) this.timeToDieAndBeRemoved();
+ 		if (this.towerbody.alpha <= 0) this.timeToDieAndBeRemoved();
 
  		if (this.reload_time_left > 0) this.reload_time_left--;
 

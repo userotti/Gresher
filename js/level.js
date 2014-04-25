@@ -1,8 +1,10 @@
-Level = function(effects_layer, colidables_layer, background_layer, level_id){
+Level = function(effects_layer, colidables_layer, background_layer, level_id, player){
 	
 	this.effects_layer = effects_layer;
 	this.colidables_layer = colidables_layer;
 	this.background_layer = background_layer;
+//make array if multiplayer
+	this.theplayer = player;
 
 	this.level_id = level_id;
 	
@@ -19,17 +21,20 @@ Level.prototype.buildLevel = function()
 
 	switch (this.level_id){
 
-	case 1:	
+	case "firstlevel":	
 		
 
-		for (var i = 0; i < 20; i++) {
-	         Tower.create(BASICJELLY, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
+		for (var i = 0; i < 7; i++) {
+	         p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, this.effects_layer, this.colidables_layer);
+	         console.log(p.teams);
 	        
 	    };
 
 
-	    for (var i = 0; i < 0; i++) {
-	         Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), this.effects_layer, this.colidables_layer);
+	    for (var i = 0; i < 24; i++) {
+	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, this.effects_layer, this.colidables_layer);
+	         p.leader = this.theplayer;
+	         console.log(p.teams);
 	        
 	    };
 
@@ -105,9 +110,7 @@ Level.prototype.buildBackground = function()
 	this.space_rubble.position.y = (Math.random()*1500) - 750;
 
 
-	//this.space_rubble.cacheAsBitmap = true;
-	//this.space_rubble_deeper.cacheAsBitmap = true;
-
+	
 
 
 };
