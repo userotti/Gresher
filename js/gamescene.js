@@ -17,11 +17,12 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM,this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
-    
+  
+    //console.log(STILLAI);
 
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"firstlevel", this.player)
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"secondlevel", this.player)
 
     
 
@@ -101,7 +102,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt){
 Gamescene.prototype.sceneUpdate = function()
 {
     
-        this.camera.zoom = 0.95;// - (1 * ((Math.pow(this.player.vel.x,2) + Math.pow(this.player.vel.y,2))));
+        //this.camera.zoom = 0.95;// - (1 * ((Math.pow(this.player.vel.x,2) + Math.pow(this.player.vel.y,2))));
 
         
         this.updateTowers();

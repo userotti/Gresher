@@ -2,8 +2,8 @@ BASICJELLY = {
 	
 	"character_class" : "jelly",
 	"mass" : 1.4,
-	"maxhealth" : 350,
-	"speed" : 0.2,
+	"maxhealth" : 250,
+	
  	"shield": 0,
  	"shielrecharge": 0,
  	"range": 70,
@@ -16,11 +16,11 @@ BASICJELLY = {
 
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
- 	"fric_coeff": 0.60,
+ 	"fric_coeff": 0.30,
  	"ai_timepercall": 100, 
 
  	
- 	"maxboostpower" : 3.5,
+ 	"maxboostpower" : 2.5,
 
 }
 
@@ -29,12 +29,12 @@ BASICSTALAGMITE = {
 	"character_class" : "stalagmite",
 	"mass" : 1,
 	"maxhealth" : 100,
-	"speed" : 0.5,
+	
  	"shield": 0,
  	"shielrecharge": 0,
  	"range": 190,
- 	"reload": 50,
- 	"damage": 20,
+ 	"reload": 60,
+ 	"damage": 55,
  	"energy": 100,
  	"energyrecharge": 1,
  	"magneticcharge": 0,
@@ -57,7 +57,7 @@ BASICSTRUCT = {
 	"character_class" : "struct",
 	"mass" : 1,
 	"maxhealth" : 100,
-	"speed" : 1,
+	
  	"shield": 0,
  	"shielrecharge": 0,
  	"range": 50,
@@ -82,8 +82,22 @@ ONSCREENRANDOM = function(){
 
 	return({
 	
-	"posx" : Math.random() * ((window.innerWidth*1)/3) ,
-	"posy" : Math.random() * ((window.innerHeight*1)/3),
+	"posx" : (Math.random() * ((window.innerWidth) ) )  - (window.innerWidth/2),
+	"posy" : (Math.random() * ((window.innerHeight) ) )   - (window.innerHeight/2),
+	"velx" : 0,
+	"vely" : 0,
+ 	"accx" : 0,
+ 	"accy" : 0, });
+ 	
+}
+
+
+ONSCREENSMALLRANDOM = function(){ 
+
+	return({
+	
+	"posx" : (Math.random() * ((window.innerWidth)/3))  - (window.innerWidth)/6,
+	"posy" : (Math.random() * ((window.innerHeight)/3))  - (window.innerHeight)/6,
 	"velx" : 0,
 	"vely" : 0,
  	"accx" : 0,

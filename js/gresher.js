@@ -3,7 +3,7 @@
 Gresher = function()
 {
   
-  
+    this.paused = false;
     this.setupPIXI();
 
     this.currentscene = new Gamescene(this.stage);
@@ -57,9 +57,11 @@ Gresher.prototype.handleClickTap = function(data){
 
 Gresher.prototype.gameupdate = function() {
 
-      
-        this.currentscene.sceneUpdate();
-
+        
+        
+        if (this.paused == false){
+            this.currentscene.sceneUpdate();
+        }
         this.renderer.render(this.stage);
         
  
