@@ -9,7 +9,7 @@
     <!-- Libraries -->
     <script src="js/libs/stats.min.js"></script>
     <script src="bower_components/pixi/bin/pixi.dev.js"></script>
-    <script src="js/libs/jquery-1.11.0.min.js"></script>
+    <!--<script src="js/libs/jquery-1.11.0.min.js"></script> -->
    
     <script src="js/libs/gamecore.min.js"></script>
 
@@ -28,87 +28,10 @@
 	<script src="js/level.js"></script>
 	<script src="js/gamescene.js"></script>
 	<script src="js/gresher.js"></script>
-
-    <script type="text/javascript">
-        var sock = null;
-        var ellog = null;
-        var code = null;
-
-        window.onload = function() {
-
-            var wsuri;
-            code = Math.round(Math.random() * 20000);
-            $('#name').html(code);
-
-            ellog = document.getElementById('log');
-
-            if (window.location.protocol === "file:") {
-                wsuri = "ws://localhost:9000";
-            } else {
-                wsuri = "ws://" + window.location.hostname + ":9000";
-            }
-
-            if ("WebSocket" in window) {
-                sock = new WebSocket(wsuri);
-            } else if ("MozWebSocket" in window) {
-                sock = new MozWebSocket(wsuri);
-            } else {
-                log("Browser does not support WebSocket!");
-                window.location = "http://autobahn.ws/unsupportedbrowser";
-            }
-
-            if (sock) {
-                sock.onopen = function() {
-                    log("Connected to " + wsuri);
-
-                    sock.send(code);
-
-                }
-
-                sock.onclose = function(e) {
-                    log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e.reason + "')");
-                    sock = null;
-                }
-
-                sock.onmessage = function(e) {
-                    log(e.data);
-                    console.log(e.data);
-                    var reply = e.data.split(":");
-                    console.log(reply[1]);
-                    if(reply[1] != code){
-                        console.log('not me');
-                    }
-
-                }
-            }
-        };
-
-        function broadcast() {
-            var msg = document.getElementById('message').value;
-            if (sock) {
-                sock.send(msg);
-                log("Sent: " + msg);
-            } else {
-                log("Not connected.");
-            }
-        };
-
-        function log(m) {
-            ellog.innerHTML += m + '\n';
-            ellog.scrollTop = ellog.scrollHeight;
-        };
-    </script>
+	
 	
 </head>
 <body>
-<div class="chat">
-    <form>
-        <h1 id="name">&nbsp;</h1>
-        <p>Broadcast Message: <input id="message" type="text" value="Hello from Browser!"></p>
-    </form>
-    <button onclick='broadcast();'>Broadcast Message</button>
-    <pre id="log" style=" overflow-y: scroll;"></pre>
-</div>
 
 
 	<script>
@@ -220,7 +143,6 @@
 	
 
     </script>
-
 
 	</body>
 </html>
