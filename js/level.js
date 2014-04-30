@@ -8,8 +8,8 @@ Level = function(effects_layer, colidables_layer, background_layer, level_id, pl
 
 	this.level_id = level_id;
 	
-	this.buildBackground();
-	this.buildLevel();
+	//this.buildBackground();
+	//this.buildLevel();
 
 
 }
@@ -131,8 +131,8 @@ Level.prototype.buildBackground = function()
 Level.prototype.doLevel = function()
 {
 
-	this.space_rubble_deeper.rotation += 0.000025;
-	this.space_rubble.rotation += 0.00019;
+	//this.space_rubble_deeper.rotation += 0.000025;
+	//this.space_rubble.rotation += 0.00019;
 	
 
 
