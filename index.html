@@ -10,11 +10,11 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="bower_components/pixi/bin/pixi.dev.js"></script>
     <script src="js/libs/jquery-1.11.0.min.js"></script>
+    <script src="js/libs/underscore/underscore-min.js"></script>
    
     <script src="js/libs/gamecore.min.js"></script>
 
     <!-- Gresher Javascript -->
-
 	<script src="js/globals.js"></script>
 	<script src="js/destenationspresets.js"> </script>
 	<script src="js/ai.js"></script>
@@ -33,12 +33,14 @@
         var sock = null;
         var ellog = null;
         var code = null;
+        var users = new gamecore.Hashtable();
+
 
         window.onload = function() {
 
             var wsuri;
             code = Math.round(Math.random() * 20000);
-            $('#name').html(code);
+            $('#name span').html(code);
 
             ellog = document.getElementById('log');
 
@@ -60,13 +62,16 @@
             if (sock) {
                 sock.onopen = function() {
                     log("Connected to " + wsuri);
-
-                    sock.send(code);
+                    sock.send(code + ':spawn');
 
                 }
 
+
                 sock.onclose = function(e) {
+                    alert('death');
+                    sock.send(code + ':death');
                     log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e.reason + "')");
+
                     sock = null;
                 }
 
@@ -75,12 +80,48 @@
                     console.log(e.data);
                     var reply = e.data.split(":");
                     console.log(reply[1]);
-                    if(reply[1] != code){
-                        console.log('not me');
+
+                    if(reply[0] != code){
+                        var tempCode = reply[0];
+                        if(reply[1] == 'spawn'){
+
+                            console.log('Spawn: Other');
+                            users.put(tempCode, Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
+
+                        } else if (reply[1] == 'death'){
+                            console.log('death');
+                            users.remove(tempCode);
+
+                        } else if(reply[1] == 'click') {
+
+                            if(users.get(tempCode) === null){
+                                console.log('Click found but no users??');
+                                users.put(tempCode, Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
+                                users.get(tempCode).startBoost(reply[2],reply[3]);
+                            } else {
+                                console.log('Click: Other');
+                                users.get(tempCode).startBoost(reply[2],reply[3]);
+                            }
+
+                        }
+                    } else {
+                        // My Actions (No message reactions)
+                        if(reply[1] == 'spawn'){
+                            console.log('Spawn: Self');
+                        } else if(reply[1] == 'click') {
+                            console.log('Click: me');
+                        }
                     }
+
 
                 }
             }
+        };
+
+        window.onbeforeunload = function() {
+            sock.send('DEATH');
+            sock.onclose = function () {}; // disable onclose handler first
+            //sock.close()
         };
 
         function broadcast() {
@@ -102,11 +143,12 @@
 </head>
 <body>
 <div class="chat">
-    <form>
-        <h1 id="name">&nbsp;</h1>
+    <h1 id="name">Hello <span>&nbsp;</span>!</h1>
+    <form style="display:none">
+
         <p>Broadcast Message: <input id="message" type="text" value="Hello from Browser!"></p>
     </form>
-    <button onclick='broadcast();'>Broadcast Message</button>
+    <button  style="display:none" onclick='broadcast();'>Broadcast Message</button>
     <pre id="log" style=" overflow-y: scroll;"></pre>
 </div>
 
