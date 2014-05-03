@@ -17,7 +17,7 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILL_BUT_ATTACKING_AI, this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
   
     //console.log(STILLAI);
@@ -108,7 +108,7 @@ Gamescene.prototype.sceneUpdate = function()
         this.updateTowers();
         this.updateEffects();
 
-        this.updateAttacks();
+        //this.updateAttacks();
 
         this.level.doLevel();
 
@@ -161,9 +161,41 @@ Gamescene.prototype.updateTowers = function(){
             this.next_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
             while( this.next_tower )
             {
+                /* main update */
                 this.next_tower.obj.update();
+
+
+                /* add to targets list */
+                this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
+                this.attacker_tower = this.next_tower;
+                while( this.target_tower )
+                {
+                    if (this.attacker_tower != this.target_tower){
+                        
+                        if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
+
+                            
+                              this.attacker_tower.obj.addToTargets(this.target_tower.obj); 
+                        }
+                    }    
+
+                this.target_tower = this.target_tower.nextLinked;
+                }
+                /*end of add to targets list */
+
+                /* neeeeext */
                 this.next_tower = this.next_tower.nextLinked;
+            
             }
+
+            
+
+
+
+
+
+
+            /* remove die siele wat gekak het die loop */
 
             this.next_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
 
@@ -188,40 +220,7 @@ Gamescene.prototype.updateTowers = function(){
 
 };
 
-Gamescene.prototype.updateAttacks = function(){
 
-    if (gamecore.DualPool.getPool(Tower) != null){
-
-
-            this.attacker_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-            while( this.attacker_tower )
-            {
-                
-                this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
-                
-                while( this.target_tower )
-                {
-                    if (this.attacker_tower != this.target_tower){
-                        
-                        if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
-
-                            //this.attacker_tower.obj.shoot(this.target_tower.obj);
-                              this.attacker_tower.obj.checkTeamAndAct(this.target_tower.obj);  
-                        }
-                    }    
-
-                this.target_tower = this.target_tower.nextLinked;
-                }
-
-                this.attacker_tower  =  this.attacker_tower.nextLinked;
-
-            }
-
-
-
-        }
-
-};    
 
 Gamescene.prototype.mouseClick = function(mousepos)
 {

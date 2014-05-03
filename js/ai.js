@@ -1,10 +1,24 @@
 STILLAI = function(tower){
 
+	//if (this.targets.length != 0)
+	//		this.attackAction();
+
+ 	
+}
+
+STILL_BUT_ATTACKING_AI = function(tower){
+
+	if (this.targets.length != 0)
+			this.attackAction();
+
  	
 }
 
 
 SQUARE250_100MOVE_AI = function(tower){
+
+		if (this.targets.length != 0)
+			this.attackAction();
 
  		if (((tower.age % 100) == 0) && (!tower.controlled)){
 		
@@ -19,7 +33,8 @@ SQUARE250_100MOVE_AI = function(tower){
 
 SQUARE100_30MOVE_AI = function(tower){
 
- 			
+ 		if (this.targets.length != 0)
+			this.attackAction();	
 
  		if (((tower.age % 30) == 0) && (!tower.controlled)){
 		
@@ -33,7 +48,8 @@ SQUARE100_30MOVE_AI = function(tower){
 
 SQUARE150_50MOVE_AI = function(tower){
 
- 			
+ 		if (this.targets.length != 0)
+			this.attackAction();		
 
  		if (((tower.age % 50) == 0) && (!tower.controlled)){
 		
@@ -47,6 +63,8 @@ SQUARE150_50MOVE_AI = function(tower){
 
 BASIC_DESTINATION_100TIC_AI = function(tower){
 
+		if (this.targets.length != 0)
+			this.attackAction();
  		
  		if (((tower.age % 100) == 0)){
 		

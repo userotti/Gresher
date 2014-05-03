@@ -2,7 +2,7 @@
 Tower = gamecore.DualPooled('Tower',
   {
     // Static constructor
-    create:function (charparams, posparams, teamparams, aiparam, destinationsparam, effectlayerparam, colidelayerparam)
+    create:function (charparams, posparams, teamparams, aiparam, effectlayerparam, colidelayerparam)
     {
        var t = this._super();
        
@@ -10,7 +10,7 @@ Tower = gamecore.DualPooled('Tower',
        t.effects_layer = effectlayerparam;
 
        t.setStats(charparams);
-       t.setDestinations(destinationsparam);
+       
        t.setPos(posparams);
        t.setTeams(teamparams);
 	   t.aifunc = aiparam;
@@ -96,6 +96,7 @@ Tower = gamecore.DualPooled('Tower',
  	controlled: false,
  	ai_timepercall: 0,
  	teams: 0,
+ 	targets: 0,
  	destinations: 0,
 
  	//attacking
@@ -133,6 +134,8 @@ Tower = gamecore.DualPooled('Tower',
 		
 		this.teams = [];
 		this.destinations = [];
+		this.targets = [];
+
 
 
 	},
@@ -329,15 +332,21 @@ Tower = gamecore.DualPooled('Tower',
 		
  	},
 
+ 	distToPoint: function(x1,y1,x2,y2){
 
- 	redrawWeapon: function(){
+
+ 		return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
+
+ 	},
+
+ 	redrawWeapon: function(target_tower){
 			
 		this.weapon.clear();	
 		
 		
 	
 		this.weapon.lineStyle(4, 0xffffff, 0.4);
-		this.weapon.drawCircle(0,0,Math.sqrt(this.current_target_distance_nosqrt));//Math.cos(((Math.PI * 2) / this.damage)*i)*this.range, Math.sin(((Math.PI * 2) / this.damage)*i)*this.range, (this.damage/2)+1);
+		this.weapon.drawCircle(0,0,this.distToPoint(this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y));
 		
 		this.weapon.endFill();	
 
@@ -358,6 +367,21 @@ Tower = gamecore.DualPooled('Tower',
 
  	/*ANIMATION FUNCTIONS */
 
+ 	attackAction: function(){
+
+ 		this.shoot(this.targets[0]);
+
+ 	},
+
+ 	addToTargets: function(target_tower){
+
+ 		if (!this.checkTeam(target_tower)){
+
+ 			this.targets.push(target_tower);
+ 		}	
+
+ 	},
+
 
  	shoot: function(target_tower){
 
@@ -366,35 +390,39 @@ Tower = gamecore.DualPooled('Tower',
 			
 			target_tower.iveBeenHitBy(this);
 
-			this.redrawWeapon();
+			this.redrawWeapon(target_tower);
 			this.reload_time_left = this.reload;
 		}	
 
 
 	},
 
-	checkTeamAndAct: function(target_tower){
+	/*
 
-		var isteammate;
+	interactWith: function(target_tower){
 
-		isteammate = -1;
 
-		for (var i=0; i < this.teams.length; i++){
-
-			isteammate = target_tower.teams.indexOf(this.teams[i]);
-
-		}
-
-		if (isteammate == -1){
+		if (!this.checkTeam(target_tower)){
 
 			this.shoot(target_tower);
 
-		}else
-		{
+		}
 
+
+	},*/
+
+	checkTeam: function(target_tower){
+
+
+		for (var i=0; i < this.teams.length; i++){
+
+			 if (target_tower.teams.indexOf(this.teams[i]) != -1)
+			 	return true;
 
 		}
 
+
+		return false;
 
 	},
 
@@ -618,8 +646,10 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateAI: function(){
 
-	
+		
+ 		
  		this.aifunc(this);
+ 		this.targets.length = 0;
 
 
  	},
@@ -659,10 +689,13 @@ Tower = gamecore.DualPooled('Tower',
  		this.updatePhysicsMovement();
 		this.updateAnimation();
 
-		this.updateAI();
+		
 
 		this.updatePeriodic();
 		this.updateStatus();
+
+
+		this.updateAI();
  		 
 
  	},
