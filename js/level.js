@@ -24,14 +24,14 @@ Level.prototype.buildLevel = function()
 	case "firstlevel":	
 		
 
-		for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, SQUARE100_30MOVE_AI, this.effects_layer, this.colidables_layer);
+		for (var i = 0; i < 20; i++) {
+	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	        
 	    };
 
 
-	    for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENSMALLRANDOM(), STALAGMITETEAM, STILLAI, this.effects_layer, this.colidables_layer);
+	    for (var i = 0; i < 0; i++) {
+	         p = Tower.create(BASICSTALAGMITE, ONSCREENSMALLRANDOM(), STALAGMITETEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	     	   
 	    };
 
@@ -41,13 +41,13 @@ Level.prototype.buildLevel = function()
 		
 
 		for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, SQUARE100_30MOVE_AI, this.effects_layer, this.colidables_layer);
+	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	        
 	    };
 
 
 	    for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, STILLAI, this.effects_layer, this.colidables_layer);
+	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	     	   
 	    };
 

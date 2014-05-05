@@ -17,7 +17,7 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILL_BUT_ATTACKING_AI, this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
   
     //console.log(STILLAI);
@@ -175,7 +175,7 @@ Gamescene.prototype.updateTowers = function(){
                         if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
 
                             
-                              this.attacker_tower.obj.addToTargets(this.target_tower.obj); 
+                              this.attacker_tower.obj.addToTargetsOrFriends(this.target_tower.obj); 
                         }
                     }    
 

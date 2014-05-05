@@ -2,7 +2,7 @@
 Tower = gamecore.DualPooled('Tower',
   {
     // Static constructor
-    create:function (charparams, posparams, teamparams, aiparam, effectlayerparam, colidelayerparam)
+    create:function (charparams, posparams, teamparams, aiparams, effectlayerparam, colidelayerparam)
     {
        var t = this._super();
        
@@ -13,7 +13,10 @@ Tower = gamecore.DualPooled('Tower',
        
        t.setPos(posparams);
        t.setTeams(teamparams);
-	   t.aifunc = aiparam;
+
+    
+       t.mind.setAi(aiparams);
+	  
 
 	   t.buildBody();
 	   
@@ -47,8 +50,7 @@ Tower = gamecore.DualPooled('Tower',
  	reload: 0,
  	reload_time_left: 0,
  	damage: 0,
- 	energy: 0,
- 	energyrecharge: 0,
+ 	
  	magneticcharge: 0,
  	magneticrange: 0,
  	maxboostpower: 0,
@@ -81,6 +83,9 @@ Tower = gamecore.DualPooled('Tower',
  	fric_coeff: 0,
  	staticfric: 0,
  	myfakespeed: 0,
+ 	fullenergy: 0,
+ 	energyrecharge: 0,
+ 	currentenergy: 0,
  	
  	boosttarget: 0,
  	boostpower: 0,	
@@ -97,7 +102,8 @@ Tower = gamecore.DualPooled('Tower',
  	ai_timepercall: 0,
  	teams: 0,
  	targets: 0,
- 	destinations: 0,
+
+ 	destination: 0,
 
  	//attacking
  	current_target_distance_nosqrt: 0,	
@@ -131,10 +137,13 @@ Tower = gamecore.DualPooled('Tower',
 
 	 	this.boosttarget = new PIXI.Point();
 		this.movevect = new PIXI.Point();
+
+		this.mind = new Ai(this);
 		
 		this.teams = [];
-		this.destinations = [];
+		
 		this.targets = [];
+		this.friends = [];
 
 
 
@@ -153,14 +162,18 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.range = charparams.range;
 	 	this.reload = charparams.reload;
 	 	this.damage = charparams.damage;
-	 	this.energy = charparams.energy;
+	 	this.fullenergy = charparams.fullenergy;
 	 	this.energyrecharge = charparams.energyrecharge;
+	 	this.currentenergy = 0;
+
 	 	this.magneticcharge = charparams.magneticcharge;
  		this.magneticrange = charparams.magneticrange;
  		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
+
+
     	this.fric_coeff = charparams.fric_coeff;
     	this.alive = true;
     	this.dying = false;
@@ -214,24 +227,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	setDestinations: function(destarray){
-
- 		while (this.destinations.length != 0){
-
- 			this.destinations.pop();
- 		
- 		}
-
- 		for (var i=0; i <= destarray.length-1; i++){
-
- 			this.destinations.push(destarray[i]);
-
- 		}
-
-
-
-
- 	},
+ 
 
  	buildBody: function(){
 
@@ -342,6 +338,7 @@ Tower = gamecore.DualPooled('Tower',
  	redrawWeapon: function(target_tower){
 			
 		this.weapon.clear();	
+
 		
 		
 	
@@ -360,7 +357,11 @@ Tower = gamecore.DualPooled('Tower',
 		this.weapon.alpha = 1;
 
 		this.weapon.rotation = this.current_target_angle + Math.PI/2;
-	
+
+
+
+
+		
 
  	},
 
@@ -373,12 +374,13 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	addToTargets: function(target_tower){
+ 	addToTargetsOrFriends: function(target_tower){
 
  		if (!this.checkTeam(target_tower)){
 
  			this.targets.push(target_tower);
- 		}	
+ 		}else
+ 			this.friends.push(target_tower);	
 
  	},
 
@@ -386,13 +388,13 @@ Tower = gamecore.DualPooled('Tower',
  	shoot: function(target_tower){
 
 		
-		if (this.reload_time_left == 0){
+		
 			
 			target_tower.iveBeenHitBy(this);
 
 			this.redrawWeapon(target_tower);
 			this.reload_time_left = this.reload;
-		}	
+		
 
 
 	},
@@ -574,6 +576,13 @@ Tower = gamecore.DualPooled('Tower',
 
  		if (this.reload_time_left > 0) this.reload_time_left--;
 
+
+ 		if (this.currentenergy < this.fullenergy) this.currentenergy = this.currentenergy + 1;
+
+
+
+ 		
+
  	},
 
 
@@ -647,9 +656,10 @@ Tower = gamecore.DualPooled('Tower',
  	updateAI: function(){
 
 		
- 		
- 		this.aifunc(this);
+ 		this.mind.update();
+ 		//this.aifunc(this);
  		this.targets.length = 0;
+		this.friends.length = 0;
 
 
  	},

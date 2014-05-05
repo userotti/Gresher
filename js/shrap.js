@@ -180,6 +180,8 @@ Shrap = gamecore.DualPooled('Shrap',
 						
 				this.body.endFill();	
 
+				
+
 			
 
 			};	
