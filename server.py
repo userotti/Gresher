@@ -1,6 +1,6 @@
 ###############################################################################
 ##
-##  Copyright (C) 2011-2013 Tavendo GmbH
+##  Copyright (C) 2011-2014 Tavendo GmbH
 ##
 ##  Licensed under the Apache License, Version 2.0 (the "License");
 ##  you may not use this file except in compliance with the License.
@@ -16,105 +16,279 @@
 ##
 ###############################################################################
 
-import sys
+import datetime
 
-from twisted.internet import reactor
+from autobahn.twisted.wamp import ApplicationSession
+
+
+class TimeService(ApplicationSession):
+   """
+   A simple time service application component.
+   """
+
+   def __init__(self, realm = "realm1"):
+      ApplicationSession.__init__(self)
+      self._realm = realm
+
+
+   def onConnect(self):
+      self.join(self._realm)
+
+
+   def onJoin(self, details):
+
+      def utcnow():
+         now = datetime.datetime.utcnow()
+         return now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+      self.register(utcnow, 'com.timeservice.now')
+
+
+
 from twisted.python import log
-from twisted.web.server import Site
-from twisted.web.static import File
+from autobahn.twisted.websocket import WampWebSocketServerProtocol, WampWebSocketServerFactory
+from twisted.internet.defer import Deferred
 
-from autobahn.twisted.websocket import WebSocketServerFactory, \
-                                       WebSocketServerProtocol, \
-                                       listenWS
+import json
+import urllib
+import Cookie
 
-
-class BroadcastServerProtocol(WebSocketServerProtocol):
-
-   def onOpen(self):
-      self.factory.register(self)
-
-   def onMessage(self, payload, isBinary):
-      if not isBinary:
-         #msg = "{} fromz {}".format(payload.decode('utf8'), self.peer)
-         msg = "{}".format(payload.decode('utf8'))
-
-         self.factory.broadcast(msg)
-
-   def connectionLost(self, reason):
-      WebSocketServerProtocol.connectionLost(self, reason)
-      self.factory.unregister(self)
+from autobahn.util import newid, utcnow
+from autobahn.websocket import http
 
 
-class BroadcastServerFactory(WebSocketServerFactory):
-   """
-   Simple broadcast server broadcasting any message it receives to all
-   currently connected clients.
-   """
+class ServerProtocol(WampWebSocketServerProtocol):
 
-   def __init__(self, url, debug = False, debugCodePaths = False):
-      WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
-      self.clients = []
-      self.tickcount = 0
-      self.tick()
+   ## authid -> cookie -> set(connection)
 
-   def tick(self):
-      self.tickcount += 1
-      ##self.broadcast("tick %d from server" % len(self.clients))
-      ##self.broadcast("Connections: %d" % len(self.clients))
-      ##reactor.callLater(1, self.tick)
+   def onConnect(self, request):
+      protocol, headers = WampWebSocketServerProtocol.onConnect(self, request)
 
-   def register(self, client):
-      if not client in self.clients:
-         print("registered client {}".format(client.peer))
-         self.clients.append(client)
+      ## our cookie tracking ID
+      self._cbtid = None
 
-   def unregister(self, client):
-      if client in self.clients:
-         print("unregistered client {}".format(client.peer))
-         self.clients.remove(client)
+      ## see if there already is a cookie set ..
+      if request.headers.has_key('cookie'):
+         try:
+            cookie = Cookie.SimpleCookie()
+            cookie.load(str(request.headers['cookie']))
+         except Cookie.CookieError:
+            pass
+         else:
+            if cookie.has_key('cbtid'):
+               cbtid = cookie['cbtid'].value
+               if self.factory._cookies.has_key(cbtid):
+                  self._cbtid = cbtid
+                  log.msg("Cookie already set: %s" % self._cbtid)
 
-   def broadcast(self, msg):
-      print("broadcasting message '{}'".format(msg))
-      for c in self.clients:
-         c.sendMessage(msg.encode('utf8'))
-         print("message sent to {}".format(c.peer))
+      ## if no cookie is set, create a new one ..
+      if self._cbtid is None:
+
+         self._cbtid = newid()
+         maxAge = 86400
+
+         cbtData = {'created': utcnow(),
+                    'authenticated': None,
+                    'maxAge': maxAge,
+                    'connections': set()}
+
+         self.factory._cookies[self._cbtid] = cbtData
+
+         ## do NOT add the "secure" cookie attribute! "secure" refers to the
+         ## scheme of the Web page that triggered the WS, not WS itself!!
+         ##
+         headers['Set-Cookie'] = 'cbtid=%s;max-age=%d' % (self._cbtid, maxAge)
+         log.msg("Setting new cookie: %s" % self._cbtid)
+
+      ## add this WebSocket connection to the set of connections
+      ## associated with the same cookie
+      self.factory._cookies[self._cbtid]['connections'].add(self)
+
+      self._authenticated = self.factory._cookies[self._cbtid]['authenticated']
+
+      ## accept the WebSocket connection, speaking subprotocol `protocol`
+      ## and setting HTTP headers `headers`
+      return (protocol, headers)
 
 
-class BroadcastPreparedServerFactory(BroadcastServerFactory):
-   """
-   Functionally same as above, but optimized broadcast using
-   prepareMessage and sendPreparedMessage.
-   """
 
-   def broadcast(self, msg):
-      print("broadcasting prepared message '{}' ..".format(msg))
-      preparedMsg = self.prepareMessage(msg)
-      for c in self.clients:
-         c.sendPreparedMessage(preparedMsg)
-         print("prepared message sent to {}".format(c.peer))
+from autobahn.twisted.wamp import RouterSession
+from autobahn.wamp import types
+
+
+class MyRouterSession(RouterSession):
+
+   def onOpen(self, transport):
+      RouterSession.onOpen(self, transport)
+      print "transport authenticated: {}".format(self._transport._authenticated)
+
+
+   def onHello(self, realm, details):
+      print "onHello: {} {}".format(realm, details)
+      if self._transport._authenticated is not None:
+         return types.Accept(authid = self._transport._authenticated)
+      else:
+         return types.Challenge("mozilla-persona")
+      return accept
+
+
+   def onLeave(self, details):
+      if details.reason == "wamp.close.logout":
+         cookie = self._transport.factory._cookies[self._transport._cbtid]
+         cookie['authenticated'] = None
+         for proto in cookie['connections']:
+            proto.sendClose()
+
+
+   def onAuthenticate(self, signature, extra):
+      print "onAuthenticate: {} {}".format(signature, extra)
+
+      dres = Deferred()
+
+      ## The client did it's Mozilla Persona authentication thing
+      ## and now wants to verify the authentication and login.
+      assertion = signature
+      audience = 'http://localhost:8080/'
+
+      ## To verify the authentication, we need to send a HTTP/POST
+      ## to Mozilla Persona. When successful, Persona will send us
+      ## back something like:
+
+      # {
+      #    "audience": "http://192.168.1.130:8080/",
+      #    "expires": 1393681951257,
+      #    "issuer": "gmail.login.persona.org",
+      #    "email": "tobias.oberstein@gmail.com",
+      #    "status": "okay"
+      # }
+
+      headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+      body = urllib.urlencode({'audience': audience, 'assertion': assertion})
+
+      from twisted.web.client import getPage
+      d = getPage(url = "https://verifier.login.persona.org/verify",
+                  method = 'POST',
+                  postdata = body,
+                  headers = headers)
+
+      log.msg("Authentication request sent.")
+
+      def done(res):
+         res = json.loads(res)
+         try:
+            if res['status'] == 'okay':
+               ## Mozilla Persona successfully authenticated the user
+
+               ## remember the user's email address. this marks the cookie as
+               ## authenticated
+               self._transport.factory._cookies[self._transport._cbtid]['authenticated'] = res['email']
+
+               log.msg("Authenticated user {}".format(res['email']))
+               dres.callback(types.Accept(authid = res['email']))
+            else:
+               log.msg("Authentication failed!")
+               dres.callback(types.Deny())
+         except Exception as e:
+            print "ERRR", e
+
+      def error(err):
+         log.msg("Authentication request failed: {}".format(err.value))
+         dres.callback(types.Deny())
+
+      d.addCallbacks(done, error)
+
+      return dres
 
 
 if __name__ == '__main__':
 
-   if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+   import sys, argparse
+
+   from twisted.python import log
+   from twisted.internet.endpoints import serverFromString
+
+
+   ## parse command line arguments
+   ##
+   parser = argparse.ArgumentParser()
+
+   parser.add_argument("-d", "--debug", action = "store_true",
+                       help = "Enable debug output.")
+
+   parser.add_argument("-c", "--component", type = str, default = None,
+                       help = "Start WAMP-WebSocket server with this application component, e.g. 'timeservice.TimeServiceBackend', or None.")
+
+   parser.add_argument("--websocket", type = str, default = "tcp:8080",
+                       help = 'WebSocket server Twisted endpoint descriptor, e.g. "tcp:9000" or "unix:/tmp/mywebsocket".')
+
+   parser.add_argument("--wsurl", type = str, default = "ws://localhost:8080",
+                       help = 'WebSocket URL (must suit the endpoint), e.g. "ws://localhost:9000".')
+
+   args = parser.parse_args()
+
+
+   ## start Twisted logging to stdout
+   ##
+   if True or args.debug:
       log.startLogging(sys.stdout)
-      debug = True
-   else:
-      debug = False
 
-   ServerFactory = BroadcastServerFactory
-   #ServerFactory = BroadcastPreparedServerFactory
 
-   factory = ServerFactory("ws://localhost:9000",
-                           debug = debug,
-                           debugCodePaths = debug)
+   ## we use an Autobahn utility to install the "best" available Twisted reactor
+   ##
+   from autobahn.twisted.choosereactor import install_reactor
+   reactor = install_reactor()
+   if args.debug:
+      print("Running on reactor {}".format(reactor))
 
-   factory.protocol = BroadcastServerProtocol
-   factory.setProtocolOptions(allowHixie76 = True)
-   listenWS(factory)
 
-   webdir = File(".")
-   web = Site(webdir)
-   reactor.listenTCP(8000, web)
+   ## create a WAMP router factory
+   ##
+   from autobahn.wamp.router import RouterFactory
+   router_factory = RouterFactory()
 
+
+   ## create a WAMP router session factory
+   ##
+   from autobahn.twisted.wamp import RouterSessionFactory
+   session_factory = RouterSessionFactory(router_factory)
+   session_factory.session = MyRouterSession
+
+
+   ## start an embedded application component ..
+   ##
+   session_factory.add(TimeService())
+
+
+   ## create a WAMP-over-WebSocket transport server factory
+   ##
+   from autobahn.twisted.websocket import WampWebSocketServerFactory
+   transport_factory = WampWebSocketServerFactory(session_factory, args.wsurl, debug_wamp = args.debug)
+   transport_factory.protocol = ServerProtocol
+   transport_factory._cookies = {}
+
+   transport_factory.setProtocolOptions(failByDrop = False)
+
+
+   from twisted.web.server import Site
+   from twisted.web.static import File
+   from autobahn.twisted.resource import WebSocketResource
+
+   ## we serve static files under "/" ..
+   root = File(".")
+
+   ## .. and our WebSocket server under "/ws"
+   resource = WebSocketResource(transport_factory)
+   root.putChild("ws", resource)
+
+   ## run both under one Twisted Web Site
+   site = Site(root)
+
+   ## start the WebSocket server from an endpoint
+   ##
+   server = serverFromString(reactor, args.websocket)
+   server.listen(site)
+
+
+   ## now enter the Twisted reactor loop
+   ##
    reactor.run()

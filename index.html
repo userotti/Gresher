@@ -1,268 +1,156 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<head>
-	<title>Gresher Alpha</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+   <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   </head>
+   <body>
+      <h1>Authenticated WAMP with Mozilla Persona</h1>
+      <p>Open JavaScript console to watch output.</p>
 
-    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+      <h2>Login</h2>
+      <div id="user">Not logged in.</div>
+      <button id="signin">Sign in</button>
+      <button id="signout">Sign out</button>
 
-    <!-- Libraries -->
-    <script src="js/libs/stats.min.js"></script>
-    <script src="bower_components/pixi/bin/pixi.dev.js"></script>
-    <script src="js/libs/jquery-1.11.0.min.js"></script>
-    <script src="js/libs/underscore/underscore-min.js"></script>
-   
-    <script src="js/libs/gamecore.min.js"></script>
+      <h2>RPC Result</h2>
+      <div id="result">No result yet.</div>
 
-    <!-- Gresher Javascript -->
-	<script src="js/globals.js"></script>
-	<script src="js/destenationspresets.js"> </script>
-	<script src="js/ai.js"></script>
-	<script src="js/smaatclasses.js"></script>
-	<script src="js/camera.js"></script>
-	<script src="js/colorfuncs.js"></script>
-	<script src="js/towerpresets.js"></script>
-	<script src="js/shrappresets.js"></script>
-	<script src="js/shrap.js"></script>
-	<script src="js/tower.js"></script>
-	<script src="js/level.js"></script>
-	<script src="js/gamescene.js"></script>
-	<script src="js/gresher.js"></script>
+      <script src="autobahn.min.jgz"></script>
+      <script src="https://login.persona.org/include.js"></script>
 
-    <script type="text/javascript">
-        var sock = null;
-        var ellog = null;
-        var code = null;
-        var users = new gamecore.Hashtable();
+      <script>
+         var signinLink = document.getElementById('signin');
+         signinLink.onclick = function() {
+            navigator.id.request();
+         };
+         signinLink.disabled = true;
 
+         var signoutLink = document.getElementById('signout');
+         signoutLink.onclick = function() {
+            navigator.id.logout();
+         };
+         signoutLink.disabled = true;
 
-        window.onload = function() {
+         var userLabel = document.getElementById('user');
+         var result = document.getElementById('result');
 
-            var wsuri;
-            code = Math.round(Math.random() * 20000);
-            $('#name span').html(code);
+         var currentUser = null;
 
-            ellog = document.getElementById('log');
+         function onchallenge (session, method, extra) {
+            if (method === "mozilla-persona") {
 
-            if (window.location.protocol === "file:") {
-                wsuri = "ws://localhost:9000";
+               userLabel.innerHTML = 'Please sign in ...';
+               signinLink.disabled = false;
+               return autobahn.auth_persona(session, currentUser);
+
             } else {
-                wsuri = "ws://" + window.location.hostname + ":9000";
+               console.log("don't know how to authentication using " + method);
             }
+         }
 
-            if ("WebSocket" in window) {
-                sock = new WebSocket(wsuri);
-            } else if ("MozWebSocket" in window) {
-                sock = new MozWebSocket(wsuri);
+         var connection = new autobahn.Connection({
+            url: 'ws://localhost:8080/ws',
+            realm: 'realm1',
+            //authmethods: ["cookie", "anonymous"],
+            onchallenge: onchallenge
+         });
+        //
+        // = = = = CONNECTION OPEN = = = = = = = = = = = = = = = = = = = = = =
+        //
+         connection.onopen = function (session, details) {
+
+            userLabel.innerHTML = 'Authenticated: ' + details.authid;
+            signinLink.disabled = true;
+            signoutLink.disabled = false;
+
+            currentUser = details.authid;
+            autobahn.auth_persona(session, currentUser);
+
+             console.log(details);
+
+           // CALL - Register User, Return Entiry
+            session.call('com.votegame.signup', ['foxinni@gmail.com']).then(
+                    function (entity) {
+                        console.log("Registered (" + email + ") with Entity " + entity);
+                    },
+                    connection.session.log
+            );
+
+            // SUB - On Move
+            session.subscribe('com.votegame.onmove', function (args) {
+               console.log("new moves for " + args[0] + " : " + args[1]);
+            });
+            // SUB - On Vote
+            session.subscribe('com.votegame.onvote', function (args) {
+               console.log("new votes for " + args[0] + " : " + args[1]);
+            });
+
+            // CALL - Get Votes
+            session.call('com.votegame.get_votes').then(
+               function (votes) {
+                  console.log("Current votes:", votes);
+               },
+               session.log
+            );
+
+            // CALL - Time Service
+            session.call('com.timeservice.now').then(
+               function (now) {
+                  result.innerHTML = now;
+               },
+               function (error) {
+                  result.innerHTML = error;
+               }
+            );
+         };
+          //
+          // = = = = CONNECTION CLOSE = = = = = = = = = = = = = = = = = = = = = =
+          //
+         connection.onclose = function () {
+            window.location.reload();
+         }
+
+         connection.open();
+
+
+         /*function register(email) {
+             if (connection.session) {
+                 connection.session.call('com.votegame.register', [email]).then(
+                         function (entity) {
+                             console.log("Registered (" + email + ") with Entity " + entity);
+                         },
+                         connection.session.log
+                 );
+             } else {
+                 console.log("can't vote: no connection");
+             }
+         }*/
+
+         function vote(item) {
+            if (connection.session) {
+               connection.session.call('com.votegame.vote', [item]).then(
+                  function (count) {
+                     console.log("Ok, voted for " + item + " : " + count);
+                  },
+                  connection.session.log
+               );
             } else {
-                log("Browser does not support WebSocket!");
-                window.location = "http://autobahn.ws/unsupportedbrowser";
+               console.log("can't vote: no connection");
             }
+         }
 
-            if (sock) {
-                sock.onopen = function() {
-                    log("Connected to " + wsuri);
-                    sock.send(code + ':spawn');
-
-                }
-
-
-                sock.onclose = function(e) {
-                    alert('death');
-                    sock.send(code + ':death');
-                    log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e.reason + "')");
-
-                    sock = null;
-                }
-
-                sock.onmessage = function(e) {
-                    log(e.data);
-                    console.log(e.data);
-                    var reply = e.data.split(":");
-                    console.log(reply[1]);
-
-                    if(reply[0] != code){
-                        var tempCode = reply[0];
-                        if(reply[1] == 'spawn'){
-
-                            console.log('Spawn: Other');
-                            users.put(tempCode, Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
-
-                        } else if (reply[1] == 'death'){
-                            console.log('death');
-                            users.remove(tempCode);
-
-                        } else if(reply[1] == 'click') {
-
-                            if(users.get(tempCode) === null){
-                                console.log('Click found but no users??');
-                                users.put(tempCode, Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
-                                users.get(tempCode).startBoost(reply[2],reply[3]);
-                            } else {
-                                console.log('Click: Other');
-                                users.get(tempCode).startBoost(reply[2],reply[3]);
-                            }
-
-                        }
-                    } else {
-                        // My Actions (No message reactions)
-                        if(reply[1] == 'spawn'){
-                            console.log('Spawn: Self');
-                        } else if(reply[1] == 'click') {
-                            console.log('Click: me');
-                        }
-                    }
-
-
-                }
-            }
-        };
-
-        window.onbeforeunload = function() {
-            sock.send('DEATH');
-            sock.onclose = function () {}; // disable onclose handler first
-            //sock.close()
-        };
-
-        function broadcast() {
-            var msg = document.getElementById('message').value;
-            if (sock) {
-                sock.send(msg);
-                log("Sent: " + msg);
-            } else {
-                log("Not connected.");
-            }
-        };
-
-        function log(m) {
-            ellog.innerHTML += m + '\n';
-            ellog.scrollTop = ellog.scrollHeight;
-        };
-    </script>
-	
-</head>
-<body>
-<div class="chat">
-    <h1 id="name">Hello <span>&nbsp;</span>!</h1>
-    <form style="display:none">
-
-        <p>Broadcast Message: <input id="message" type="text" value="Hello from Browser!"></p>
-    </form>
-    <button  style="display:none" onclick='broadcast();'>Broadcast Message</button>
-    <pre id="log" style=" overflow-y: scroll;"></pre>
-</div>
-
-
-	<script>
-//console.log("fsdfsd");
-	//device resize call
-	
-
-
-	//KEYBOARD
-	var Key = {
-	  _pressed: {},
-
-	  LEFT: 37,
-	  UP: 38,
-	  RIGHT: 39,
-	  DOWN: 40,
-	  
-	  isDown: function(keyCode) {
-	    return this._pressed[keyCode];
-	  },
-	  
-	  onKeydown: function(event) {
-	    this._pressed[event.keyCode] = true;
-	  },
-	  
-	  onKeyup: function(event) {
-	    delete this._pressed[event.keyCode];
-	  }
-	};
-
-	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
-	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
-	window.addEventListener('keypress', function(event) { console.log("Key PRessed"); keypressed() }, false);
-	//make the fps stats
-
-	stats = new Stats();
-    document.body.appendChild( stats.domElement );
-    stats.domElement.style.position = "fixed";
-    stats.domElement.style.zIndex = "999";
-    stats.domElement.style.bottom = "0px";
-    stats.domElement.style.right = "0px";
-
-
-    //make the game instance
-
-	gresher = new Gresher();
-
-	
-	keypressed = function(){
-		console.log("Toggle Pause");
-		gresher.paused = !(gresher.paused);
-  
-
-	}
-
-
-	gresher.stage.click = function(mouseData){
-
-		gresher.handleClickTap(mouseData.originalEvent);
-
-	}
-
-	gresher.stage.tap = function(touchData){
-
-
-		gresher.handleClickTap(touchData.global);
-
-	}
-
-	gresher.stage.tap = function(touchData){
-
-
-		gresher.handleClickTap(touchData.global);
-
-	}
-	
-	
-    // THIS FUNCTION CALL KICKS OFF THE WHOLE RENDER LOOP PARTY 
-	requestAnimFrame(update);
-
-
-	//the main loop function
-	function update() {
-		
-		if (Key.isDown(Key.UP)) {
-
-
-		
-			
-	
-		}	
-
-		stats.begin();	
-
-		gresher.gameupdate();
-		
-		requestAnimFrame( update );
-
-
-        stats.end();
-	}
-
-	//the main resize function
-	window.onresize = function resize() {
-		
-		gresher.resize();
-	}
-
-	
-
-    </script>
-
-
-	</body>
+         function svrmove(x) {
+             if (connection.session) {
+                 connection.session.call('com.votegame.move', [x]).then(
+                         function () {
+                             console.log("Ok, moved for " + x + "");
+                         },
+                         connection.session.log
+                 );
+             } else {
+                 console.log("can't vote: no connection");
+             }
+         }
+      </script>
+   </body>
 </html>
