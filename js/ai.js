@@ -19,6 +19,7 @@ Ai = function(mytower, aiparams){
 
 	this.destx = 0;
 	this.desty = 0;
+
 	
 	
 
@@ -77,8 +78,10 @@ Ai.prototype.setDestinationXY = function(whattodo)
 			break;
 
 
-			case "approach" :
+			case "approach_closest" :
 
+				this.destx = this.getClosestTarget().pos.x;
+				this.desty = this.getClosestTarget().pos.y;
 
 
 
@@ -130,6 +133,7 @@ Ai.prototype.setDestinationXY = function(whattodo)
 };
 
 
+
 Ai.prototype.getClosestTarget = function(){
 
 	var closest;
@@ -137,9 +141,21 @@ Ai.prototype.getClosestTarget = function(){
 	if (this.mytower.targets.length != 0){
 
 		closest = this.mytower.targets[0];
-		for(var i = 1; i < this.mytower.targets.length-1; i++){
+		for(var i = 0; i < this.mytower.targets.length-1; i++){
+
+			if (this.mytower.targets[i] == null){
+
+				return closest;
+
+			}
+
+			if (this.getUnsquaredDistance(closest) > this.getUnsquaredDistance(this.mytower.targets[i])) {
 
 
+				closest = this.mytower.targets[i];
+
+
+			}
 
 
 		}
@@ -150,6 +166,13 @@ Ai.prototype.getClosestTarget = function(){
 
 	return null;
 
+
+
+};
+
+Ai.prototype.getUnsquaredDistance = function(other_tower){
+
+	return(Math.pow(other_tower.pos.x-this.mytower.pos.x,2) + Math.pow(other_tower.pos.y-this.mytower.pos.y,2)); 
 
 
 };
