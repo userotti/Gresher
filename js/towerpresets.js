@@ -28,24 +28,24 @@ BASICSTALAGMITE = {
 	
 	"character_class" : "stalagmite",
 	"mass" : 1,
-	"maxhealth" : 100,
+	"maxhealth" : 70,
 	
  	"shield": 0,
  	"shielrecharge": 0,
  	"range": 190,
  	"reload": 60,
- 	"damage": 55,
- 	"fullenergy": 100,
+ 	"damage": 45,
+ 	"fullenergy": 80,
  	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
 
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
- 	"fric_coeff": 0.20,
+ 	"fric_coeff": 0.350,
  	"ai_timepercall": 50,
  	
- 	"maxboostpower" : 0.25,
+ 	"maxboostpower" : 1.95,
  
 
 }

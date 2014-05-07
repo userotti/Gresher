@@ -22,7 +22,7 @@ Gamescene = function(stage)
   
     //console.log(STILLAI);
 
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"firstlevel", this.player)
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"secondlevel", this.player)
 
     
 

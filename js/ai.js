@@ -49,34 +49,130 @@ Ai.prototype.setAi = function(aiparams)
 
 };
 
-Ai.prototype.updateAttack = function()
-{	
-	if (this.mytower.reload_time_left == 0){
 
-		if (this.mytower.targets.length != 0)
-	    	this.mytower.shoot(this.mytower.targets[0]);
 
-	}    		
+
+
+Ai.prototype.setDestinationXY = function(whattodo)
+{
+		
+		switch (whattodo){
+
+
+			case "chill":
+
+				this.destx = null;
+				this.desty = null;
+
+
+			break;
+
+
+			case "roam":
+
+				
+				this.destx = (this.mytower.pos.x+(Math.random()*this.moveradius*2) - this.moveradius);
+				this.desty = (this.mytower.pos.y+(Math.random()*this.moveradius*2) - this.moveradius);
+
+			break;
+
+
+			case "approach" :
+
+
+
+
+			break;
+
+
+
+			case "close_approach" :
+
+
+			break;
+
+
+
+			case "retreat" :
+
+
+			break;
+
+
+
+			case "far_retreat" :
+
+
+			break;
+
+//tower increase interact range
+
+			case "following" :
+
+
+			break;
+
+			case "hunting" :
+
+
+			break;
+	
+
+
+
+
+
+
+
+		}
+
 
 };
+
+
+Ai.prototype.getClosestTarget = function(){
+
+	var closest;
+
+	if (this.mytower.targets.length != 0){
+
+		closest = this.mytower.targets[0];
+		for(var i = 1; i < this.mytower.targets.length-1; i++){
+
+
+
+
+		}
+
+
+
+	}else
+
+	return null;
+
+
+
+};
+
+
 
 Ai.prototype.updateEnvironment = function()
 {
 	
 	if ((this.mytower.friends.length == 0) && (this.mytower.targets.length == 0)){
-
+		
 		this.environment = "alone";
 		return;
 	}
 
-	if ((this.mytower.friends.length == 0) && !(this.mytower.targets.length == 0)){
-
+	if ((this.mytower.friends.length != 0) && (this.mytower.targets.length == 0)){
+		
 		this.environment = "withfriends";
 		return;
 
 	}
 
-	if (!(this.mytower.friends.length == 0) && (this.mytower.targets.length == 0)){
+	if (!(this.mytower.friends.length == 0) && (this.mytower.targets.length != 0)){
 
 		this.environment = "withtargets";
 		return;
@@ -97,30 +193,74 @@ Ai.prototype.updateEnvironment = function()
 
 };
 
+Ai.prototype.updateCheckDestination = function()
+{
+	
+	switch (this.environment){
+
+		case "alone":
+
+			this.setDestinationXY(this.alone);
+
+		break;
+
+
+		case "withfriends":
+
+			this.setDestinationXY(this.withfriends);
+
+		break;
+
+
+		case "withtargets":
+
+			this.setDestinationXY(this.withtargets);
+
+		break;
+
+
+		case "withfriendstargets":
+
+			this.setDestinationXY(this.withfriendstargets);
+
+		break;
+
+
+
+	}
+
+};
+
+
+
+
+Ai.prototype.updateAttack = function()
+{	
+	if (this.mytower.reload_time_left == 0){
+
+		if (this.mytower.targets.length != 0)
+	    	this.mytower.shoot(this.mytower.targets[0]);
+
+	}    		
+
+};
+
 Ai.prototype.updateMove = function()
 {
 	if (this.mytower.currentenergy >= this.mytower.fullenergy){
 
-	if (this.environment == "alone"){
-
-
-
-
-	} else
-	
-		if ((this.environment == "withfriends") || (this.environment == "withtargets") || (this.environment == "withfriendstargets")){
-
 
 			if (!this.mytower.controlled){
-					
+						
+					if (this.destx != null){	
 
-					this.mytower.startBoost(this.mytower.pos.x+(Math.random()*this.moveradius*2) - this.moveradius, this.mytower.pos.y+(Math.random()*this.moveradius*2) - this.moveradius);
-					
-					this.mytower.currentenergy = 0;
+						this.mytower.startBoost(this.destx, this.desty);			
+						this.mytower.currentenergy = 0;
+					}
 			}
 
 
-		}
+		
 		
 	}
 
@@ -134,8 +274,9 @@ Ai.prototype.update = function()
 {
 
 	this.updateEnvironment();
+	this.updateCheckDestination();
 	
-	//this.updateAttack();
+	this.updateAttack();
 	this.updateMove();
 
 	
@@ -147,10 +288,28 @@ BASICJELLY_GEDAGTE = {
 	
 	"player" : false,
 	"moveradius" : 100,
-	"alone" : "random",
-	"withfriends" : "followstrongest",
-	"withtargets" : "attackclosesttilldead",
-	"withfriendstargets" : "attackclosesttilldead",
+	"alone" : "roam",
+	"withfriends" : "roam",
+	"withtargets" : "chill",
+	"withfriendstargets" : "chill",
+
+	"friendmemory" : 50,
+	"targetmemory" : 50,
+
+	
+
+
+};
+
+
+BASICSTALAGMITE_GEDAGTE = {
+	
+	"player" : false,
+	"moveradius" : 100,
+	"alone" : "roam",
+	"withfriends" : "chill",
+	"withtargets" : "chill",
+	"withfriendstargets" : "chill",
 
 	"friendmemory" : 50,
 	"targetmemory" : 50,
