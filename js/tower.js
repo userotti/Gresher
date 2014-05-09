@@ -46,13 +46,13 @@ Tower = gamecore.DualPooled('Tower',
  	speed: 0,
  	shield: 0,
  	shielrecharge: 0,
- 	range: 0,
+ 	weapon_range: 0,
  	reload: 0,
  	reload_time_left: 0,
  	damage: 0,
  	
  	magneticcharge: 0,
- 	magneticrange: 0,
+ 	magneticweapon_range: 0,
  	maxboostpower: 0,
  	alive: false,
  	dying: false,
@@ -102,6 +102,8 @@ Tower = gamecore.DualPooled('Tower',
  	ai_timepercall: 0,
  	teams: 0,
  	targets: 0,
+
+ 	interaction_range: 0,
 
  	destination: 0,
 
@@ -159,7 +161,7 @@ Tower = gamecore.DualPooled('Tower',
 	 	
 	 	this.shield = charparams.shield;
 	 	this.shielrecharge = charparams.shieldrecharge;
-	 	this.range = charparams.range;
+	 	this.weapon_range = charparams.weapon_range;
 	 	this.reload = charparams.reload;
 	 	this.damage = charparams.damage;
 	 	this.fullenergy = charparams.fullenergy;
@@ -167,11 +169,13 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.currentenergy = 0;
 
 	 	this.magneticcharge = charparams.magneticcharge;
- 		this.magneticrange = charparams.magneticrange;
+ 		this.magneticweapon_range = charparams.magneticweapon_range;
  		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
+
+    	this.interaction_range = charparams.interaction_range,
 
 
     	this.fric_coeff = charparams.fric_coeff;
@@ -349,9 +353,9 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.weapon.lineStyle(2, 0xffffff, 0.3);
 		this.weapon.moveTo(0,0);
-		this.weapon.lineTo(this.range,0);
+		this.weapon.lineTo(this.weapon_range,0);
 		this.weapon.moveTo(0,0);
-		this.weapon.lineTo(-this.range,0);
+		this.weapon.lineTo(-this.weapon_range,0);
 	
 	
 		this.weapon.alpha = 1;
@@ -377,10 +381,12 @@ Tower = gamecore.DualPooled('Tower',
  	addToTargetsOrFriends: function(target_tower){
 
  		if (!this.checkTeam(target_tower)){
-
+ 			
  			this.targets.push(target_tower);
- 		}else
+ 		}else{
  			this.friends.push(target_tower);	
+ 			
+ 		}	
 
  	},
 
@@ -537,7 +543,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		
  		}
 
- 		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.range)) * 0.1;
+ 		//this.weapon.rotation = this.weapon.rotation + -((this.animcounterstep)*(this.reload/this.weapon_range)) * 0.1;
 
  		if (this.boostpower == 0)
  		this.towerbody.rotation += this.bodyrotation_speed;
@@ -657,7 +663,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		
  		this.mind.update();
- 		//this.aifunc(this);
+ 		
  		this.targets.length = 0;
 		this.friends.length = 0;
 
@@ -704,7 +710,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.updatePeriodic();
 		this.updateStatus();
 
-
+		
 		this.updateAI();
  		 
 

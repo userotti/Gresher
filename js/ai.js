@@ -20,12 +20,17 @@ Ai = function(mytower, aiparams){
 	this.destx = 0;
 	this.desty = 0;
 
+	this.closet_target = 0;
+
+	this.target_inrange = 0;
+
 	
 	
 
 
 
-	this.environment = "";
+	this.environment = 0;
+
 	
 
 }
@@ -37,7 +42,7 @@ Ai.prototype.setAi = function(aiparams)
 
 	this.player = aiparams.player;
 	this.moveradius = aiparams.moveradius;
-	console.log(this.moveradius);
+	
 
 	this.alone = aiparams.alone;
 	this.withfriends = aiparams.withfriends;
@@ -55,15 +60,18 @@ Ai.prototype.setAi = function(aiparams)
 
 
 Ai.prototype.setDestinationXY = function(whattodo)
-{
+{	
+			
 		
+
 		switch (whattodo){
+
 
 
 			case "chill":
 
-				this.destx = null;
-				this.desty = null;
+				this.destx = this.mytower.pos.x;
+				this.desty = this.mytower.pos.y;
 
 
 			break;
@@ -71,7 +79,7 @@ Ai.prototype.setDestinationXY = function(whattodo)
 
 			case "roam":
 
-				
+				//console.log(this.environment + " : "+ this.withfriendstargets);
 				this.destx = (this.mytower.pos.x+(Math.random()*this.moveradius*2) - this.moveradius);
 				this.desty = (this.mytower.pos.y+(Math.random()*this.moveradius*2) - this.moveradius);
 
@@ -80,8 +88,16 @@ Ai.prototype.setDestinationXY = function(whattodo)
 
 			case "approach_closest" :
 
-				this.destx = this.getClosestTarget().pos.x;
-				this.desty = this.getClosestTarget().pos.y;
+
+				if (this.closet_target != null) {
+
+					this.destx = this.closet_target.pos.x;
+					this.desty = this.closet_target.pos.y;
+
+
+
+
+				}	
 
 
 
@@ -108,7 +124,7 @@ Ai.prototype.setDestinationXY = function(whattodo)
 
 			break;
 
-//tower increase interact range
+//tower increase interact weapon_range
 
 			case "following" :
 
@@ -134,38 +150,57 @@ Ai.prototype.setDestinationXY = function(whattodo)
 
 
 
-Ai.prototype.getClosestTarget = function(){
+Ai.prototype.setClosestTarget = function(){
 
 	var closest;
+	var unsquared_dist_to_closest;
 
 	if (this.mytower.targets.length != 0){
 
 		closest = this.mytower.targets[0];
+
 		for(var i = 0; i < this.mytower.targets.length-1; i++){
 
-			if (this.mytower.targets[i] == null){
-
-				return closest;
-
-			}
-
+			
 			if (this.getUnsquaredDistance(closest) > this.getUnsquaredDistance(this.mytower.targets[i])) {
+				
+				
+			 
+
 
 
 				closest = this.mytower.targets[i];
-
+				
 
 			}
 
+		}	
 
-		}
+	
+		
+		this.closet_target = closest;
 
 
 
-	}else
+	}else{
+		
+	this.closet_target = null;
+	
+	}
 
-	return null;
 
+	if ( (this.closet_target != null) && (this.getUnsquaredDistance(closest) < Math.pow(this.mytower.weapon_range,2))) {
+
+		this.target_inrange = true;
+
+	}else{
+
+		this.target_inrange = false;
+
+
+	}
+
+	
 
 
 };
@@ -182,48 +217,62 @@ Ai.prototype.getUnsquaredDistance = function(other_tower){
 Ai.prototype.updateEnvironment = function()
 {
 	
+
 	if ((this.mytower.friends.length == 0) && (this.mytower.targets.length == 0)){
 		
+	/*	if (this.withfriendstargets == "chill")
+				console.log("updateEnvironment poes");
+*/
 		this.environment = "alone";
-		return;
-	}
+
+		
+		
+	}else
 
 	if ((this.mytower.friends.length != 0) && (this.mytower.targets.length == 0)){
 		
 		this.environment = "withfriends";
-		return;
+	
+		
 
-	}
+	}else
 
-	if (!(this.mytower.friends.length == 0) && (this.mytower.targets.length != 0)){
+	if ((this.mytower.friends.length == 0) && (this.mytower.targets.length != 0)){
 
 		this.environment = "withtargets";
-		return;
 
-	}
+		
 
-	if (!(this.mytower.friends.length == 0) && !(this.mytower.targets.length == 0)){
+	}else
+
+	if ((this.mytower.friends.length != 0) && (this.mytower.targets.length != 0)){
 
 		this.environment = "withfriendstargets";
-		return;
+		
+		
 
 	}
+	//console.log("environment doesn't change");
 
 
 
-	
+	//console.log(this.environment);
 	    
 
 };
 
-Ai.prototype.updateCheckDestination = function()
+Ai.prototype.checkDestination = function()
 {
-	
+	/*if (this.withfriendstargets == "chill")
+				console.log(this.environment);*/
+
 	switch (this.environment){
 
 		case "alone":
 
 			this.setDestinationXY(this.alone);
+
+			
 
 		break;
 
@@ -237,6 +286,7 @@ Ai.prototype.updateCheckDestination = function()
 
 		case "withtargets":
 
+			this.setClosestTarget();
 			this.setDestinationXY(this.withtargets);
 
 		break;
@@ -244,7 +294,12 @@ Ai.prototype.updateCheckDestination = function()
 
 		case "withfriendstargets":
 
+			this.setClosestTarget();
 			this.setDestinationXY(this.withfriendstargets);
+
+		break;
+
+		default:
 
 		break;
 
@@ -261,8 +316,14 @@ Ai.prototype.updateAttack = function()
 {	
 	if (this.mytower.reload_time_left == 0){
 
-		if (this.mytower.targets.length != 0)
-	    	this.mytower.shoot(this.mytower.targets[0]);
+		if (this.mytower.targets.length != 0){
+
+			this.setClosestTarget();
+	   		
+	   		if (this.target_inrange == true)
+	    	this.mytower.shoot(this.closet_target);
+
+	    }	
 
 	}    		
 
@@ -272,19 +333,14 @@ Ai.prototype.updateMove = function()
 {
 	if (this.mytower.currentenergy >= this.mytower.fullenergy){
 
-
-			if (!this.mytower.controlled){
-						
-					if (this.destx != null){	
-
-						this.mytower.startBoost(this.destx, this.desty);			
-						this.mytower.currentenergy = 0;
-					}
-			}
-
-
 		
 		
+
+		this.mytower.startBoost(this.destx, this.desty);			
+		
+
+		this.mytower.currentenergy = 0;
+
 	}
 
 		
@@ -296,11 +352,31 @@ Ai.prototype.updateMove = function()
 Ai.prototype.update = function()
 {
 
+	if( this.mytower.controlled == false){
+
+
+	
 	this.updateEnvironment();
-	this.updateCheckDestination();
+
+	
+
+
+	this.checkDestination();	
+	 
+
+	/* if (this.withfriendstargets == "chill")
+	 	console.log(this.environment + "2");*/
+
+
+	
+	this.updateMove();
+	
 	
 	this.updateAttack();
-	this.updateMove();
+
+	
+
+	}
 
 	
 
@@ -313,8 +389,8 @@ BASICJELLY_GEDAGTE = {
 	"moveradius" : 100,
 	"alone" : "roam",
 	"withfriends" : "roam",
-	"withtargets" : "chill",
-	"withfriendstargets" : "chill",
+	"withtargets" : "approach_closest",
+	"withfriendstargets" : "approach_closest",
 
 	"friendmemory" : 50,
 	"targetmemory" : 50,

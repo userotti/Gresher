@@ -24,14 +24,14 @@ Level.prototype.buildLevel = function()
 	case "firstlevel":	
 		
 
-		for (var i = 0; i < 15; i++) {
+		for (var i = 0; i < 10; i++) {
 	         p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	        
 	    };
 
 
 	    for (var i = 0; i < 15; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENSMALLRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
+	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
 	     	   
 	    };
 

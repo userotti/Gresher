@@ -22,7 +22,7 @@ Gamescene = function(stage)
   
     //console.log(STILLAI);
 
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"secondlevel", this.player)
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"firstlevel", this.player)
 
     
 
@@ -49,7 +49,7 @@ Gamescene = function(stage)
 Gamescene.prototype.constructor = Gamescene;
 
 
-Gamescene.prototype.checkInRangeCollision = function(at,tt){
+Gamescene.prototype.checkInweapon_rangeCollision = function(at,tt){
 
     if (this.checkBoundingboxCollision(at,tt)){
 
@@ -64,10 +64,10 @@ Gamescene.prototype.checkInRangeCollision = function(at,tt){
 Gamescene.prototype.checkBoundingboxCollision = function(at,tt){
 
     return  !(
-        (at.pos.y+at.range < tt.pos.y) ||
-        (at.pos.y-at.range > tt.pos.y) ||
-        (at.pos.x-at.range > tt.pos.x) ||
-        (at.pos.x+at.range < tt.pos.x) )
+        (at.pos.y+at.interaction_range < tt.pos.y) ||
+        (at.pos.y-at.interaction_range > tt.pos.y) ||
+        (at.pos.x-at.interaction_range > tt.pos.x) ||
+        (at.pos.x+at.interaction_range < tt.pos.x) )
 
 };
 
@@ -77,7 +77,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt){
     at.current_target_distance_nosqrt = Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2);
     at.current_target_angle = Math.atan2(at.pos.y - tt.pos.y, at.pos.x - tt.pos.x) + Math.PI;
 
-    if (at.current_target_distance_nosqrt < Math.pow(at.range, 2)){
+    if (at.current_target_distance_nosqrt < Math.pow(at.interaction_range, 2)){
 
            
 
@@ -86,7 +86,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt){
     } else{
 
           
-        at.current_target_distance_nosqrt = Math.pow(at.range, 2);
+        at.current_target_distance_nosqrt = Math.pow(at.interaction_range, 2);
         at.current_target_angle = 0;
         return false;
     }
@@ -172,7 +172,7 @@ Gamescene.prototype.updateTowers = function(){
                 {
                     if (this.attacker_tower != this.target_tower){
                         
-                        if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
+                        if (this.checkInweapon_rangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
 
                             
                               this.attacker_tower.obj.addToTargetsOrFriends(this.target_tower.obj); 

@@ -6,7 +6,11 @@ BASICJELLY = {
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 70,
+
+ 	"weapon_range": 70,
+ 	
+ 	"interaction_range": 170,
+ 	
  	"reload": 10,
  	"damage": 30,
  	"fullenergy": 30,
@@ -32,7 +36,10 @@ BASICSTALAGMITE = {
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 190,
+ 	
+ 	"weapon_range": 170,
+
+ 	"interaction_range": 170,
  	"reload": 60,
  	"damage": 45,
  	"fullenergy": 80,
@@ -60,7 +67,11 @@ BASICSTRUCT = {
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 50,
+ 	"weapon_range": 50,
+
+ 	"interaction_range": 170,
+
+
  	"reload": 30,
  	"damage": 3,
  	"fullenergy": 30,
