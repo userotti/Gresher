@@ -56,14 +56,32 @@
 
          connection.onopen = function (session) {
 
-
+            //users.put(session.id,Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
 
             session.subscribe('com.votegame.onmove', function (args) {
-               console.log("new moves for " + args[0] + " : " + args[1]);
+               console.log("new moves for : " + args[0] + " -> " + args[1] + " : " + args[2]);
+
+                // Other Players
+                 if( args[0] != connection.session.id ){
+
+                       if(users.get(args[0]) === null){
+                            console.log('Click found but no users??');
+                            users.put(args[0], Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
+                            users.get(args[0]).startBoost(args[1],args[2]);
+                        } else {
+                            console.log('Click: Other: ' + args[0]);
+                            users.get(args[0]).startBoost(args[1],args[2]);
+                        }
+
+                 } else {
+                     gresher.currentscene.player.startBoost(args[1],args[2]);
+                 }
             });
 
             session.subscribe('com.votegame.onvote', function (args) {
                console.log("new votes for " + args[0] + " : " + args[1]);
+
+
             });
 
             session.call('com.votegame.get_votes').then(
@@ -95,31 +113,7 @@
          };
 
 
-         function vote(item) {
-            if (connection.session) {
-               connection.session.call('com.votegame.vote', [item]).then(
-                  function (count) {
-                     console.log("Ok, voted for " + item + " : " + count);
-                  },
-                  connection.session.log
-               );
-            } else {
-               console.log("can't vote: no connection");
-            }
-         }
 
-         function svrmove(x) {
-             if (connection.session) {
-                 connection.session.call('com.votegame.move', [x]).then(
-                         function () {
-                             console.log("Ok, moved for " + x + "");
-                         },
-                         connection.session.log
-                 );
-             } else {
-                 console.log("can't vote: no connection");
-             }
-         }
       </script>
       <script>
 
@@ -219,9 +213,39 @@
               gresher.resize();
           }
 
+          function vote(item) {
+                if (connection.session) {
+                   connection.session.call('com.votegame.vote', [item]).then(
+                      function (count) {
+                         console.log("Ok, voted for " + item + " : " + count);
+                      },
+                      connection.session.log
+                   );
+                } else {
+                   console.log("can't vote: no connection");
+                }
+             }
 
+             function svrmove(x,y) {
+                 if (connection.session) {
+                     connection.session.call('com.votegame.move', [connection.session.id,x,y]).then(
+                             function (id) {
+                                 console.log("Ok, moved for: " + id +" " + x + " - " + y);
+
+                                 //users.get(id).startBoost(x, y);
+                             },
+                             connection.session.log
+                     );
+                 } else {
+                     console.log("can't vote: no connection");
+                 }
+             }
 
       </script>
+
+       <script type="text/javascript">
+
+       </script>
 
    </body>
 </html>

@@ -20,6 +20,7 @@ import os
 import datetime
 import sqlite3
 import datetime
+from time import sleep
 
 
 from twisted.python import log
@@ -147,24 +148,13 @@ class VoteGameBackend(ApplicationSession):
       return self.db.runInteraction(run)
 
    @wamp.procedure("com.votegame.move")
-   def move(self, x):
-      #if not item in self.config.extra['items']:
-         #raise ApplicationError("com.votegame.error.no_such_item", "no item '{}' to vote on".format(item))
+   def move(self, id, x, y):
 
       def run(txn):
-         self.publish("com.votegame.onmove", x, x,
+         self.publish("com.votegame.onmove", id, x, y,
             options = PublishOptions(excludeMe = False))
 
-         ## FIXME: make the following into 1 (atomic) SQL statement
-         ## => does SQLite feature "UPDATE .. RETURNING"?
-         #txn.execute("UPDATE votes SET count = count + 1 WHERE item = ?", [item])
-         #txn.execute("SELECT count FROM votes WHERE item = ?", [item])
-         #count = int(2)
-
-         #self.publish("com.votegame.onmove", x, count,
-         #   options = PublishOptions(excludeMe = False))
-
-         #return count
+         return id
 
       return self.db.runInteraction(run)
 
@@ -177,8 +167,8 @@ class VoteGameBackend(ApplicationSession):
 
       yield self.subscribe(onvote, 'com.votegame.onvote')
 
-      def onmove(x, count):
-         print("New move on '{}': {}".format(x, count))
+      def onmove(id, x, y):
+         print("New move for '{}' on '{}': '{}'".format(id, x, y))
 
       yield self.subscribe(onmove, 'com.votegame.onmove')
 
