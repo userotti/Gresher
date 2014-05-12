@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   </head>
+   <body>
+      <h1>Authenticated WAMP with Mozilla Persona</h1>
+      <p>Open JavaScript console to watch output.</p>
+
+      <h2>Login</h2>
+      <div id="user">Not logged in.</div>
+      <button id="signin">Sign in</button>
+      <button id="signout">Sign out</button>
+
+      <h2>RPC Result</h2>
+      <div id="result">No result yet.</div>
+
+      <script src="autobahn.min.jgz"></script>
+      <script src="https://login.persona.org/include.js"></script>
+
+      <script>
+         var signinLink = document.getElementById('signin');
+         signinLink.onclick = function() {
+            navigator.id.request();
+         };
+         signinLink.disabled = true;
+
+         var signoutLink = document.getElementById('signout');
+         signoutLink.onclick = function() {
+            navigator.id.logout();
+         };
+         signoutLink.disabled = true;
+
+         var userLabel = document.getElementById('user');
+         var result = document.getElementById('result');
+
+         var currentUser = null;
+
+         function onchallenge (session, method, extra) {
+            if (method === "mozilla-persona") {
+
+               userLabel.innerHTML = 'Please sign in ...';
+               signinLink.disabled = false;
+               return autobahn.auth_persona(session, currentUser);
+
+            } else {
+               console.log("don't know how to authentication using " + method);
+            }
+         }
+
+         var connection = new autobahn.Connection({
+            url: 'ws://localhost:8080/ws',
+            realm: 'realm1',
+            //authmethods: ["cookie", "anonymous"],
+            onchallenge: onchallenge
+         });
+        //
+        // = = = = CONNECTION OPEN = = = = = = = = = = = = = = = = = = = = = =
+        //
+         connection.onopen = function (session, details) {
+
+            userLabel.innerHTML = 'Authenticated: ' + details.authid;
+            signinLink.disabled = true;
+            signoutLink.disabled = false;
+
+            currentUser = details.authid;
+            autobahn.auth_persona(session, currentUser);
+
+             console.log(details);
+
+           // CALL - Register User, Return Entiry
+            session.call('com.votegame.signup', ['foxinni@gmail.com']).then(
+                    function (entity) {
+                        console.log("Registered (" + email + ") with Entity " + entity);
+                    },
+                    connection.session.log
+            );
+
+            // SUB - On Move
+            session.subscribe('com.votegame.onmove', function (args) {
+               console.log("new moves for " + args[0] + " : " + args[1]);
+            });
+            // SUB - On Vote
+            session.subscribe('com.votegame.onvote', function (args) {
+               console.log("new votes for " + args[0] + " : " + args[1]);
+            });
+
+            // CALL - Get Votes
+            session.call('com.votegame.get_votes').then(
+               function (votes) {
+                  console.log("Current votes:", votes);
+               },
+               session.log
+            );
+
+            // CALL - Time Service
+            session.call('com.timeservice.now').then(
+               function (now) {
+                  result.innerHTML = now;
+               },
+               function (error) {
+                  result.innerHTML = error;
+               }
+            );
+         };
+          //
+          // = = = = CONNECTION CLOSE = = = = = = = = = = = = = = = = = = = = = =
+          //
+         connection.onclose = function () {
+            window.location.reload();
+         }
+
+         connection.open();
+
+
+         /*function register(email) {
+             if (connection.session) {
+                 connection.session.call('com.votegame.register', [email]).then(
+                         function (entity) {
+                             console.log("Registered (" + email + ") with Entity " + entity);
+                         },
+                         connection.session.log
+                 );
+             } else {
+                 console.log("can't vote: no connection");
+             }
+         }*/
+
+         function vote(item) {
+            if (connection.session) {
+               connection.session.call('com.votegame.vote', [item]).then(
+                  function (count) {
+                     console.log("Ok, voted for " + item + " : " + count);
+                  },
+                  connection.session.log
+               );
+            } else {
+               console.log("can't vote: no connection");
+            }
+         }
+
+         function svrmove(x) {
+             if (connection.session) {
+                 connection.session.call('com.votegame.move', [x]).then(
+                         function () {
+                             console.log("Ok, moved for " + x + "");
+                         },
+                         connection.session.log
+                 );
+             } else {
+                 console.log("can't vote: no connection");
+             }
+         }
+      </script>
+   </body>
+</html>
