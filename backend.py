@@ -215,7 +215,7 @@ if __name__ == '__main__':
 
    ## test drive the component during development ..
    runner = ApplicationRunner(
-      url = "ws://malan:8080/ws",
+      url = "ws://ec2-50-17-46-129.compute-1.amazonaws.com:8080/ws",
       realm = "realm1",
       extra = extra,
       debug = True,       ## low-level WebSocket debugging
