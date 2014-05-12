@@ -1,91 +1,89 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-   </head>
+<head>
+    <title>GRSH - Socket 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+    <!-- Libraries -->
+    <script src="js/libs/stats.min.js"></script>
+    <script src="bower_components/pixi/bin/pixi.dev.js"></script>
+    <script src="js/libs/jquery-1.11.0.min.js"></script>
+    <script src="js/libs/underscore/underscore-min.js"></script>
+
+    <script src="js/libs/gamecore.min.js"></script>
+
+    <!-- Gresher Javascript -->
+    <script src="js/globals.js"></script>
+    <script src="js/destenationspresets.js"> </script>
+    <script src="js/ai.js"></script>
+    <script src="js/smaatclasses.js"></script>
+    <script src="js/camera.js"></script>
+    <script src="js/colorfuncs.js"></script>
+    <script src="js/towerpresets.js"></script>
+    <script src="js/shrappresets.js"></script>
+    <script src="js/shrap.js"></script>
+    <script src="js/tower.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/gamescene.js"></script>
+    <script src="js/gresher.js"></script>
+</head>
    <body>
-      <h1>Authenticated WAMP with Mozilla Persona</h1>
+      <h1>Votes Frontend</h1>
       <p>Open JavaScript console to watch output.</p>
+      <script>AUTOBAHN_DEBUG = true;</script>
+      <script type="text/javascript" src="autobahn.js"></script>
 
-      <h2>Login</h2>
-      <div id="user">Not logged in.</div>
-      <button id="signin">Sign in</button>
-      <button id="signout">Sign out</button>
-
-      <h2>RPC Result</h2>
-      <div id="result">No result yet.</div>
-
-      <script src="autobahn.min.jgz"></script>
-      <script src="https://login.persona.org/include.js"></script>
+      <button onclick="vote('banana')">Banana</button>
+      <button onclick="vote('lemon')">Lemon</button>
+      <button onclick="vote('grapefruit')">Grapefruit</button>
 
       <script>
-         var signinLink = document.getElementById('signin');
-         signinLink.onclick = function() {
-            navigator.id.request();
-         };
-         signinLink.disabled = true;
+         var wsuri;
+         var users = new gamecore.Hashtable();
 
-         var signoutLink = document.getElementById('signout');
-         signoutLink.onclick = function() {
-            navigator.id.logout();
-         };
-         signoutLink.disabled = true;
-
-         var userLabel = document.getElementById('user');
-         var result = document.getElementById('result');
-
-         var currentUser = null;
-
-         function onchallenge (session, method, extra) {
-            if (method === "mozilla-persona") {
-
-               userLabel.innerHTML = 'Please sign in ...';
-               signinLink.disabled = false;
-               return autobahn.auth_persona(session, currentUser);
-
-            } else {
-               console.log("don't know how to authentication using " + method);
-            }
-         }
+         //if (window.location.protocol === "file:") {
+             wsuri = "ws://aasdlocalhost:8080/ws";
+         //} else {
+             //wsuri = "ws://" + window.location.hostname + ":8080/ws";
+         //}
 
          var connection = new autobahn.Connection({
-            url: 'ws://localhost:8080/ws',
-            realm: 'realm1',
-            //authmethods: ["cookie", "anonymous"],
-            onchallenge: onchallenge
-         });
-        //
-        // = = = = CONNECTION OPEN = = = = = = = = = = = = = = = = = = = = = =
-        //
-         connection.onopen = function (session, details) {
+            url: wsuri,
+            realm: 'realm1'}
+         );
 
-            userLabel.innerHTML = 'Authenticated: ' + details.authid;
-            signinLink.disabled = true;
-            signoutLink.disabled = false;
+         connection.onopen = function (session) {
 
-            currentUser = details.authid;
-            autobahn.auth_persona(session, currentUser);
+            //users.put(session.id,Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
 
-             console.log(details);
-
-           // CALL - Register User, Return Entiry
-            session.call('com.votegame.signup', ['foxinni@gmail.com']).then(
-                    function (entity) {
-                        console.log("Registered (" + email + ") with Entity " + entity);
-                    },
-                    connection.session.log
-            );
-
-            // SUB - On Move
             session.subscribe('com.votegame.onmove', function (args) {
-               console.log("new moves for " + args[0] + " : " + args[1]);
+               console.log("new moves for : " + args[0] + " -> " + args[1] + " : " + args[2]);
+
+                // Other Players
+                 if( args[0] != connection.session.id ){
+
+                       if(users.get(args[0]) === null){
+                            console.log('Click found but no users??');
+                            users.put(args[0], Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, gresher.currentscene.effects_layer, gresher.currentscene.colidables_layer));
+                            users.get(args[0]).startBoost(args[1],args[2]);
+                        } else {
+                            console.log('Click: Other: ' + args[0]);
+                            users.get(args[0]).startBoost(args[1],args[2]);
+                        }
+
+                 } else {
+                     gresher.currentscene.player.startBoost(args[1],args[2]);
+                 }
             });
-            // SUB - On Vote
+
             session.subscribe('com.votegame.onvote', function (args) {
                console.log("new votes for " + args[0] + " : " + args[1]);
+
+
             });
 
-            // CALL - Get Votes
             session.call('com.votegame.get_votes').then(
                function (votes) {
                   console.log("Current votes:", votes);
@@ -93,64 +91,159 @@
                session.log
             );
 
-            // CALL - Time Service
-            session.call('com.timeservice.now').then(
-               function (now) {
-                  result.innerHTML = now;
-               },
-               function (error) {
-                  result.innerHTML = error;
-               }
-            );
+            // CALL - Register User, Return Entiry
+            var email = 'doos@dooskop.com';
+             session.call('com.votegame.signup', [email]).then(
+                     function (entity) {
+                         console.log("Registered (" + email + ") with Entity " + entity);
+                     },
+                     connection.session.log
+             );
+
          };
-          //
-          // = = = = CONNECTION CLOSE = = = = = = = = = = = = = = = = = = = = = =
-          //
-         connection.onclose = function () {
-            window.location.reload();
-         }
+
+
 
          connection.open();
 
+         window.onbeforeunload = function() {
 
-         /*function register(email) {
-             if (connection.session) {
-                 connection.session.call('com.votegame.register', [email]).then(
-                         function (entity) {
-                             console.log("Registered (" + email + ") with Entity " + entity);
-                         },
-                         connection.session.log
-                 );
-             } else {
-                 console.log("can't vote: no connection");
-             }
-         }*/
+             connection.close()
 
-         function vote(item) {
-            if (connection.session) {
-               connection.session.call('com.votegame.vote', [item]).then(
-                  function (count) {
-                     console.log("Ok, voted for " + item + " : " + count);
-                  },
-                  connection.session.log
-               );
-            } else {
-               console.log("can't vote: no connection");
-            }
-         }
+         };
 
-         function svrmove(x) {
-             if (connection.session) {
-                 connection.session.call('com.votegame.move', [x]).then(
-                         function () {
-                             console.log("Ok, moved for " + x + "");
-                         },
-                         connection.session.log
-                 );
-             } else {
-                 console.log("can't vote: no connection");
-             }
-         }
+
+
       </script>
+      <script>
+
+          //KEYBOARD
+          var Key = {
+              _pressed: {},
+
+              LEFT: 37,
+              UP: 38,
+              RIGHT: 39,
+              DOWN: 40,
+
+              isDown: function(keyCode) {
+                  return this._pressed[keyCode];
+              },
+
+              onKeydown: function(event) {
+                  this._pressed[event.keyCode] = true;
+              },
+
+              onKeyup: function(event) {
+                  delete this._pressed[event.keyCode];
+              }
+          };
+
+          window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
+          window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
+          window.addEventListener('keypress', function(event) { console.log("Key PRessed"); keypressed() }, false);
+          //make the fps stats
+
+          stats = new Stats();
+          document.body.appendChild( stats.domElement );
+          stats.domElement.style.position = "fixed";
+          stats.domElement.style.zIndex = "999";
+          stats.domElement.style.bottom = "0px";
+          stats.domElement.style.right = "0px";
+
+
+          //make the game instance
+
+          gresher = new Gresher();
+
+
+          keypressed = function(){
+              console.log("Toggle Pause");
+              gresher.paused = !(gresher.paused);
+
+
+          }
+
+
+          gresher.stage.click = function(mouseData){
+
+              gresher.handleClickTap(mouseData.originalEvent);
+
+          }
+
+          gresher.stage.tap = function(touchData){
+
+
+              gresher.handleClickTap(touchData.global);
+
+          }
+
+          gresher.stage.tap = function(touchData){
+
+
+              gresher.handleClickTap(touchData.global);
+
+          }
+
+
+          // THIS FUNCTION CALL KICKS OFF THE WHOLE RENDER LOOP PARTY
+          requestAnimFrame(update);
+
+
+          //the main loop function
+          function update() {
+
+              if (Key.isDown(Key.UP)) {
+
+              }
+
+              stats.begin();
+
+              gresher.gameupdate();
+
+              requestAnimFrame( update );
+
+
+              stats.end();
+          }
+
+          //the main resize function
+          window.onresize = function resize() {
+
+              gresher.resize();
+          }
+
+          function vote(item) {
+                if (connection.session) {
+                   connection.session.call('com.votegame.vote', [item]).then(
+                      function (count) {
+                         console.log("Ok, voted for " + item + " : " + count);
+                      },
+                      connection.session.log
+                   );
+                } else {
+                   console.log("can't vote: no connection");
+                }
+             }
+
+             function svrmove(x,y) {
+                 if (connection.session) {
+                     connection.session.call('com.votegame.move', [connection.session.id,x,y]).then(
+                             function (id) {
+                                 console.log("Ok, moved for: " + id +" " + x + " - " + y);
+
+                                 //users.get(id).startBoost(x, y);
+                             },
+                             connection.session.log
+                     );
+                 } else {
+                     console.log("can't vote: no connection");
+                 }
+             }
+
+      </script>
+
+
+
    </body>
 </html>
