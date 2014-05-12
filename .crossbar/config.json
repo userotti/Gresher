@@ -26,7 +26,6 @@
                "transports": [
                   {
                      "type": "web",
-                     "url" : "http://ec2-50-17-46-129.compute-1.amazonaws.com:8080",
 
                      "endpoint": {
                         "type": "tcp",
