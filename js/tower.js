@@ -91,6 +91,8 @@ Tower = gamecore.DualPooled('Tower',
  	boostpower: 0,	
  	boostangle: 0,
 
+ 	closeenoughtodestination: 50,
+
  	//tween 
  	moving: false,
  	movingframe: 0,
@@ -108,6 +110,7 @@ Tower = gamecore.DualPooled('Tower',
  	destination: 0,
 
  	//attacking
+ 	weapon_drawangle: 0,
  	current_target_distance_nosqrt: 0,	
 	current_target_angle: 0,	
 
@@ -339,12 +342,54 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
+ 	drawweaponflame: function(length,starty,sidewidth, midheight, angle,color){
+
+ 		this.weapon.beginFill(color, 1);	
+						
+			this.weapon.moveTo(Math.cos(angle)*length, starty + (Math.sin(angle)*length));
+			this.weapon.lineTo(-sidewidth*Math.cos(angle-Math.PI/2) - midheight*Math.sin(angle-Math.PI/2), -sidewidth*Math.sin(angle-Math.PI/2) + midheight*Math.cos(angle - Math.PI/2) + starty);
+			this.weapon.lineTo(0,starty);
+			this.weapon.lineTo(sidewidth*Math.cos(angle-Math.PI/2) - midheight*Math.sin(angle-Math.PI/2), sidewidth*Math.sin(angle-Math.PI/2) + midheight*Math.cos(angle-Math.PI/2) + starty);
+			this.weapon.lineTo(Math.cos(angle)*length, starty + (Math.sin(angle)*length));
+			
+			
+
+
+		this.weapon.endFill();
+
+
+ 	},
+
  	redrawWeapon: function(target_tower){
 			
 		this.weapon.clear();	
+		if (this.character_class == "jelly"){ 
+		this.drawweaponflame(45, 15, 7, 7, Math.PI/2, 0xffaa33);
+		this.drawweaponflame(25, 15, 4, 4, Math.PI/2  -  Math.PI/(Math.random()*5 + 3), 0xffbb22);
+		this.drawweaponflame(25, 15, 4, 4, Math.PI/2  +  Math.PI/(Math.random()*5 + 3), 0xffbb22);
+		}else
+
+		if (this.character_class == "stalagmite"){ 
+		this.drawweaponflame(65, 15, 7, 7, Math.PI/2, 0x66aaee);
+		this.drawweaponflame(45, 15, 4, 4, Math.PI/2  -  Math.PI/(Math.random()*5 + 3), 0x44aaee);
+		this.drawweaponflame(45, 15, 4, 4, Math.PI/2  +  Math.PI/(Math.random()*5 + 3), 0x44aaee);
+		}
+
+		this.weapon.alpha = 1;
+
+
+		//this.drawweaponflame(100, 30, 4, 4, Math.PI/2-Math.PI/2, 0xffaa00);
+		//this.drawweaponflame(100, 30, 4, 4, Math.PI/2+Math.PI/5, 0xffaa00);
+				
 
 		
+
+		this.weapon.rotation = this.weapon_drawangle - Math.PI/2;
+
+
 		
+
+		/*
 	
 		this.weapon.lineStyle(4, 0xffffff, 0.4);
 		this.weapon.drawCircle(0,0,this.distToPoint(this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y));
@@ -363,7 +408,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.weapon.rotation = this.current_target_angle + Math.PI/2;
 
 
-
+*/
 
 		
 
@@ -399,6 +444,7 @@ Tower = gamecore.DualPooled('Tower',
 			target_tower.iveBeenHitBy(this);
 
 			this.redrawWeapon(target_tower);
+			this.makeSparks(6);
 			this.reload_time_left = this.reload;
 		
 
@@ -481,7 +527,7 @@ Tower = gamecore.DualPooled('Tower',
 
 			this.bodyHitFlash(5);
 
-	 		this.makeHitShards(4);
+	 		this.makeHitShards(3);
 	 		this.makeSparks(6);
 
 	},
@@ -492,7 +538,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.bodyHitFlash(6);	
 		this.dyinganimationcounter = 30;
 		this.makeSparks(8);
-		this.makeHitShards(9);
+		this.makeHitShards(7);
 
 
 
@@ -527,7 +573,7 @@ Tower = gamecore.DualPooled('Tower',
  	checkboostdist: function(){
 
 
-		  return ( (Math.abs(this.boosttarget.x - this.pos.x) * 2 < (50)) && (Math.abs(this.boosttarget.y - this.pos.y) * 2 < (50)) );
+		  return ( (Math.abs(this.boosttarget.x - this.pos.x) < (this.closeenoughtodestination)) && (Math.abs(this.boosttarget.y - this.pos.y) < (this.closeenoughtodestination)) );
 		
  	},
 

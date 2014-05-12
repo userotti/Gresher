@@ -73,11 +73,9 @@ Gamescene.prototype.checkBoundingboxCollision = function(at,tt){
 
 Gamescene.prototype.checkDistCollision = function(at,tt){
 
-    
-    at.current_target_distance_nosqrt = Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2);
-    at.current_target_angle = Math.atan2(at.pos.y - tt.pos.y, at.pos.x - tt.pos.x) + Math.PI;
+  
 
-    if (at.current_target_distance_nosqrt < Math.pow(at.interaction_range, 2)){
+    if (Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2) < Math.pow(at.interaction_range, 2)){
 
            
 
@@ -85,9 +83,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt){
 
     } else{
 
-          
-        at.current_target_distance_nosqrt = Math.pow(at.interaction_range, 2);
-        at.current_target_angle = 0;
+
         return false;
     }
 
