@@ -6,11 +6,15 @@ BASICJELLY = {
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 70,
- 	"reload": 10,
- 	"damage": 30,
- 	"energy": 0,
- 	"energyrecharge": 0,
+
+ 	"weapon_range": 100,
+ 	
+ 	"interaction_range": 250,
+ 	
+ 	"reload": 15,
+ 	"damage": 25,
+ 	"fullenergy": 30,
+ 	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
 
@@ -28,24 +32,27 @@ BASICSTALAGMITE = {
 	
 	"character_class" : "stalagmite",
 	"mass" : 1,
-	"maxhealth" : 100,
+	"maxhealth" : 70,
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 190,
- 	"reload": 60,
+ 	
+ 	"weapon_range": 210,
+
+ 	"interaction_range": 250,
+ 	"reload": 40,
  	"damage": 55,
- 	"energy": 100,
+ 	"fullenergy": 80,
  	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
 
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
- 	"fric_coeff": 0.20,
+ 	"fric_coeff": 0.350,
  	"ai_timepercall": 50,
  	
- 	"maxboostpower" : 0.25,
+ 	"maxboostpower" : 1.95,
  
 
 }
@@ -60,11 +67,15 @@ BASICSTRUCT = {
 	
  	"shield": 0,
  	"shielrecharge": 0,
- 	"range": 50,
+ 	"weapon_range": 50,
+
+ 	"interaction_range": 250,
+
+
  	"reload": 30,
  	"damage": 3,
- 	"energy": 0,
- 	"energyrecharge": 0,
+ 	"fullenergy": 30,
+ 	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
 

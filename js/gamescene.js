@@ -17,7 +17,7 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, STILLAI, NODEST, this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
   
     //console.log(STILLAI);
@@ -49,7 +49,7 @@ Gamescene = function(stage)
 Gamescene.prototype.constructor = Gamescene;
 
 
-Gamescene.prototype.checkInRangeCollision = function(at,tt){
+Gamescene.prototype.checkInweapon_rangeCollision = function(at,tt){
 
     if (this.checkBoundingboxCollision(at,tt)){
 
@@ -64,20 +64,18 @@ Gamescene.prototype.checkInRangeCollision = function(at,tt){
 Gamescene.prototype.checkBoundingboxCollision = function(at,tt){
 
     return  !(
-        (at.pos.y+at.range < tt.pos.y) ||
-        (at.pos.y-at.range > tt.pos.y) ||
-        (at.pos.x-at.range > tt.pos.x) ||
-        (at.pos.x+at.range < tt.pos.x) )
+        (at.pos.y+at.interaction_range < tt.pos.y) ||
+        (at.pos.y-at.interaction_range > tt.pos.y) ||
+        (at.pos.x-at.interaction_range > tt.pos.x) ||
+        (at.pos.x+at.interaction_range < tt.pos.x) )
 
 };
 
 Gamescene.prototype.checkDistCollision = function(at,tt){
 
-    
-    at.current_target_distance_nosqrt = Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2);
-    at.current_target_angle = Math.atan2(at.pos.y - tt.pos.y, at.pos.x - tt.pos.x) + Math.PI;
+  
 
-    if (at.current_target_distance_nosqrt < Math.pow(at.range, 2)){
+    if (Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2) < Math.pow(at.interaction_range, 2)){
 
            
 
@@ -85,9 +83,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt){
 
     } else{
 
-          
-        at.current_target_distance_nosqrt = Math.pow(at.range, 2);
-        at.current_target_angle = 0;
+
         return false;
     }
 
@@ -108,7 +104,7 @@ Gamescene.prototype.sceneUpdate = function()
         this.updateTowers();
         this.updateEffects();
 
-        this.updateAttacks();
+        //this.updateAttacks();
 
         this.level.doLevel();
 
@@ -161,9 +157,41 @@ Gamescene.prototype.updateTowers = function(){
             this.next_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
             while( this.next_tower )
             {
+                /* main update */
                 this.next_tower.obj.update();
+
+
+                /* add to targets list */
+                this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
+                this.attacker_tower = this.next_tower;
+                while( this.target_tower )
+                {
+                    if (this.attacker_tower != this.target_tower){
+                        
+                        if (this.checkInweapon_rangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
+
+                            
+                              this.attacker_tower.obj.addToTargetsOrFriends(this.target_tower.obj); 
+                        }
+                    }    
+
+                this.target_tower = this.target_tower.nextLinked;
+                }
+                /*end of add to targets list */
+
+                /* neeeeext */
                 this.next_tower = this.next_tower.nextLinked;
+            
             }
+
+            
+
+
+
+
+
+
+            /* remove die siele wat gekak het die loop */
 
             this.next_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
 
@@ -188,52 +216,17 @@ Gamescene.prototype.updateTowers = function(){
 
 };
 
-Gamescene.prototype.updateAttacks = function(){
 
-    if (gamecore.DualPool.getPool(Tower) != null){
-
-
-            this.attacker_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;
-            while( this.attacker_tower )
-            {
-                
-                this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
-                
-                while( this.target_tower )
-                {
-                    if (this.attacker_tower != this.target_tower){
-                        
-                        if (this.checkInRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
-
-                            //this.attacker_tower.obj.shoot(this.target_tower.obj);
-                              this.attacker_tower.obj.checkTeamAndAct(this.target_tower.obj);  
-                        }
-                    }    
-
-                this.target_tower = this.target_tower.nextLinked;
-                }
-
-                this.attacker_tower  =  this.attacker_tower.nextLinked;
-
-            }
-
-
-
-        }
-
-};    
 
 Gamescene.prototype.mouseClick = function(mousepos)
 {
-    this.mouseclickpos = mousepos;
+     this.mouseclickpos = mousepos;
         
     this.mouseclickposdist = Math.sqrt(Math.pow(((this.camera.screen_midx) - this.mouseclickpos.x),2) + Math.pow(((this.camera.screen_midy) - this.mouseclickpos.y),2));
     this.mouseclickposhoek = Math.atan2(((this.camera.screen_midy) - this.mouseclickpos.y), ((this.camera.screen_midx) - this.mouseclickpos.x) ) - this.camera.rotation;
-    //this.player.startBoost(this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
-    var x = this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom;
-    var y = this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom;
-    svrmove(x,y);
-    //sock.send(code + ':click:' + (this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom) + ":" + (this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom) + "");
+    this.player.startBoost(this.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
+           
+   
 
 
 };   
