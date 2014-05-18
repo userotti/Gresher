@@ -17,7 +17,7 @@ Gamescene = function(stage)
     this.world.addChild(this.colidables_layer);
     this.world.addChild(this.effects_layer);
 
-    this.player = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this.colidables_layer);
+    this.player = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this.colidables_layer);
     this.player.controlled = true;
   
     //console.log(STILLAI);

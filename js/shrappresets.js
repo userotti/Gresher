@@ -6,7 +6,7 @@ JELLYSHRAP = {
  	"fric_coeff": 0.07,
 
     "startalpha" : 1,
-    "alphadecrease" : 0.05,
+    "alphadecrease" : 0.02,
     
     "scaleup_speed" : 0.0,
 
@@ -27,7 +27,7 @@ STALAGSHRAP = {
  	
 
     "startalpha" : 1,
- 	"alphadecrease" : 0.05,
+ 	"alphadecrease" : 0.02,
 
  	"scaleup_speed" : 0.0,
  	"scale" : 1,

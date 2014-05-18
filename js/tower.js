@@ -332,6 +332,14 @@ Tower = gamecore.DualPooled('Tower',
  		
  		this.body.cacheAsBitmap = true;
 		this.body_flash.cacheAsBitmap = true;
+
+		//this.body.alpha = 0.3;
+		//this.body.alpha = 0.9;
+		this.body.alpha = 1;
+
+		this.towerbody.alpha = 1;
+		this.towerbody.cacheAsBitmap = false;
+		console.log(this.towerbody.cacheAsBitmap);
 		
  	},
 
@@ -385,7 +393,7 @@ Tower = gamecore.DualPooled('Tower',
 		
 
 		this.weapon.rotation = this.weapon_drawangle - Math.PI/2;
-
+		this.weapon.cacheAsBitmap = true;
 
 		
 
@@ -615,6 +623,9 @@ Tower = gamecore.DualPooled('Tower',
 		}
 
 
+		
+
+
 			
 
  	},
@@ -629,7 +640,7 @@ Tower = gamecore.DualPooled('Tower',
  		if (this.reload_time_left > 0) this.reload_time_left--;
 
 
- 		if (this.currentenergy < this.fullenergy) this.currentenergy = this.currentenergy + 1;
+ 		if (this.currentenergy < this.fullenergy) this.currentenergy = this.currentenergy + this.energyrecharge;
 
 
 

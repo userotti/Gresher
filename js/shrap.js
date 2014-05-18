@@ -249,7 +249,7 @@ Shrap = gamecore.DualPooled('Shrap',
 	
 		}
 
-		//this.body.cacheAsBitmap = true;
+		this.body.cacheAsBitmap = true;
 
 		
 

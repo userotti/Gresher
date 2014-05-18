@@ -23,16 +23,21 @@ Level.prototype.buildLevel = function()
 
 	case "firstlevel":	
 		
-		for (var i = 0; i < 30; i++) {
-	         p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
+		for (var i = 0; i < 18; i++) {
+	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
 	        
 	    };
 
 
-	    for (var i = 0; i < 30; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENSMALLRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
+	    for (var i = 0; i < 23; i++) {
+	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
 	     	   
 	    };
+
+	//p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
+	       
+
+	   
 
 	break;
 

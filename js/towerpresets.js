@@ -9,22 +9,22 @@ BASICJELLY = {
 
  	"weapon_range": 100,
  	
- 	"interaction_range": 250,
+ 	"interaction_range": 350,
  	
  	"reload": 15,
  	"damage": 25,
- 	"fullenergy": 30,
+ 	"fullenergy": 25,
  	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
 
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
- 	"fric_coeff": 0.30,
+ 	"fric_coeff": 0.300,
  	"ai_timepercall": 100, 
 
  	
- 	"maxboostpower" : 2.5,
+ 	"maxboostpower" : 2.9,
 
 }
 
@@ -42,7 +42,7 @@ BASICSTALAGMITE = {
  	"interaction_range": 250,
  	"reload": 40,
  	"damage": 55,
- 	"fullenergy": 80,
+ 	"fullenergy": 120,
  	"energyrecharge": 1,
  	"magneticcharge": 0,
  	"magneticrange": 0,
@@ -52,7 +52,7 @@ BASICSTALAGMITE = {
  	"fric_coeff": 0.350,
  	"ai_timepercall": 50,
  	
- 	"maxboostpower" : 1.95,
+ 	"maxboostpower" : 1.65,
  
 
 }
@@ -109,6 +109,20 @@ ONSCREENSMALLRANDOM = function(){
 	
 	"posx" : (Math.random() * ((window.innerWidth)/3))  - (window.innerWidth)/6,
 	"posy" : (Math.random() * ((window.innerHeight)/3))  - (window.innerHeight)/6,
+	"velx" : 0,
+	"vely" : 0,
+ 	"accx" : 0,
+ 	"accy" : 0, });
+ 	
+}
+
+
+ONSCREENSMALLRANDOM_LEFT = function(){ 
+
+	return({
+	
+	"posx" : 1400 + (Math.random() * ((window.innerWidth)/4))  - (window.innerWidth)/8,
+	"posy" : (Math.random() * ((window.innerHeight)/4))  - (window.innerHeight)/8,
 	"velx" : 0,
 	"vely" : 0,
  	"accx" : 0,
