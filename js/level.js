@@ -1,16 +1,15 @@
-Level = function(effects_layer, colidables_layer, background_layer, level_id, player){
+Level = function(effects_layer, colidables_layer, background_layer, level_id){
 	
 	this.effects_layer = effects_layer;
 	this.colidables_layer = colidables_layer;
 	this.background_layer = background_layer;
-//make array if multiplayer
-	this.theplayer = player;
-
+	
+	//make array if multiplayer
+	this.player = 0;
 	this.level_id = level_id;
 	
 	this.buildBackground();
 	this.buildLevel();
-
 
 }
 
@@ -18,47 +17,37 @@ Level.prototype.constructor = Level;
 
 Level.prototype.buildLevel = function()
 {
+	
+	this.player = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this);
+	this.player.controlled = true;
+	this.addTowerToWorld(this.player.sprite);
 
 	switch (this.level_id){
 
-	case "firstlevel":	
+	case "1":	
 		
-		for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
-	        
+		for (var i = 0; i < 30; i++) {
+	        t = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
+	        this.addTowerToWorld(t.sprite);	
 	    };
-
-
-	    for (var i = 0; i < 23; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
-	     	   
+	    for (var i = 0; i < 38; i++) {
+	        t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
+	    	this.addTowerToWorld(t.sprite);	   
 	    };
-
-	//p = Tower.create(BASICJELLY, ONSCREENRANDOM(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
-	       
-
-	   
 
 	break;
 
-	case "secondlevel":	
-		
-
-		for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this.colidables_layer);
-	        
+	case "2":	
+		for (var i = 0; i < 0; i++) {
+	         t = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this);
+	         this.addTowerToWorld(t.sprite);
 	    };
-
-
-	    for (var i = 0; i < 18; i++) {
-	         p = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this.colidables_layer);
-	     	   
+	    for (var i = 0; i < 3; i++) {
+	         t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this);
+	     	 this.addTowerToWorld(t.sprite);  
 	    };
 
 	break;
-	
-
-
 	
 	}
 
@@ -132,13 +121,91 @@ Level.prototype.buildBackground = function()
 
 };
 
+Level.prototype.addTowerToWorld = function(t){
+
+ 	this.colidables_layer.addChild(t);
+
+},
+
+Level.prototype.makeHitShards = function(amount, x, y, char_class){
+
+	var s;
+
+	if (char_class == "jelly"){
+		for (var i = 0; i < amount; i++){
+		 	s = Shrap.create(JELLYSHRAP, FROMMESHRAP(x, y),  this.effects_layer);
+		 	this.effects_layer.addChild(s.body);
+		}
+	}
+	if (char_class == "stalagmite"){
+		for (var i = 0; i < amount; i++){
+		 	s = Shrap.create(STALAGSHRAP, FROMMESHRAP(x, y));
+			this.effects_layer.addChild(s.body);
+		}
+	}
+	if (char_class == "struct"){
+	 	for (var i = 0; i < amount; i++){
+		 	s = Shrap.create(STRUCTSHRAP, FROMMESHRAP(x, y));
+			this.effects_layer.addChild(s.body);
+		}
+	}
+},
+
+Level.prototype.makeSparks = function(amount, x, y){
+
+	for (var i = 0; i < amount; i++){
+		s = Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(x, y));
+		this.effects_layer.addChild(s.body);
+	}	
+
+},
+
+Level.prototype.makeSmoke = function(amount, x, y){
+
+	for (var i = 0; i < amount; i++){
+		s = Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(x, y));
+		this.effects_layer.addChild(s.body);
+	}	
+
+},
+
+
+Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_class){
+
+	var rotation = Math.atan2(x-tx, y-ty) + Math.PI;
+
+	if (tcharacter_class == "jelly"){
+		
+
+		//die pos van die shrap moet hier yt-gewerk word, en die angle moet saam gepass word.	
+		console.log("jelly");
+		for (var i = 0; i < amount; i++){
+			s = Shrap.create(JELLYWEAPONFLAME, FLAMESHRAP(x, y, rotation));
+			this.effects_layer.addChild(s.body);
+		}		
+					
+	}
+
+
+	if (tcharacter_class == "stalagmite"){
+
+		console.log("stalagmite");
+	
+
+		for (var i = 0; i < amount; i++){
+			s = Shrap.create(STALAGMITEWEAPONFLAME, FLAMESHRAP(x, y, rotation));
+			this.effects_layer.addChild(s.body);
+		}		
+	}
+
+},
+
+
 Level.prototype.doLevel = function()
 {
 
 	this.space_rubble_deeper.rotation += 0.000025;
 	this.space_rubble.rotation += 0.00019;
-	
-
 
 }
 

@@ -67,13 +67,8 @@ Ai.prototype.APointCloseTo = function(dest,cx,cy,r){
 
 	var angle = Math.random()*Math.PI*2;
 
-
 	dest.x = cx + (Math.cos(angle) * r);
 	dest.y = cy + (Math.sin(angle) * r); 
-
-	
-
-
 
 };	 
 
@@ -83,27 +78,19 @@ Ai.prototype.APointOppositeFrom = function(dest,cx,cy,r){
 	var angle = Math.random()*Math.PI*2;
 	var direction = Math.atan2(this.mytower.pos.y-cy, this.mytower.pos.x-cx);
 
-
-
-
 	dest.x = this.mytower.pos.x + this.moveradius*Math.cos(direction) + (Math.cos(angle) * r);
 	dest.y = this.mytower.pos.y + this.moveradius*Math.sin(direction) + (Math.sin(angle) * r); 
-
 
 };
 
 
 Ai.prototype.capMoveDist = function(){
-
-
 	
 	var movetoangle = Math.atan2(this.mytower.pos.y - this.dest.y, this.mytower.pos.x - this.dest.x) + Math.PI;
-
 	if ( (Math.pow(this.mytower.pos.x - this.dest.x,2) + Math.pow(this.mytower.pos.y - this.dest.y,2)) > Math.pow(this.moveradius,2)){
 
 		this.dest.x = this.mytower.pos.x + Math.cos(movetoangle)*this.moveradius;
 		this.dest.y = this.mytower.pos.y + Math.sin(movetoangle)*this.moveradius;
-
 
 	}
 
@@ -111,112 +98,58 @@ Ai.prototype.capMoveDist = function(){
 
 Ai.prototype.setDestinationXY = function(whattodo)
 {	
-			
-		
-
 		switch (whattodo){
 
-
-
 			case "chill":
-
 				this.dest.x = this.mytower.pos.x;
 				this.dest.y = this.mytower.pos.y;
 
-				
-
-
 			break;
 
-
 			case "interaction_roam":
-
 				this.APointCloseTo(this.dest, this.mytower.pos.x, this.mytower.pos.y, this.moveradius);
-
-				this.mytower.currentenergy = 0;
-
+				
 
 			break;
 
 
 			case "approach_closest_target" :
 
-
 				if (this.closest_target != null) {
-
-
 					this.APointCloseTo(this.dest, this.closest_target.pos.x, this.closest_target.pos.y, this.mytower.weapon_range * 0.7);
-
-					this.mytower.currentenergy = 0;
-
 					
-					//this.dest.x = this.closet_target.pos.x;
-					//this.dest.y = this.closet_target.pos.y;
-
-
-
-
 				}	
 
-
-
 			break;
-
-
 
 			case "approach_closest_friend" :
 
-
 				if (this.closest_friend != null) {
-
-
-
 					this.APointCloseTo(this.dest, this.closest_friend.pos.x, this.closest_friend.pos.y, this.mytower.interaction_range * 0.2);
-
-					this.mytower.currentenergy = 0;
-
-
-
-
+					
 				}	
 
-
 			break;
-
-
 
 			case "retreat_from_closest_target" :
 
-
 				if (this.closest_target != null) {
-
 					this.APointOppositeFrom(this.dest, this.closest_target.pos.x, this.closest_target.pos.y, this.mytower.interaction_range * 0.2);
-
-					this.mytower.currentenergy = 0;
-
+					
 				}	
-
 
 			break;
 
-
-
 			case "follow_controlled" :
-
 				
 				if (this.closest_player != null) {
-
 					this.APointCloseTo(this.dest, this.closest_player.pos.x, this.closest_player.pos.y, this.mytower.interaction_range * 0.1);
-					
 
 				}else{
-
 					this.APointCloseTo(this.dest, this.mytower.pos.x, this.mytower.pos.y, this.moveradius);
-						
-
 
 				}	
-				this.mytower.currentenergy = 0;
+				
 
 			break;
 
@@ -224,23 +157,16 @@ Ai.prototype.setDestinationXY = function(whattodo)
 
 			case "following" :
 
-
 			break;
 
 			case "hunting" :
 
-
 			break;
-	
-
-
-			
-
-
 
 
 		}
-		this.capMoveDist();
+
+		//this.capMoveDist();
 
 
 };
@@ -410,77 +336,41 @@ Ai.prototype.updateEnvironment = function()
 };
 
 Ai.prototype.updateIndividuals = function(){
-
 	this.setClosestTarget();
 	this.setClosestPlayer();
 	this.setClosestFriend();
-	
 
 }
 
-
-
-
 Ai.prototype.updateAttack = function()
 {	
-	if (this.mytower.reload_time_left == 0){
-
-	
+	if (this.mytower.current_reload == this.mytower.full_reload){
 		if (this.mytower.targets.length != 0){
-	   	
-	   		
 	   		if (this.target_inrange == true){
-	    		
 	    		this.mytower.shoot(this.closest_target);
 	    	}
-
 	    }	
-
 	}    		
-
 };
 
 Ai.prototype.updateMove = function()
 {
-	 
-
-	if (this.mytower.currentenergy >= this.mytower.fullenergy){
-
+	if (this.mytower.currentenergy == this.mytower.fullenergy){
 		
 		this.setDestinationXY(this.whatToDoInThisEnvironment());
-
 		this.mytower.startBoost(this.dest.x, this.dest.y);			
-		
-
-		
-
 	}
-
-		
-
 };
-
-
 
 Ai.prototype.update = function()
 {
-
-
-
 	this.updateIndividuals();		
 	this.updateEnvironment();
-	
-	//controlled means its a player
-	if (this.mytower.controlled == false){
+
+	if (!this.mytower.controlled){
 		this.updateMove();
 	}
-
-
 	this.updateAttack();
-
-	
-
-
 }; 
 
 BASICJELLY_GEDAGTE = {

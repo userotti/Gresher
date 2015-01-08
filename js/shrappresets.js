@@ -4,15 +4,10 @@ JELLYSHRAP = {
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.07,
-
     "startalpha" : 1,
     "alphadecrease" : 0.02,
-    
     "scaleup_speed" : 0.0,
-
-
     "scale" : 1,
-
 
 }
 
@@ -22,16 +17,10 @@ STALAGSHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.070,
- 	
-
- 	
-
     "startalpha" : 1,
  	"alphadecrease" : 0.02,
-
  	"scaleup_speed" : 0.0,
  	"scale" : 1,
-    
 
 }
 
@@ -39,20 +28,14 @@ STALAGSHRAP = {
 
 STRUCTSHRAP = {
 	
-	
 	"shrap_class" : "struct",
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
  	"fric_coeff": 0.20,
- 
-
     "startalpha" : 1,
  	"alphadecrease" : 0.05,
-
  	"scaleup_speed" : 0.0,
  	"scale" : 1,
-    
- 
 
 }
 
@@ -62,11 +45,8 @@ BASICSMOKESHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.2,
  	"fric_coeff": 0.070,
-
-
     "startalpha" : 0.5,
  	"alphadecrease" : 0.02,
-
  	"scaleup_speed" : 0.05,
     "scale" : 1.6,
 
@@ -78,16 +58,39 @@ BASICSPARKSHRAP = {
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0.0,
  	"fric_coeff": 0.070,
- 	
-
     "startalpha" : 2,
  	"alphadecrease" : 0.2,
-
  	"scaleup_speed" : 0.00,
     "scale" : 1,
 
 }
 
+JELLYWEAPONFLAME = {
+	
+	"shrap_class" : "jelly_weapon",
+ 	"bodybounce" : 0.00,
+ 	"bodyrotation_speed": 0.0,
+ 	"fric_coeff": 0.070,
+    "startalpha" : 1.2,
+ 	"alphadecrease" : 0.24,
+ 	"scaleup_speed" : 0.25,
+    "scale" : 0.2,
+
+}
+
+
+STALAGMITEWEAPONFLAME = {
+	
+	"shrap_class" : "stalagmite_weapon",
+ 	"bodybounce" : 0.00,
+ 	"bodyrotation_speed": 0.0,
+ 	"fric_coeff": 0.070,
+    "startalpha" : 1.2,
+ 	"alphadecrease" : 0.24,
+ 	"scaleup_speed" : 0.25,
+    "scale" : 0.2,
+
+}
 ONSCREENRANDOMSHRAP = function(){ 
 
 	return({
@@ -97,7 +100,10 @@ ONSCREENRANDOMSHRAP = function(){
 	"velx" : (Math.random()*10)-5,
 	"vely" : (Math.random()*10)-5,
  	"accx" : 0,
- 	"accy" : 0, });
+ 	"accy" : 0,
+ 	"rotation": 0,
+ 	
+ 	});
  	
 }
 
@@ -110,7 +116,10 @@ FROMMESHRAP = function(px,py){
 	"velx" : (Math.random()*15)-7.5,
 	"vely" : (Math.random()*15)-7.5,
  	"accx" : 0,
- 	"accy" : 0, });
+ 	"accy" : 0,
+ 	"rotation": 0,
+
+ 	});
  	
 }
 
@@ -123,10 +132,12 @@ SPARKSHRAP = function(px,py){
 	"velx" : (Math.random()*8)-4,
 	"vely" : (Math.random()*8)-4,
  	"accx" : 0,
- 	"accy" : 0, });
+ 	"accy" : 0,
+	"rotation": 0,
+ 	
+ 	});
  	
 }
-
 
 SMOKESHRAP = function(px,py){ 
 
@@ -137,6 +148,25 @@ SMOKESHRAP = function(px,py){
 	"velx" : (Math.random()*2)-2,
 	"vely" : (Math.random()*2)-2,
  	"accx" : 0,
- 	"accy" : 0, });
+ 	"accy" : 0,
+ 	"rotation": 0,
+
+ 	});
+ 	
+}
+
+FLAMESHRAP = function(px,py, rot){ 
+
+	return({
+	
+	"posx" : px,
+	"posy" : py,
+	"velx" : 0,
+	"vely" : 0,
+ 	"accx" : 0,
+ 	"accy" : 0,
+ 	"rotation": rot,
+
+ 	});
  	
 }

@@ -28,7 +28,7 @@
 	<script src="js/level.js"></script>
 	<script src="js/gamescene.js"></script>
 	<script src="js/gresher.js"></script>
-	
+	<script type="text/javascript" src="js/libs/soundjs-NEXT.combined.js"></script>
 	
 </head>
 <body>
@@ -78,6 +78,7 @@
     //make the game instance
 
 	gresher = new Gresher();
+	document.body.appendChild(gresher.renderer.view);
 
 	
 	keypressed = function(){
@@ -87,56 +88,25 @@
 
 	}
 
-
-	gresher.stage.click = function(mouseData){
-
-		gresher.handleClickTap(mouseData.originalEvent);
-
-	}
-
-	gresher.stage.tap = function(touchData){
-
-
-		gresher.handleClickTap(touchData.global);
-
-	}
-
-	gresher.stage.tap = function(touchData){
-
-
-		gresher.handleClickTap(touchData.global);
-
-	}
-	
-	
     // THIS FUNCTION CALL KICKS OFF THE WHOLE RENDER LOOP PARTY 
 	requestAnimFrame(update);
-
 
 	//the main loop function
 	function update() {
 		
 		if (Key.isDown(Key.UP)) {
-
-
-		
 			
 	
 		}	
 
 		stats.begin();	
-
 		gresher.gameupdate();
-		
 		requestAnimFrame( update );
-
-
         stats.end();
 	}
 
 	//the main resize function
 	window.onresize = function resize() {
-		
 		gresher.resize();
 	}
 
