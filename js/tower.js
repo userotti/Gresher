@@ -13,7 +13,6 @@ Tower = gamecore.DualPooled('Tower',
        	t.setTeams(teamparams);
 	   	t.mind.setAi(aiparams);
 	   	t.buildBody();
-	   	
 	   	t.sprite.addChild(t.towerbody);
        	t.animcounter = Math.random()*Math.PI;
        	return t;
@@ -103,7 +102,8 @@ Tower = gamecore.DualPooled('Tower',
 	    
 	    this.sprite = new PIXI.SmaatObjectContainer();
 	    this.towerbody = new PIXI.SmaatObjectContainer();
- 		 
+ 		this.body = new PIXI.Sprite;
+
  		this.body_flash = new PIXI.SmaatGraphics();
   		this.hud = new PIXI.SmaatGraphics();
 
@@ -122,6 +122,25 @@ Tower = gamecore.DualPooled('Tower',
 		this.teams = [];
 		this.targets = [];
 		this.friends = [];
+
+		this.normal_colorMatrix =  [
+    		1,0,0,0,
+		    0,1,0,0,
+		    0,0,1,0,
+		    0,0,0,1
+  		];
+
+  		this.white_colorMatrix =  [
+    		1,0,0,1,
+		    0,1,0,1,
+		    0,0,1,1,
+		    0,0,0,1
+  		];
+
+	  	this.body_filter = new PIXI.ColorMatrixFilter();
+  		this.body_filter.matrix = this.normal_colorMatrix;
+  		this.body.filters = [this.body_filter];
+
 
 	},
  
@@ -143,16 +162,13 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.fullenergy = charparams.fullenergy;
 	 	this.energyrecharge = charparams.energyrecharge;
 	 	this.currentenergy = 0;
-
 	 	this.magneticcharge = charparams.magneticcharge;
  		this.magneticweapon_range = charparams.magneticweapon_range;
  		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
     	this.maxboostpower = charparams.maxboostpower;
-
     	this.interaction_range = charparams.interaction_range,
-
     	this.fric_coeff = charparams.fric_coeff;
     	this.alive = true;
     	this.dying = false;
@@ -212,18 +228,19 @@ Tower = gamecore.DualPooled('Tower',
 
 		case "jelly" : 
 
-				var texture = PIXI.Texture.fromFrame("clawbot.png");
- 		
-		 		//console.log("texture", texture);
-		 		this.body = new PIXI.Sprite(texture);
-		    	
-		 		this.body.scale.x = 0.1;
-		 		this.body.scale.y = 0.1;
-				
-				this.body.position.x = -((texture.width*this.body.scale.x)/2);
-		 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
-		 		
-		 		this.towerbody.addChild(this.body);
+			var texture = PIXI.Texture.fromFrame("clawbot.png");
+		
+	 		//console.log("texture", texture);
+	 		this.body.setTexture(texture);
+	    	
+	 		this.body.scale.x = 0.15;
+	 		this.body.scale.y = 0.15;
+			
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+	 		
+	 		this.towerbody.rotation = Math.PI;
+	 		this.towerbody.addChild(this.body);
 
 
 				/*
@@ -261,15 +278,22 @@ Tower = gamecore.DualPooled('Tower',
 			var texture = PIXI.Texture.fromFrame("seeker.png");
 		
 	 		//console.log("texture", texture);
-	 		this.body = new PIXI.Sprite(texture);
+	 		
+	 		this.body.setTexture(texture);
 	    	
-	 		this.body.scale.x = 0.2;
-	 		this.body.scale.y = 0.2;
+	 		this.body.scale.x = 0.25;
+	 		this.body.scale.y = 0.25;
 			
 			this.body.position.x = -((texture.width*this.body.scale.x)/2);
 	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
-	 		
+
+	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
+
+	 		
+  			
+	 	
+
 			/*
 			
 			for (var i = 0; i <  10; i++) {
@@ -372,8 +396,10 @@ Tower = gamecore.DualPooled('Tower',
 
  	bodyHitFlash: function(length){
 
-		this.body_flash.visible = true;
+		
 		this.body_flash.counter = length;
+		this.body_filter.matrix = this.white_colorMatrix;
+	 		
 
 	},
 
@@ -441,7 +467,7 @@ Tower = gamecore.DualPooled('Tower',
  		if (this.body_flash.counter > 0){
  			this.body_flash.counter--;
  		}else{
-			this.body_flash.visible = false;
+ 			this.body_filter.matrix = this.normal_colorMatrix;
 		}
 
 		
@@ -575,7 +601,7 @@ Tower = gamecore.DualPooled('Tower',
  	clearSprites: function(){
 
  		//this.body.clear();
- 		//this.body_flash.clear();
+ 		
  		this.hud.clear();
  		
  		
