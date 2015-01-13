@@ -3,13 +3,14 @@
 Gresher = function()
 {
     this.stage;
-    this.queue;
+    
     this.paused = false;
     this.setupPIXIStage();
     //this.currentscene = new GameScene(this.stage);
 
-    //loadfile manifest
-    this.manifest = [
+    //load sound file sound_file_manifest
+    this.sound_file_load_queue;
+    this.sound_file_manifest = [
             {id: "solar_seas_minimal", src: "Solar-seas-A-mix-3-minimal.mp3"},
             {id: "solar_seas_basic", src: "Solar-seas-A-mix-1.mp3"},
             {id: "laser_shot", src: "Game-Shot.mp3"},
@@ -17,9 +18,14 @@ Gresher = function()
             {id: "nes_laser_shot2", src: "energy-2.wav"}
         ]
 
+    
+    this.image_file_loader;     
+    this.images_loaded = 0;       
+        
    
-    this.loadSound();    
-    this.currentscene = new LoadingScene(this.stage, this.queue);
+    this.loadSound();  
+    this.loadGraphics();  
+    this.currentscene = new LoadingScene(this.stage, this.sound_file_load_queue);
     this.setupInteraction(this.stage);
    
 
@@ -42,10 +48,6 @@ Gresher.prototype.loadSound = function()
         params[parts[0]] = parts[1];
     }
 
-    
-    var displayStatus;
-    
-
     if (params.type == "flash") {
         createjs.Sound.registerPlugins([createjs.FlashAudioPlugin]);
     } else if (params.type == "html5") {
@@ -54,63 +56,42 @@ Gresher.prototype.loadSound = function()
         createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.HTMLAudioPlugin, createjs.FlashAudioPlugin]);
     }
 
-    if (!createjs.Sound.isReady()) {
-        document.getElementById("error").style.display = "block";
-        document.getElementById("content").style.display = "none";
-        return;
-    }
-
-    if (createjs.BrowserDetect.isIOS || createjs.BrowserDetect.isAndroid || createjs.BrowserDetect.isBlackberry) {
-        document.getElementById("mobile").style.display = "block";
-        document.getElementById("content").style.display = "none";
-        return;
-    }
-
-        // Instantiate a queue.
-    this.queue = new createjs.LoadQueue(true, "assets/audio/");
+        // Instantiate a sound_file_load_queue.
+    this.sound_file_load_queue = new createjs.LoadQueue(true, "assets/audio/");
 
     createjs.Sound.alternateExtensions = ["mp3"];   // add other extensions to try loading if the src file extension is not supported
-    this.queue.installPlugin(createjs.Sound);
-        this.queue.addEventListener("fileload", this.fileLoaded);
-        this.queue.addEventListener("fileprogress", this.handleFileProgress);
-    this.queue.loadManifest(this.manifest);
+    this.sound_file_load_queue.installPlugin(createjs.Sound);
+        this.sound_file_load_queue.addEventListener("fileload", this.fileLoaded);
+    this.sound_file_load_queue.loadManifest(this.sound_file_manifest);
 
 };
 
-
-
-Gresher.prototype.fileLoaded = function(event) {
-        //console.log("soundFileLoaded", event);
-    if (gresher.queue.progress == 1){
-        gresher.currentscene = new GameScene(gresher.stage);
-
-    }
-
-
-
-}
-
-Gresher.prototype.handleFileProgress = function(event) {
-
-        console.log("preload progress", gresher.queue.progress);
-               
-}
-
 Gresher.prototype.loadGraphics = function(){
 
-    // create an array of assets to load, in the form of json files generated from TexturePacker
-    var assetsToLoader = [ "SpriteSheet.json"];
-    // create a new loader
-    loader = new PIXI.AssetLoader(assetsToLoader);
-    // use callback
-    loader.onComplete = onAssetsLoaded
-    //begin load
-    loader.load();
-    // holder to store aliens
-    var aliens = [];
-    var alienFrames = ["eggHead.png", "flowerTop.png", "helmlok.png", "skully.png"];
+    var assetsToLoader = [ "assets/sprites/spritesheet.json"];    
+    this.image_file_loader = new PIXI.AssetLoader(assetsToLoader);
+    this.image_file_loader.onProgress = this.fileLoaded;
+    this.image_file_loader.load();
+    this.spriteFrames = ["brom1.png", "brom2.png", "brom3.png", "clawbot.png", "clawbot.png", "seeker.png"];
+
 }
 
+Gresher.prototype.imageFilesLoaded = function(){
+    
+}
+
+Gresher.prototype.fileLoaded = function(event) {
+    
+    if (event.loaded == true){
+        
+        gresher.images_loaded = 1;
+    }
+    if ((gresher.sound_file_load_queue.progress == 1) && (gresher.images_loaded == 1)){
+
+        gresher.currentscene = new GameScene(gresher.stage);
+    }
+
+}
 
 //setup the PIXI renderer and Stage
 Gresher.prototype.setupPIXIStage = function()

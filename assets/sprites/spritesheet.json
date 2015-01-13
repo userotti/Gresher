@@ -1,0 +1,57 @@
+{"frames": {
+
+"brom1.png":
+{
+	"frame": {"x":2,"y":369,"w":97,"h":94},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":97,"h":94},
+	"sourceSize": {"w":97,"h":94},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"brom2.png":
+{
+	"frame": {"x":98,"y":369,"w":76,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":76,"h":96},
+	"sourceSize": {"w":76,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"brom3.png":
+{
+	"frame": {"x":176,"y":369,"w":78,"h":90},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":90},
+	"sourceSize": {"w":78,"h":90},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"clawbot.png":
+{
+	"frame": {"x":2,"y":190,"w":179,"h":177},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":179,"h":177},
+	"sourceSize": {"w":179,"h":177},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"seeker.png":
+{
+	"frame": {"x":2,"y":2,"w":191,"h":186},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":191,"h":186},
+	"sourceSize": {"w":191,"h":186},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "spritesheet.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":468},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:0c44bfbc92e27af7502ea7f1912dc63a:29203eec66f6942e1fc7afaf68d9d12c:729adc6043343cfda41c447ce8f464d6$"
+}
+}

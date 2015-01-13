@@ -3,6 +3,8 @@ LoadingScene = function(stage, loading_queue)
     this.camera = new PIXI.Camera();
     this.world = new PIXI.SmaatObjectContainer();
     this.loading_bar = new PIXI.SmaatGraphics();
+
+    
     
     this.loading_queue = loading_queue;
     

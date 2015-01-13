@@ -13,6 +13,7 @@ Tower = gamecore.DualPooled('Tower',
        	t.setTeams(teamparams);
 	   	t.mind.setAi(aiparams);
 	   	t.buildBody();
+	   	
 	   	t.sprite.addChild(t.towerbody);
        	t.animcounter = Math.random()*Math.PI;
        	return t;
@@ -102,7 +103,7 @@ Tower = gamecore.DualPooled('Tower',
 	    
 	    this.sprite = new PIXI.SmaatObjectContainer();
 	    this.towerbody = new PIXI.SmaatObjectContainer();
- 		this.body = new PIXI.SmaatGraphics();
+ 		 
  		this.body_flash = new PIXI.SmaatGraphics();
   		this.hud = new PIXI.SmaatGraphics();
 
@@ -194,6 +195,10 @@ Tower = gamecore.DualPooled('Tower',
 
  	buildBody: function(){
 
+ 		
+
+ 		//this.body.tint = 0xFFFFFF
+ 		/*
  		var x,y;
  		var x1,y1,x2,y2;
 
@@ -202,10 +207,26 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.body_flash.visible = false;
 		this.body_flash.counter = 0;
-		
+		*/
 		switch (this.character_class){
 
 		case "jelly" : 
+
+				var texture = PIXI.Texture.fromFrame("clawbot.png");
+ 		
+		 		//console.log("texture", texture);
+		 		this.body = new PIXI.Sprite(texture);
+		    	
+		 		this.body.scale.x = 0.1;
+		 		this.body.scale.y = 0.1;
+				
+				this.body.position.x = -((texture.width*this.body.scale.x)/2);
+		 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+		 		
+		 		this.towerbody.addChild(this.body);
+
+
+				/*
 
 				for (var i = 0; i <  5; i++) {
 
@@ -230,14 +251,27 @@ Tower = gamecore.DualPooled('Tower',
 					this.body_flash.beginFill('0xffffff', 1);
 					this.body_flash.drawCircle(x/2, y/2, 7.5);
 					this.body_flash.endFill();
-			
-				}
+					
+				}*/
 				
 		break;
 
 		case "stalagmite" :	
 
-	
+			var texture = PIXI.Texture.fromFrame("seeker.png");
+		
+	 		//console.log("texture", texture);
+	 		this.body = new PIXI.Sprite(texture);
+	    	
+	 		this.body.scale.x = 0.2;
+	 		this.body.scale.y = 0.2;
+			
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+	 		
+	 		this.towerbody.addChild(this.body);
+			/*
+			
 			for (var i = 0; i <  10; i++) {
 
 
@@ -260,12 +294,12 @@ Tower = gamecore.DualPooled('Tower',
 					this.body_flash.lineTo(x1,y1);
 				this.body_flash.endFill();	
 
-			};	
+			};	*/
 			
 			break;			
 	
 		}
-
+/*
 		this.towerbody.addChild(this.body);
 		this.towerbody.addChild(this.body_flash);	
  		
@@ -276,7 +310,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.towerbody.alpha = 1;
 		this.towerbody.cacheAsBitmap = false;
-		console.log(this.towerbody.cacheAsBitmap);
+		console.log(this.towerbody.cacheAsBitmap);*/
 		
  	},
 
@@ -309,8 +343,9 @@ Tower = gamecore.DualPooled('Tower',
 
  	shoot: function(target_tower){
 			
-			console.log(this);
+			//console.log(this);
 			target_tower.iveBeenHitBy(this);
+			
 			if (this.character_class === 'jelly'){
 				createjs.Sound.play("nes_laser_shot", {loop:0, volume:0.5});
 			} else if (this.character_class === 'stalagmite'){
@@ -539,8 +574,8 @@ Tower = gamecore.DualPooled('Tower',
 
  	clearSprites: function(){
 
- 		this.body.clear();
- 		this.body_flash.clear();
+ 		//this.body.clear();
+ 		//this.body_flash.clear();
  		this.hud.clear();
  		
  		
