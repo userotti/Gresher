@@ -9,7 +9,7 @@ BASICJELLY = {
  	"interaction_range": 200,
  	"full_reload": 100,
  	"reload_speed": 2,
- 	"damage": 5,
+ 	"damage": 35,
  	"fullenergy": 170,
  	"energyrecharge": 10.5,
  	"magneticcharge": 0,
@@ -26,7 +26,7 @@ BASICSTALAGMITE = {
 	
 	"character_class" : "stalagmite",
 	"mass" : 1,
-	"maxhealth" : 700,
+	"maxhealth" : 500,
  	"shield": 0,
  	"shielrecharge": 0,
  	"weapon_range": 210,
