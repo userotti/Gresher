@@ -347,6 +347,7 @@ Ai.prototype.updateAttack = function()
 	if (this.mytower.current_reload == this.mytower.full_reload){
 		if (this.mytower.targets.length != 0){
 	   		if (this.target_inrange == true){
+	   			
 	    		this.mytower.shoot(this.closest_target);
 	    	}
 	    }	

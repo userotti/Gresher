@@ -1,4 +1,4 @@
-Gamescene = function(stage)
+GameScene = function(stage)
 {
     this.camera = new PIXI.Camera();
     this.hud = new PIXI.SmaatObjectContainer();
@@ -8,7 +8,9 @@ Gamescene = function(stage)
     this.colidables_layer = new PIXI.SmaatObjectContainer();
     this.effects_layer = new PIXI.SmaatObjectContainer();
     
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"1")
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"1");
+
+    createjs.Sound.play("solar_seas_basic", {loop:-1});
 
     this.world.addChild(this.background_layer);
     this.world.addChild(this.colidables_layer);
@@ -20,6 +22,7 @@ Gamescene = function(stage)
 
     this.buildHud();
     // add the camera and the hud to the stage
+    stage.removeChildren();
     stage.addChild(this.camera);
     stage.addChild(this.hud);
  
@@ -27,9 +30,9 @@ Gamescene = function(stage)
 
 // constructor
 
-Gamescene.prototype.constructor = Gamescene;
+GameScene.prototype.constructor = GameScene;
 
-Gamescene.prototype.buildHud = function(){
+GameScene.prototype.buildHud = function(){
 
     this.player_health_bar = new PIXI.SmaatGraphics();
     this.player_health_bar_offset_pos_x = 30;
@@ -56,7 +59,7 @@ Gamescene.prototype.buildHud = function(){
 
 }
 
-Gamescene.prototype.checkInteractionRangeCollision = function(at,tt){
+GameScene.prototype.checkInteractionRangeCollision = function(at,tt){
 
     if (this.checkBoundingboxCollision(at,tt, at.interaction_range)){
         return this.checkDistCollision(at,tt, at.interaction_range);
@@ -65,7 +68,7 @@ Gamescene.prototype.checkInteractionRangeCollision = function(at,tt){
 }
 
 
-Gamescene.prototype.checkBoundingboxCollision = function(at,tt,radius){
+GameScene.prototype.checkBoundingboxCollision = function(at,tt,radius){
 
     return  !(
         (at.pos.y+radius < tt.pos.y) ||
@@ -75,7 +78,7 @@ Gamescene.prototype.checkBoundingboxCollision = function(at,tt,radius){
 
 };
 
-Gamescene.prototype.checkDistCollision = function(at,tt,radius){
+GameScene.prototype.checkDistCollision = function(at,tt,radius){
 
     if (Math.pow(at.pos.x - tt.pos.x, 2) + Math.pow(at.pos.y - tt.pos.y, 2) < Math.pow(radius, 2)){
         return true;
@@ -85,7 +88,7 @@ Gamescene.prototype.checkDistCollision = function(at,tt,radius){
 
 };
 
-Gamescene.prototype.sortTargetsAndFriends = function(current_tower){
+GameScene.prototype.sortTargetsAndFriends = function(current_tower){
     
     this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
     this.attacker_tower = current_tower;
@@ -102,7 +105,7 @@ Gamescene.prototype.sortTargetsAndFriends = function(current_tower){
     
 }
 
-Gamescene.prototype.recycleDeadTowers = function(current_tower){
+GameScene.prototype.recycleDeadTowers = function(current_tower){
 
     while( this.current_tower ){
                                     
@@ -118,7 +121,7 @@ Gamescene.prototype.recycleDeadTowers = function(current_tower){
 }
 
 
-Gamescene.prototype.updateTowers = function(){
+GameScene.prototype.updateTowers = function(){
 
     if (gamecore.DualPool.getPool(Tower) != null){
 
@@ -137,7 +140,7 @@ Gamescene.prototype.updateTowers = function(){
 
 };
 
-Gamescene.prototype.updateEffects = function(){
+GameScene.prototype.updateEffects = function(){
 
     if (gamecore.DualPool.getPool(Shrap) != null){
         var nextShrap = gamecore.DualPool.getPool(Shrap).getUsedList().first;
@@ -166,7 +169,7 @@ Gamescene.prototype.updateEffects = function(){
 
 }
 
-Gamescene.prototype.updateHealthBar = function(){
+GameScene.prototype.updateHealthBar = function(){
 
     this.player_health_bar.clear();   
     if (this.level.player.health == this.level.player.maxhealth){
@@ -189,7 +192,7 @@ Gamescene.prototype.updateHealthBar = function(){
 
 }
 
-Gamescene.prototype.updateEnergyBar = function(){
+GameScene.prototype.updateEnergyBar = function(){
 
     this.player_energy_bar.clear();   
     if (this.level.player.currentenergy == this.level.player.fullenergy){
@@ -212,7 +215,7 @@ Gamescene.prototype.updateEnergyBar = function(){
 
 }
 
-Gamescene.prototype.updateWeaponBar = function(){
+GameScene.prototype.updateWeaponBar = function(){
 
     this.player_weapon_bar.clear();   
     
@@ -236,7 +239,7 @@ Gamescene.prototype.updateWeaponBar = function(){
 
 }
 
-Gamescene.prototype.updateHud = function(){
+GameScene.prototype.updateHud = function(){
 
     this.updateHealthBar();
     this.updateEnergyBar();
@@ -244,7 +247,7 @@ Gamescene.prototype.updateHud = function(){
 }    
 
 
-Gamescene.prototype.sceneUpdate = function()
+GameScene.prototype.sceneUpdate = function()
 {
     this.camera.zoom = 1.1;// - (1 * ((Math.pow(this.player.vel.x,2) + Math.pow(this.player.vel.y,2))));
     this.updateTowers();
@@ -257,7 +260,7 @@ Gamescene.prototype.sceneUpdate = function()
 
 
 
-Gamescene.prototype.mouseClick = function(mousepos)
+GameScene.prototype.mouseClick = function(mousepos)
 {
 
     this.mouseclickpos = mousepos;
@@ -270,7 +273,7 @@ Gamescene.prototype.mouseClick = function(mousepos)
     
 };   
 
-Gamescene.prototype.resizeScene = function(){
+GameScene.prototype.resizeScene = function(){
 
     this.camera.screenCenterView(window.innerWidth/2,window.innerHeight/2);
 

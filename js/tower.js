@@ -310,7 +310,7 @@ Tower = gamecore.DualPooled('Tower',
  	shoot: function(target_tower){
 			
 			target_tower.iveBeenHitBy(this);
-
+			createjs.Sound.play("nes_laser_shot", {loop:0, volume:0.2});
 			
 			this.level.makeWeaponFlames(1, this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y, this.character_class);
 
@@ -340,8 +340,8 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.health = this.health - attacker.damage;
 		this.bodyHitFlash(5);
-		this.level.makeHitShards(3, this.pos.x, this.pos.y, this.character_class);
-	 	this.level.makeSparks(6, this.pos.x, this.pos.y);
+		this.level.makeHitShards(attacker.damage/15, this.pos.x, this.pos.y, this.character_class);
+	 	this.level.makeSparks(attacker.damage/10, this.pos.x, this.pos.y);
 
 	},
 

@@ -26,11 +26,11 @@ Level.prototype.buildLevel = function()
 
 	case "1":	
 		
-		for (var i = 0; i < 30; i++) {
+		for (var i = 0; i < 6; i++) {
 	        t = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
 	        this.addTowerToWorld(t.sprite);	
 	    };
-	    for (var i = 0; i < 38; i++) {
+	    for (var i = 0; i < 10; i++) {
 	        t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
 	    	this.addTowerToWorld(t.sprite);	   
 	    };
@@ -178,7 +178,6 @@ Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_cla
 		
 
 		//die pos van die shrap moet hier yt-gewerk word, en die angle moet saam gepass word.	
-		console.log("jelly");
 		for (var i = 0; i < amount; i++){
 			s = Shrap.create(JELLYWEAPONFLAME, FLAMESHRAP(x, y, rotation));
 			this.effects_layer.addChild(s.body);
@@ -189,9 +188,7 @@ Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_cla
 
 	if (tcharacter_class == "stalagmite"){
 
-		console.log("stalagmite");
 	
-
 		for (var i = 0; i < amount; i++){
 			s = Shrap.create(STALAGMITEWEAPONFLAME, FLAMESHRAP(x, y, rotation));
 			this.effects_layer.addChild(s.body);
