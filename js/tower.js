@@ -309,8 +309,14 @@ Tower = gamecore.DualPooled('Tower',
 
  	shoot: function(target_tower){
 			
+			console.log(this);
 			target_tower.iveBeenHitBy(this);
-			createjs.Sound.play("nes_laser_shot", {loop:0, volume:0.2});
+			if (this.character_class === 'jelly'){
+				createjs.Sound.play("nes_laser_shot", {loop:0, volume:0.5});
+			} else if (this.character_class === 'stalagmite'){
+				createjs.Sound.play("nes_laser_shot2", {loop:0, volume:0.5});
+			}	
+			
 			
 			this.level.makeWeaponFlames(1, this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y, this.character_class);
 

@@ -10,7 +10,7 @@ GameScene = function(stage)
     
     this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"1");
 
-    createjs.Sound.play("solar_seas_basic", {loop:-1});
+    createjs.Sound.play("solar_seas_basic", {loop:-1,volume: 0.3});
 
     this.world.addChild(this.background_layer);
     this.world.addChild(this.colidables_layer);
