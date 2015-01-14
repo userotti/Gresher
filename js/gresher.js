@@ -17,11 +17,9 @@ Gresher = function()
             {id: "nes_laser_shot", src: "energy-6.wav"},
             {id: "nes_laser_shot2", src: "energy-2.wav"}
         ]
-
     
     this.image_file_loader;     
     this.images_loaded = 0;       
-        
    
     this.loadSound();  
     this.loadGraphics();  
@@ -56,7 +54,7 @@ Gresher.prototype.loadSound = function()
         createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.HTMLAudioPlugin, createjs.FlashAudioPlugin]);
     }
 
-        // Instantiate a sound_file_load_queue.
+    // Instantiate a sound_file_load_queue.
     this.sound_file_load_queue = new createjs.LoadQueue(true, "assets/audio/");
 
     createjs.Sound.alternateExtensions = ["mp3"];   // add other extensions to try loading if the src file extension is not supported
@@ -76,18 +74,13 @@ Gresher.prototype.loadGraphics = function(){
 
 }
 
-Gresher.prototype.imageFilesLoaded = function(){
-    
-}
-
 Gresher.prototype.fileLoaded = function(event) {
     
     if (event.loaded == true){
-        
         gresher.images_loaded = 1;
     }
-    if ((gresher.sound_file_load_queue.progress == 1) && (gresher.images_loaded == 1)){
 
+    if ((gresher.sound_file_load_queue.progress == 1) && (gresher.images_loaded == 1)){
         gresher.currentscene = new GameScene(gresher.stage);
     }
 
@@ -101,7 +94,6 @@ Gresher.prototype.setupPIXIStage = function()
     this.renderer.view.id = "main-canvas";
     this.renderer.view.style.display = "block";
     this.renderer.view.screencanvas = true;
-    
     
 };
 
