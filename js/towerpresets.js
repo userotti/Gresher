@@ -8,8 +8,8 @@ BASICJELLY = {
  	"weapon_range": 120,
  	"interaction_range": 200,
  	"full_reload": 100,
- 	"reload_speed": 4,
- 	"damage": 45,
+ 	"reload_speed": 2.5,
+ 	"damage": 65,
  	"fullenergy": 170,
  	"energyrecharge": 10.5,
  	"magneticcharge": 0,
@@ -18,7 +18,7 @@ BASICJELLY = {
  	"bodyrotation_speed": 0,
  	"fric_coeff": 0.300,
  	"ai_timepercall": 100, 
- 	"maxboostpower" : 2.9,
+ 	"maxboostpower" : 0.9,
 
 }
 
@@ -42,7 +42,7 @@ BASICSTALAGMITE = {
  	"bodyrotation_speed": 0.01,
  	"fric_coeff": 0.350,
  	"ai_timepercall": 50,
- 	"maxboostpower" : 1.65,
+ 	"maxboostpower" : 0.65,
 
 }
 

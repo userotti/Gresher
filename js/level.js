@@ -26,11 +26,11 @@ Level.prototype.buildLevel = function()
 
 	case "1":	
 		
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < 4; i++) {
 	        t = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
 	        this.addTowerToWorld(t.sprite);	
 	    };
-	    for (var i = 0; i < 10; i++) {
+	    for (var i = 0; i < 15; i++) {
 	        t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
 	    	this.addTowerToWorld(t.sprite);	   
 	    };
