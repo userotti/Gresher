@@ -55,6 +55,9 @@ Gresher.prototype.loadSound = function()
     } else {
         createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.HTMLAudioPlugin, createjs.FlashAudioPlugin]);
     }
+    
+    // Compression Mods
+    //console.log(createjs.Sound.activePlugin.dynamicsCompressorNode);
 
         // Instantiate a sound_file_load_queue.
     this.sound_file_load_queue = new createjs.LoadQueue(true, "assets/audio/");
