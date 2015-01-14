@@ -366,14 +366,26 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
  	shoot: function(target_tower){
-			
-			//console.log(this);
+ 	
 			target_tower.iveBeenHitBy(this);
 			
+			// Using Player like this?
+			// Getting player from shooter (this) distance
+			var dist = (Math.pow(window.gresher.currentscene.level.player.pos.x-this.pos.x,2) + Math.pow(window.gresher.currentscene.level.player.pos.y-this.pos.y,2));
+			
+			// Making range from 0 to 1+
+			// Also making it from 0.5 to 0-
+			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark?
+			// Setting a min limit
+			if(dynamicVolume <= 0.15){
+				dynamicVolume = 0.15;
+			}
+			
+			
 			if (this.character_class === 'jelly'){
-				createjs.Sound.play("nes_laser_shot", {loop:0, volume:0.5});
+				createjs.Sound.play("nes_laser_shot", {loop:0, volume:dynamicVolume});
 			} else if (this.character_class === 'stalagmite'){
-				createjs.Sound.play("nes_laser_shot2", {loop:0, volume:0.5});
+				createjs.Sound.play("nes_laser_shot2", {loop:0, volume:dynamicVolume});
 			}	
 			
 			
@@ -402,6 +414,18 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 
 	},
+	
+	distanceFrom: function(other){
+		
+		
+		
+		this.health = this.health - attacker.damage;
+		this.bodyHitFlash(5);
+		this.level.makeHitShards(attacker.damage/15, this.pos.x, this.pos.y, this.character_class);
+	 	this.level.makeSparks(attacker.damage/10, this.pos.x, this.pos.y);
+
+	},
+	
 
 	iveBeenHitBy: function(attacker){
 
