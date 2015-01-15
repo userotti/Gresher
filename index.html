@@ -7,14 +7,18 @@
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
 
     <!-- Libraries -->
+    <script type="text/javascript" src="js/libs/soundjs-NEXT.combined.js"></script>
+	<script type="text/javascript" src="js/libs/preloadjs-NEXT.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="js/libs/pixi.js"></script>
-    <!--<script src="js/libs/jquery-1.11.0.min.js"></script> -->
-   
     <script src="js/libs/gamecore.min.js"></script>
 
+    <!--<script src="js/libs/jquery-1.11.0.min.js"></script> -->
+   
+    
     <!-- Gresher Javascript -->
 
+    <script type="text/javascript" src="js/texturegroups.js"></script>
 	<script src="js/globals.js"></script>
 	<script src="js/destenationspresets.js"> </script>
 	<script src="js/ai.js"></script>
@@ -29,9 +33,9 @@
 	<script src="js/gamescene.js"></script>
 	<script src="js/loadingscene.js"></script>
 	<script src="js/gresher.js"></script>
-	<script type="text/javascript" src="js/libs/soundjs-NEXT.combined.js"></script>
-	<script type="text/javascript" src="js/libs/preloadjs-NEXT.min.js"></script>
+
 	
+
 </head>
 <body>
 
@@ -77,9 +81,10 @@
     stats.domElement.style.right = "0px";
 
 
+    //external texture manager
+    var texturegroups = new TextureGroups();
     //make the game instance
-
-	var gresher = new Gresher();
+    var gresher = new Gresher();
 	document.body.appendChild(gresher.renderer.view);
 
 	

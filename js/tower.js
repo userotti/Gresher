@@ -228,8 +228,8 @@ Tower = gamecore.DualPooled('Tower',
 
 		case "jelly" : 
 
-			var texture = PIXI.Texture.fromFrame("clawbot.png");
-		
+			var texture = texturegroups.getOrganicBackground();
+			
 	 		//console.log("texture", texture);
 	 		this.body.setTexture(texture);
 	    	
@@ -369,13 +369,15 @@ Tower = gamecore.DualPooled('Tower',
  	
 			target_tower.iveBeenHitBy(this);
 			
-			// Using Player like this?
+			// Using Player like this?  Close, but every tower has a reference to the level...
 			// Getting player from shooter (this) distance
-			var dist = (Math.pow(window.gresher.currentscene.level.player.pos.x-this.pos.x,2) + Math.pow(window.gresher.currentscene.level.player.pos.y-this.pos.y,2));
+			//var dist = (Math.pow(window.gresher.currentscene.level.player.pos.x-this.pos.x,2) + Math.pow(window.gresher.currentscene.level.player.pos.y-this.pos.y,2));
 			
+			var dist = (Math.pow(this.level.player.pos.x-this.pos.x,2) + Math.pow(this.level.player.pos.y-this.pos.y,2));
+
 			// Making range from 0 to 1+
 			// Also making it from 0.5 to 0-
-			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark?
+			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
 			// Setting a min limit
 			if(dynamicVolume <= 0.15){
 				dynamicVolume = 0.15;
