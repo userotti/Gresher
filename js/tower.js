@@ -233,8 +233,8 @@ Tower = gamecore.DualPooled('Tower',
 	 		//console.log("texture", texture);
 	 		this.body.setTexture(texture);
 	    	
-	 		this.body.scale.x = 0.15;
-	 		this.body.scale.y = 0.15;
+	 		this.body.scale.x = 0.25;
+	 		this.body.scale.y = 0.25;
 			
 			this.body.position.x = -((texture.width*this.body.scale.x)/2);
 	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
