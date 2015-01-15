@@ -1,11 +1,11 @@
 TextureGroups = function(){
 
-	this.organic_backgrounds = [
-		"back1.png",
-		"back2.png",
-		"back3.png",
-		"back4.png",
-		"back5.png",
+	this.gromites = [
+		"grom1.png",
+		"grom2.png",
+		"grom3.png",
+		"grom4.png",
+		"grom5.png",
 	]
 
 
@@ -19,3 +19,9 @@ TextureGroups.prototype.getOrganicBackground = function(){
 
 }
 
+TextureGroups.prototype.getGrom = function(){
+
+
+	return PIXI.Texture.fromFrame(this.gromites[Math.floor(this.gromites.length*Math.random())]);
+
+}

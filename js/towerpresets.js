@@ -8,7 +8,7 @@ BASICJELLY = {
  	"weapon_range": 120,
  	"interaction_range": 200,
  	"full_reload": 100,
- 	"reload_speed": 2.5,
+ 	"reload_speed": 10,
  	"damage": 65,
  	"fullenergy": 170,
  	"energyrecharge": 10.5,

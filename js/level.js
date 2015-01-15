@@ -60,7 +60,29 @@ Level.prototype.buildBackground = function()
 	this.space_rubble = new PIXI.SmaatObjectContainer(); 
 	this.space_rubble_deeper = new PIXI.SmaatObjectContainer(); 
 
-	for (var i = 0; i < 50; i++){
+	test = new PIXI.Sprite;
+	test.setTexture(PIXI.Texture.fromFrame("big_back.png"));
+	test.scale.x = 2;
+	test.scale.y = test.scale.x
+	test.alpha = 0.03;
+		//test.tint = 0xccccee;
+	test.position.x = -2000;
+	test.position.y = -2000;
+
+	this.space_rubble_deeper.addChild(test);
+
+	test2 = new PIXI.Sprite;
+	test2.setTexture(PIXI.Texture.fromFrame("big_back2.png"));
+	test2.scale.x = 4;
+	test2.scale.y = test2.scale.x
+	test2.alpha = 0.06;
+		//test.tint = 0xccccee;
+	test2.position.x = -4000;
+	test2.position.y = -4000;
+
+	this.space_rubble.addChild(test2);
+
+	/*for (var i = 0; i < 50; i++){
 		t = PIXI.Texture.fromFrame(texturegroups.organic_backgrounds[i%texturegroups.organic_backgrounds.length]);
 		test = new PIXI.Sprite;
 		test.setTexture(t);
@@ -92,10 +114,9 @@ Level.prototype.buildBackground = function()
 		
 		this.space_rubble_deeper.addChild(test);
 			
-	}
+	}*/
 
 	this.background_layer.addChild(this.space_rubble_deeper);
-
 	this.background_layer.addChild(this.space_rubble);
 
 		for (var i = 0; i <  250; i++) {

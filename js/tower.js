@@ -226,9 +226,9 @@ Tower = gamecore.DualPooled('Tower',
 		*/
 		switch (this.character_class){
 
-		case "jelly" : 
+		case "jelly" : //getGrom
 
-			var texture = PIXI.Texture.fromFrame("clawbot.png");
+			var texture = texturegroups.getGrom();
 			
 	 		//console.log("texture", texture);
 	 		this.body.setTexture(texture);
@@ -275,7 +275,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		case "stalagmite" :	
 
-			var texture = PIXI.Texture.fromFrame("seeker.png");
+			var texture = PIXI.Texture.fromFrame("clawbot.png");
 		
 	 		//console.log("texture", texture);
 	 		
