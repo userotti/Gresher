@@ -57,14 +57,52 @@ Level.prototype.buildLevel = function()
 
 Level.prototype.buildBackground = function()
 {
-	this.space_rubble = new PIXI.SmaatGraphics(); 
-	this.space_rubble_deeper = new PIXI.SmaatGraphics(); 
+	this.space_rubble = new PIXI.SmaatObjectContainer(); 
+	this.space_rubble_deeper = new PIXI.SmaatObjectContainer(); 
 
-	
+	for (var i = 0; i < 50; i++){
+		t = PIXI.Texture.fromFrame(texturegroups.organic_backgrounds[i%texturegroups.organic_backgrounds.length]);
+		test = new PIXI.Sprite;
+		test.setTexture(t);
+		test.scale.x = 1+ (1.5 * Math.random());
+		test.scale.y = test.scale.x
+		test.tint = 0xccccee;
+		test.position.x = 2500 - Math.random()*5000;
+		test.position.y = 2500 - Math.random()*5000;
+		
+		
+		
+		this.space_rubble.addChild(test);
+			
+	}
+
+	for (var i = 0; i < 150; i++){
+		t = PIXI.Texture.fromFrame(texturegroups.organic_backgrounds[i%texturegroups.organic_backgrounds.length]);
+		test = new PIXI.Sprite;
+		test.setTexture(t);
+
+		
+		test.scale.x = 0.25 + (0.5 * Math.random());
+		test.scale.y = test.scale.x;
+		test.tint = 0xaaaadd;
+		test.position.x = 2500 - Math.random()*5000;
+		test.position.y = 2500 - Math.random()*5000;
+		
+		
+		
+		this.space_rubble_deeper.addChild(test);
+			
+	}
+
+	this.background_layer.addChild(this.space_rubble_deeper);
+
+	this.background_layer.addChild(this.space_rubble);
+
 		for (var i = 0; i <  250; i++) {
 
-
-				x1 = ((Math.random()*300)-150);
+			//b = new PIXI.Sprite();
+			
+				/*x1 = ((Math.random()*300)-150);
 				y1 = ((Math.random()*300)-150);
 
 
@@ -81,13 +119,16 @@ Level.prototype.buildBackground = function()
 					this.space_rubble.lineTo(px + -x1-x2, py + -y1-y2);
 					this.space_rubble.lineTo(px+x1,py+y1);
 						
-				this.space_rubble.endFill();
+				this.space_rubble.endFill();*/
 		}
 
 		for (var i = 0; i <  450; i++) {
 
+			//b = new PIXI.Sprite();
+		
+			
 
-				x1 = ((Math.random()*150)-75);
+				/*x1 = ((Math.random()*150)-75);
 				y1 = ((Math.random()*150)-75);
 
 
@@ -104,18 +145,19 @@ Level.prototype.buildBackground = function()
 					this.space_rubble_deeper.lineTo(px + -x1-x2, py + -y1-y2);
 					this.space_rubble_deeper.lineTo(px+x1,py+y1);
 						
-				this.space_rubble_deeper.endFill();
+				this.space_rubble_deeper.endFill();*/
 		}
 		
-	this.background_layer.addChild(this.space_rubble_deeper);
+	/*this.background_layer.addChild(this.space_rubble_deeper);
 	this.space_rubble_deeper.position.x = (Math.random()*1500) - 750;
 	this.space_rubble_deeper.position.y = (Math.random()*1500) - 750;
 
 	this.background_layer.addChild(this.space_rubble);
 	this.space_rubble.position.x = (Math.random()*1500) - 750;
 	this.space_rubble.position.y = (Math.random()*1500) - 750;
-
-
+*/
+	
+	
 	
 
 

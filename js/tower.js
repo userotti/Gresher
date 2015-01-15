@@ -228,7 +228,7 @@ Tower = gamecore.DualPooled('Tower',
 
 		case "jelly" : 
 
-			var texture = texturegroups.getOrganicBackground();
+			var texture = PIXI.Texture.fromFrame("clawbot.png");
 			
 	 		//console.log("texture", texture);
 	 		this.body.setTexture(texture);

@@ -73,8 +73,7 @@ Gresher.prototype.loadGraphics = function(){
     this.image_file_loader = new PIXI.AssetLoader(assetsToLoader);
     this.image_file_loader.onProgress = this.fileLoaded;
     this.image_file_loader.load();
-    this.spriteFrames = ["brom1.png", "brom2.png", "brom3.png", "clawbot.png", "clawbot.png", "seeker.png"];
-
+    
 }
 
 Gresher.prototype.fileLoaded = function(event) {
