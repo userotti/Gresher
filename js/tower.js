@@ -380,7 +380,7 @@ Tower = gamecore.DualPooled('Tower',
 			// Also making it from 0.5 to 0-
 			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
 			var dynamicPan = panning/800 * -1;
-			console.log( dynamicPan );
+
 			// Setting a min limit
 			if(dynamicVolume <= 0.025){
 				dynamicVolume = 0.025;
