@@ -374,20 +374,27 @@ Tower = gamecore.DualPooled('Tower',
 			//var dist = (Math.pow(window.gresher.currentscene.level.player.pos.x-this.pos.x,2) + Math.pow(window.gresher.currentscene.level.player.pos.y-this.pos.y,2));
 			
 			var dist = (Math.pow(this.level.player.pos.x-this.pos.x,2) + Math.pow(this.level.player.pos.y-this.pos.y,2));
+			var panning = this.level.player.pos.x-this.pos.x;
 
 			// Making range from 0 to 1+
 			// Also making it from 0.5 to 0-
 			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
+			var dynamicPan = panning/800 * -1;
+			console.log( dynamicPan );
 			// Setting a min limit
-			if(dynamicVolume <= 0.15){
-				dynamicVolume = 0.15;
+			if(dynamicVolume <= 0.025){
+				dynamicVolume = 0.025;
 			}
 			
 			
 			if (this.character_class === 'jelly'){
-				createjs.Sound.play("nes_laser_shot", {loop:0, volume:dynamicVolume});
+				createjs.Sound.play("nes_laser_shot", {loop:0,
+				pan: dynamicPan,
+				volume:dynamicVolume});
 			} else if (this.character_class === 'stalagmite'){
-				createjs.Sound.play("nes_laser_shot2", {loop:0, volume:dynamicVolume});
+				createjs.Sound.play("nes_laser_shot2", {loop:0, 
+				pan: dynamicPan,
+				volume:dynamicVolume});
 			}	
 			
 			
