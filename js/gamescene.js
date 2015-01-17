@@ -8,7 +8,7 @@ GameScene = function(stage)
     this.colidables_layer = new PIXI.SmaatObjectContainer();
     this.effects_layer = new PIXI.SmaatObjectContainer();
     
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"1");
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"3");
 
     createjs.Sound.play("solar_seas_basic", {loop:-1,volume: 0.3});
 

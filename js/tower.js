@@ -148,7 +148,10 @@ Tower = gamecore.DualPooled('Tower',
 
 	  	this.body_filter = new PIXI.ColorMatrixFilter();
   		this.body_filter.matrix = this.normal_colorMatrix;
-  		this.body.filters = [this.body_filter];
+  		
+  		//this make the bodies flash, but is suuuuper expencive!!
+  		
+  		//this.body.filters = [this.body_filter];
 
 
 	},
@@ -220,26 +223,48 @@ Tower = gamecore.DualPooled('Tower',
 
  	buildBody: function(){
 
- 		
+ 		switch (this.character_class){
 
- 		//this.body.tint = 0xFFFFFF
- 		/*
- 		var x,y;
- 		var x1,y1,x2,y2;
+ 		case "bot1" : 
 
- 		this.towerbody.scale.x = this.scale;
-		this.towerbody.scale.y = this.scale;	
 
-		this.body_flash.visible = false;
-		this.body_flash.counter = 0;
-		*/
-		switch (this.character_class){
+			var texture = PIXI.Texture.fromFrame("bot1.png");
+	 		this.body.setTexture(texture);
+	    	
+	 		this.body.scale.x = 0.50;
+	 		this.body.scale.y = 0.50;
+			
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+	 		
+	 		this.towerbody.rotation = Math.PI;
+	 		this.towerbody.addChild(this.body);
+
+
+		break;
+
+		case "mushroom" : 
+
+ 			
+			var texture = PIXI.Texture.fromFrame("mushroom1.png");
+	 		this.body.setTexture(texture);
+	    	
+	    	this.body.scale.x = 0.25 + (0.10 * Math.random());
+	 		this.body.scale.y = this.body.scale.x;
+			
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+	 		
+	 		this.towerbody.rotation = (Math.PI*2) * Math.random();
+	 		this.towerbody.addChild(this.body);
+
+
+		break;
+	
 
 		case "jelly" : //getGrom
 
 			var texture = texturegroups.getGrom();
-			
-	 		//console.log("texture", texture);
 	 		this.body.setTexture(texture);
 	    	
 	 		this.body.scale.x = 0.25;
@@ -252,42 +277,11 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.addChild(this.body);
 
 
-				/*
-
-				for (var i = 0; i <  5; i++) {
-
-					x = Math.floor(Math.random() * 30)-15;
-					y = Math.floor(Math.random() * 30)-15;
-					radius = 5;
-
-					this.body.beginFill(color_rooi1(i+4), 1);
-					this.body.drawCircle(x, y, 5);
-					this.body.endFill();
-
-						
-					this.body_flash.beginFill('0xffffff', 1);
-					this.body_flash.drawCircle(x, y, 5);
-					this.body_flash.endFill();	
-					 
-
-					this.body.beginFill(color_rooi1(i+5), 1);
-					this.body.drawCircle(x/2, y/2, 7.5);
-					this.body.endFill();	
-
-					this.body_flash.beginFill('0xffffff', 1);
-					this.body_flash.drawCircle(x/2, y/2, 7.5);
-					this.body_flash.endFill();
-					
-				}*/
-				
 		break;
 
 		case "stalagmite" :	
 
 			var texture = PIXI.Texture.fromFrame("clawbot.png");
-		
-	 		//console.log("texture", texture);
-	 		
 	 		this.body.setTexture(texture);
 	    	
 	 		this.body.scale.x = 0.25;
@@ -299,52 +293,10 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
-	 		
-  			
-	 	
-
-			/*
-			
-			for (var i = 0; i <  10; i++) {
-
-
-				x1 = ((Math.random()*30)-15);
-				y1 = ((Math.random()*30)-15);
-				x2 = ((Math.random()*30)-15);
-				y2 = ((Math.random()*30)-15);
-
-				this.body.beginFill(color_blou1(Math.floor((i/1.8)) +6), 1);	
-				this.body.moveTo(x1,y1);
-				this.body.lineTo(x2,y2);
-				this.body.lineTo(-x1-x2,-y1-y2);
-				this.body.lineTo(x1,y1);
-						
-				this.body.endFill();	
-				this.body_flash.beginFill('0xffffff', 1);	
-					this.body_flash.moveTo(x1,y1);
-					this.body_flash.lineTo(x2,y2);
-					this.body_flash.lineTo(-x1-x2,-y1-y2);
-					this.body_flash.lineTo(x1,y1);
-				this.body_flash.endFill();	
-
-			};	*/
-			
 			break;			
 	
 		}
-/*
-		this.towerbody.addChild(this.body);
-		this.towerbody.addChild(this.body_flash);	
- 		
- 		this.body.cacheAsBitmap = true;
-		this.body_flash.cacheAsBitmap = true;
-
-		this.body.alpha = 1;
-
-		this.towerbody.alpha = 1;
-		this.towerbody.cacheAsBitmap = false;
-		console.log(this.towerbody.cacheAsBitmap);*/
-		
+	
  	},
 
  	distToPoint: function(x1,y1,x2,y2){
@@ -384,17 +336,14 @@ Tower = gamecore.DualPooled('Tower',
 			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
 			var dynamicPan = panning/800 * -1;
 
-/*<<<<<<< HEAD
 
-=======
->>>>>>> Added Electromagnetic forces to the towers. Not sure how its gonna be used. maybe only for collecting things.*/
 			// Setting a min limit
 			if(dynamicVolume <= 0.025){
 				dynamicVolume = 0.025;
 			}
 			
 			
-			if (this.character_class === 'jelly'){
+			if (this.character_class === 'bot1'){
 				createjs.Sound.play("nes_laser_shot", {loop:0,
 				pan: dynamicPan,
 				volume:dynamicVolume});
@@ -405,9 +354,8 @@ Tower = gamecore.DualPooled('Tower',
 			}	
 			
 			
-			this.level.makeWeaponFlames(1, this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y, this.character_class);
+			this.level.makeWeaponFlames(1, this.pos.x, this.pos.y, target_tower.pos.x, target_tower.pos.y, this.character_class, (this.body.texture.width/2)*this.body.scale.x);
 
-			this.level.makeSparks(6, this.pos.x, this.pos.y);
 			this.current_reload = 0;
 
 	},
@@ -427,8 +375,8 @@ Tower = gamecore.DualPooled('Tower',
 
 		this.health = this.health - attacker.damage;
 		this.bodyHitFlash(5);
-		this.level.makeHitShards(attacker.damage/15, this.pos.x, this.pos.y, this.character_class);
-	 	this.level.makeSparks(attacker.damage/10, this.pos.x, this.pos.y);
+		this.level.makeHitShards(((attacker.damage/this.maxhealth) * 10), this.pos.x, this.pos.y, this.character_class);
+	 	this.level.makeSparks(5, this.pos.x, this.pos.y);
 
 	},
 
@@ -437,8 +385,8 @@ Tower = gamecore.DualPooled('Tower',
 		this.dying = true;
 		this.bodyHitFlash(6);	
 		this.dyinganimationcounter = 30;
-		this.level.makeHitShards(7, this.pos.x, this.pos.y, this.character_class);
-		this.level.makeSparks(8, this.pos.x, this.pos.y);
+		this.level.makeHitShards(4, this.pos.x, this.pos.y, this.character_class);
+		this.level.makeSparks(5, this.pos.x, this.pos.y);
 		
 	},
 
@@ -478,15 +426,14 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
  		}
 
- 		this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
+ 		if (this.boostpower > 0)
+ 			this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
  		
  		if (this.body_flash.counter > 0){
  			this.body_flash.counter--;
  		}else{
  			this.body_filter.matrix = this.normal_colorMatrix;
 		}
-
-		
 			
 		if (this.dying == true){
 			this.scale += 0.07;
@@ -621,7 +568,7 @@ Tower = gamecore.DualPooled('Tower',
 
 	 	if (this.healthpercentage != 100) {
 		 	if ( (this.age) % Math.floor((2+ ((0.0005)*Math.pow(this.healthpercentage,3)))) == 0){
-		 		this.level.makeSmoke(1, this.pos.x, this.pos.y);
+		 		this.level.makeSmoke(1, this.pos.x, this.pos.y, this.body.width, this.body.scale.x);
 		 		if (this.health < 50){
 		 			if ((this.age % 2)== 0)
 		 				this.level.makeSparks(1, this.pos.x, this.pos.y);

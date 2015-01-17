@@ -1,3 +1,19 @@
+
+
+
+MUSHROOMSHRAP = {
+	
+	"shrap_class" : "mushroom",
+ 	"bodybounce" : 0.08,
+ 	"bodyrotation_speed": 0.1,
+ 	"fric_coeff": 0.07,
+    "startalpha" : 1,
+    "alphadecrease" : 0.03,
+    "scaleup_speed" : 0.0,
+    "scale" : 0.25,
+
+}
+
 JELLYSHRAP = {
 	
 	"shrap_class" : "jelly",
@@ -39,17 +55,18 @@ STRUCTSHRAP = {
 
 }
 
-BASICSMOKESHRAP = {
+BASICSMOKESHRAP = function(){
 	
+	return ({
 	"shrap_class" : "smoke",
  	"bodybounce" : 0.00,
- 	"bodyrotation_speed": 0.2,
+ 	"bodyrotation_speed": 0.04 - Math.random()*0.08,
  	"fric_coeff": 0.070,
     "startalpha" : 0.5,
- 	"alphadecrease" : 0.02,
- 	"scaleup_speed" : 0.05,
-    "scale" : 1.6,
-
+ 	"alphadecrease" : 0.008,
+ 	"scaleup_speed" : 0.005,
+    "scale" : 0.21,
+	});
 }
 
 BASICSPARKSHRAP = {
@@ -61,7 +78,7 @@ BASICSPARKSHRAP = {
     "startalpha" : 2,
  	"alphadecrease" : 0.2,
  	"scaleup_speed" : 0.00,
-    "scale" : 1,
+    "scale" : 0.5,
 
 }
 
@@ -78,6 +95,19 @@ JELLYWEAPONFLAME = {
 
 }
 
+
+BOT1FLASH = {
+	
+	"shrap_class" : "bot1_flash",
+ 	"bodybounce" : 0.00,
+ 	"bodyrotation_speed": 0.0,
+ 	"fric_coeff": 0.070,
+    "startalpha" : 0.8,
+ 	"alphadecrease" : 0.14,
+ 	"scaleup_speed" : 0,
+    "scale" : 0.8,
+
+}
 
 STALAGMITEWEAPONFLAME = {
 	
@@ -102,6 +132,7 @@ ONSCREENRANDOMSHRAP = function(){
  	"accx" : 0,
  	"accy" : 0,
  	"rotation": 0,
+ 	"y_offset": 0
  	
  	});
  	
@@ -117,7 +148,8 @@ FROMMESHRAP = function(px,py){
 	"vely" : (Math.random()*15)-7.5,
  	"accx" : 0,
  	"accy" : 0,
- 	"rotation": 0,
+ 	"rotation": Math.random()*(Math.PI*2),
+ 	"y_offset": 0
 
  	});
  	
@@ -125,15 +157,18 @@ FROMMESHRAP = function(px,py){
 
 SPARKSHRAP = function(px,py){ 
 
+	var velx = (Math.random()*8)-4;
+	var vely = (Math.random()*8)-4;
 	return({
 	
 	"posx" : px,
 	"posy" : py,
-	"velx" : (Math.random()*8)-4,
-	"vely" : (Math.random()*8)-4,
+	"velx" : velx,
+	"vely" : vely,
  	"accx" : 0,
  	"accy" : 0,
-	"rotation": 0,
+	"rotation": Math.atan2(velx, vely),
+	"y_offset": 0
  	
  	});
  	
@@ -145,17 +180,17 @@ SMOKESHRAP = function(px,py){
 	
 	"posx" : px,
 	"posy" : py,
-	"velx" : (Math.random()*2)-2,
-	"vely" : (Math.random()*2)-2,
+	"velx" : (Math.random()*1)-1,
+	"vely" : (Math.random()*1)-1,
  	"accx" : 0,
  	"accy" : 0,
- 	"rotation": 0,
-
+ 	"rotation": 0.5 - (Math.random()*(Math.PI*2)),
+ 	"y_offset": 0
  	});
  	
 }
 
-FLAMESHRAP = function(px,py, rot){ 
+FLASHSHRAP = function(px,py, rot, y_offset){ 
 
 	return({
 	
@@ -165,7 +200,8 @@ FLAMESHRAP = function(px,py, rot){
 	"vely" : 0,
  	"accx" : 0,
  	"accy" : 0,
- 	"rotation": rot,
+ 	"rotation": rot - Math.PI,
+ 	"y_offset": y_offset*1.5
 
  	});
  	

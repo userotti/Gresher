@@ -6,10 +6,14 @@ Level = function(effects_layer, colidables_layer, background_layer, level_id){
 	
 	//make array if multiplayer
 	this.player = 0;
+	this.map_width = 0;
+	this.map_height = 0;
 	this.level_id = level_id;
 	
-	this.buildBackground();
 	this.buildLevel();
+	this.buildBackground();
+	
+
 
 }
 
@@ -18,7 +22,7 @@ Level.prototype.constructor = Level;
 Level.prototype.buildLevel = function()
 {
 	
-	this.player = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM_LEFT(), JELLIESTEAM, BASICJELLY_PLAYER, this.effects_layer, this);
+	this.player = Tower.create(BASICBOT, MIDDLE(), PLAYERTEAM, BASICJELLY_PLAYER, this.effects_layer, this);
 	this.player.controlled = true;
 	this.addTowerToWorld(this.player.sprite);
 
@@ -49,8 +53,20 @@ Level.prototype.buildLevel = function()
 
 	break;
 	
-	}
+	
+	case "3":	
+		this.map_width = 4000;
+		this.map_height = 4000;
+		
+		for (var i = 0; i < 100; i++) {
+	         t = Tower.create(BASICMUSHROOM, ONMAPRANDOM(this.map_width, this.map_height), NOTEAM, BASICMUSHROOM_GEDAGTE, this.effects_layer, this);
+	         this.addTowerToWorld(t.sprite);
+	    };
 
+	break;
+	
+	}
+    
 
 
 };
@@ -62,121 +78,29 @@ Level.prototype.buildBackground = function()
 
 	test = new PIXI.Sprite;
 	test.setTexture(PIXI.Texture.fromFrame("big_back.png"));
-	test.scale.x = 2;
+	test.scale.x = 1.0;
 	test.scale.y = test.scale.x
-	test.alpha = 0.03;
+	test.alpha = 1//0.03;
 		//test.tint = 0xccccee;
-	test.position.x = -2000;
-	test.position.y = -2000;
+	test.position.x = -(this.map_width/4)*test.scale.x;
+	test.position.y = -(this.map_height/4)*test.scale.y;
 
 	this.space_rubble_deeper.addChild(test);
 
 	test2 = new PIXI.Sprite;
 	test2.setTexture(PIXI.Texture.fromFrame("big_back2.png"));
-	test2.scale.x = 4;
+	test2.scale.x = 1.2;
 	test2.scale.y = test2.scale.x
-	test2.alpha = 0.06;
+	test2.alpha = 1//0.06;
 		//test.tint = 0xccccee;
-	test2.position.x = -4000;
-	test2.position.y = -4000;
+	test2.position.x = -(this.map_width/4)*test2.scale.x;
+	test2.position.y = -(this.map_height/4)*test2.scale.y;
 
 	this.space_rubble.addChild(test2);
-
-	/*for (var i = 0; i < 50; i++){
-		t = PIXI.Texture.fromFrame(texturegroups.organic_backgrounds[i%texturegroups.organic_backgrounds.length]);
-		test = new PIXI.Sprite;
-		test.setTexture(t);
-		test.scale.x = 1+ (1.5 * Math.random());
-		test.scale.y = test.scale.x
-		test.tint = 0xccccee;
-		test.position.x = 2500 - Math.random()*5000;
-		test.position.y = 2500 - Math.random()*5000;
-		
-		
-		
-		this.space_rubble.addChild(test);
-			
-	}
-
-	for (var i = 0; i < 150; i++){
-		t = PIXI.Texture.fromFrame(texturegroups.organic_backgrounds[i%texturegroups.organic_backgrounds.length]);
-		test = new PIXI.Sprite;
-		test.setTexture(t);
-
-		
-		test.scale.x = 0.25 + (0.5 * Math.random());
-		test.scale.y = test.scale.x;
-		test.tint = 0xaaaadd;
-		test.position.x = 2500 - Math.random()*5000;
-		test.position.y = 2500 - Math.random()*5000;
-		
-		
-		
-		this.space_rubble_deeper.addChild(test);
-			
-	}*/
 
 	this.background_layer.addChild(this.space_rubble_deeper);
 	this.background_layer.addChild(this.space_rubble);
 
-		for (var i = 0; i <  250; i++) {
-
-			//b = new PIXI.Sprite();
-			
-				/*x1 = ((Math.random()*300)-150);
-				y1 = ((Math.random()*300)-150);
-
-
-				x2 = ((Math.random()*300)-150);
-				y2 = ((Math.random()*300)-150);
-
-				px = (Math.random()*5000) - 2500;  
-				py = (Math.random()*5000) - 2500;
-				
-				this.space_rubble.beginFill(color_background_rubble(), 1);	
-						
-					this.space_rubble.moveTo(px + x1, py + y1);
-					this.space_rubble.lineTo(px + x2, py + y2);
-					this.space_rubble.lineTo(px + -x1-x2, py + -y1-y2);
-					this.space_rubble.lineTo(px+x1,py+y1);
-						
-				this.space_rubble.endFill();*/
-		}
-
-		for (var i = 0; i <  450; i++) {
-
-			//b = new PIXI.Sprite();
-		
-			
-
-				/*x1 = ((Math.random()*150)-75);
-				y1 = ((Math.random()*150)-75);
-
-
-				x2 = ((Math.random()*150)-75);
-				y2 = ((Math.random()*150)-75);
-
-				px = (Math.random()*5000) - 2500;  
-				py = (Math.random()*5000) - 2500;
-				
-				this.space_rubble_deeper.beginFill(0x102349, 1);	
-						
-					this.space_rubble_deeper.moveTo(px + x1, py + y1);
-					this.space_rubble_deeper.lineTo(px + x2, py + y2);
-					this.space_rubble_deeper.lineTo(px + -x1-x2, py + -y1-y2);
-					this.space_rubble_deeper.lineTo(px+x1,py+y1);
-						
-				this.space_rubble_deeper.endFill();*/
-		}
-		
-	/*this.background_layer.addChild(this.space_rubble_deeper);
-	this.space_rubble_deeper.position.x = (Math.random()*1500) - 750;
-	this.space_rubble_deeper.position.y = (Math.random()*1500) - 750;
-
-	this.background_layer.addChild(this.space_rubble);
-	this.space_rubble.position.x = (Math.random()*1500) - 750;
-	this.space_rubble.position.y = (Math.random()*1500) - 750;
-*/
 	
 	
 	
@@ -193,68 +117,74 @@ Level.prototype.addTowerToWorld = function(t){
 Level.prototype.makeHitShards = function(amount, x, y, char_class){
 
 	var s;
+	for (var i = 0; i < amount; i++){
+	
+		if (char_class == "mushroom"){
+			 	s = Shrap.create(MUSHROOMSHRAP, FROMMESHRAP(x, y),  this.effects_layer);
+			 	this.effects_layer.addChild(s.body_container);
+		}
 
-	if (char_class == "jelly"){
-		for (var i = 0; i < amount; i++){
-		 	s = Shrap.create(JELLYSHRAP, FROMMESHRAP(x, y),  this.effects_layer);
-		 	this.effects_layer.addChild(s.body);
+		if (char_class == "jelly"){
+			 	s = Shrap.create(JELLYSHRAP, FROMMESHRAP(x, y),  this.effects_layer);
+			 	this.effects_layer.addChild(s.body_container);
 		}
-	}
-	if (char_class == "stalagmite"){
-		for (var i = 0; i < amount; i++){
-		 	s = Shrap.create(STALAGSHRAP, FROMMESHRAP(x, y));
-			this.effects_layer.addChild(s.body);
+		if (char_class == "stalagmite"){
+			 	s = Shrap.create(STALAGSHRAP, FROMMESHRAP(x, y));
+				this.effects_layer.addChild(s.body_container);
 		}
-	}
-	if (char_class == "struct"){
-	 	for (var i = 0; i < amount; i++){
-		 	s = Shrap.create(STRUCTSHRAP, FROMMESHRAP(x, y));
-			this.effects_layer.addChild(s.body);
+		if (char_class == "struct"){
+			 	s = Shrap.create(STRUCTSHRAP, FROMMESHRAP(x, y));
+				this.effects_layer.addChild(s.bobody_containerdy);
 		}
-	}
+	}	
 },
 
 Level.prototype.makeSparks = function(amount, x, y){
 
 	for (var i = 0; i < amount; i++){
 		s = Shrap.create(BASICSPARKSHRAP, SPARKSHRAP(x, y));
-		this.effects_layer.addChild(s.body);
+		this.effects_layer.addChild(s.body_container);
 	}	
 
 },
 
-Level.prototype.makeSmoke = function(amount, x, y){
+Level.prototype.makeSmoke = function(amount, x, y, width, scale_x){
+
+	var radius = width + scale_x;
 
 	for (var i = 0; i < amount; i++){
-		s = Shrap.create(BASICSMOKESHRAP, SMOKESHRAP(x, y));
-		this.effects_layer.addChild(s.body);
+		s = Shrap.create(BASICSMOKESHRAP(), SMOKESHRAP(x, y));
+		this.effects_layer.addChild(s.body_container);
 	}	
 
 },
 
 
-Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_class){
+Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_class, y_offset){
 
+	console.log(y_offset);
 	var rotation = Math.atan2(x-tx, y-ty) + Math.PI;
+
+	if (tcharacter_class == "bot1"){
+		for (var i = 0; i < amount; i++){
+			s = Shrap.create(BOT1FLASH, FLASHSHRAP(x, y, rotation, y_offset));
+			this.effects_layer.addChild(s.body_container);
+		}		
+	}
 
 	if (tcharacter_class == "jelly"){
 		
-
-		//die pos van die shrap moet hier yt-gewerk word, en die angle moet saam gepass word.	
 		for (var i = 0; i < amount; i++){
-			s = Shrap.create(JELLYWEAPONFLAME, FLAMESHRAP(x, y, rotation));
-			this.effects_layer.addChild(s.body);
+			s = Shrap.create(JELLYWEAPONFLAME, FLASHSHRAP(x, y, rotation, y_offset));
+			this.effects_layer.addChild(s.body_container);
 		}		
-					
 	}
 
-
 	if (tcharacter_class == "stalagmite"){
-
-	
+		
 		for (var i = 0; i < amount; i++){
-			s = Shrap.create(STALAGMITEWEAPONFLAME, FLAMESHRAP(x, y, rotation));
-			this.effects_layer.addChild(s.body);
+			s = Shrap.create(STALAGMITEWEAPONFLAME, FLASHSHRAP(x, y, rotation, y_offset));
+			this.effects_layer.addChild(s.body_container);
 		}		
 	}
 
@@ -264,8 +194,11 @@ Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_cla
 Level.prototype.doLevel = function()
 {
 
-	this.space_rubble_deeper.rotation += 0.000025;
-	this.space_rubble.rotation += 0.00019;
-
+	this.space_rubble_deeper.position.x = this.player.pos.x*0.9;
+	this.space_rubble_deeper.position.y = this.player.pos.y*0.9;
+	
+	this.space_rubble.position.x = this.player.pos.x*0.6;
+	this.space_rubble.position.y = this.player.pos.y*0.6;
+		
 }
 

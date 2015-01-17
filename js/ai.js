@@ -374,6 +374,15 @@ Ai.prototype.update = function()
 	this.updateAttack();
 }; 
 
+
+/*
+chill
+interaction_roam
+approach_closest_target
+approach_closest_friend
+retreat_from_closest_target
+follow_controlled
+*/
 BASICJELLY_GEDAGTE = {
 	
 	"player" : false,
@@ -386,11 +395,21 @@ BASICJELLY_GEDAGTE = {
 	"friendmemory" : 50,
 	"targetmemory" : 50,
 
-	
-
-
 };
 
+BASICMUSHROOM_GEDAGTE = {
+	
+	"player" : false,
+	"moveradius" : 0,
+	"alone" : "chill",
+	"withfriends" : "chill",
+	"withtargets" : "chill",
+	"withfriendstargets" : "chill",
+
+	"friendmemory" : 0,
+	"targetmemory" : 0,
+
+};
 
 PLAYERFOLLOWJELLY_GEDAGTE = {
 	

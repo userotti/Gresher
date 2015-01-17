@@ -86,9 +86,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>4096</int>
             <key>height</key>
-            <int>2048</int>
+            <int>4096</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -121,7 +121,7 @@
                 <key>sortBy</key>
                 <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
                 <key>order</key>
-                <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
+                <enum type="AlgorithmBasicSettings::Order">Descending</enum>
             </struct>
         </struct>
         <key>andEngine</key>
@@ -193,9 +193,17 @@
             <filename>working_files/brom3.png</filename>
             <filename>working_files/brom2.png</filename>
             <filename>working_files/brom1.png</filename>
-            <filename>working_files/background_organic1.png</filename>
-            <filename>working_files/background_organic3.png</filename>
-            <filename>working_files/background_organic2.png</filename>
+            <filename>working_files/big_back.png</filename>
+            <filename>working_files/big_back2.png</filename>
+            <filename>working_files/grom5.png</filename>
+            <filename>working_files/grom4.png</filename>
+            <filename>working_files/grom3.png</filename>
+            <filename>working_files/grom2.png</filename>
+            <filename>working_files/grom1.png</filename>
+            <filename>working_files/bot1.png</filename>
+            <filename>working_files/bot1_flash.png</filename>
+            <filename>working_files/smoke1.png</filename>
+            <filename>working_files/mushroom1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

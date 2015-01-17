@@ -8,6 +8,12 @@ TextureGroups = function(){
 		"grom5.png",
 	]
 
+	this.mushroom_shraps = [
+		"mushroom_sharp1.png",
+		"mushroom_sharp2.png",
+	
+	]
+
 
 }
 TextureGroups.prototype.constructor = TextureGroups;
@@ -20,8 +26,11 @@ TextureGroups.prototype.getOrganicBackground = function(){
 }
 
 TextureGroups.prototype.getGrom = function(){
-
-
 	return PIXI.Texture.fromFrame(this.gromites[Math.floor(this.gromites.length*Math.random())]);
-
 }
+
+TextureGroups.prototype.getMushroomShrap = function(){
+	
+	return PIXI.Texture.fromFrame(this.mushroom_shraps[Math.floor(this.mushroom_shraps.length*Math.random())]);
+}
+

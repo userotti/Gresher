@@ -1,3 +1,51 @@
+BASICBOT = {
+	
+	"character_class" : "bot1",
+	"mass" : 1.4,
+	"maxhealth" : 250,
+	"shield": 0,
+ 	"shielrecharge": 0,
+ 	"weapon_range": 120,
+ 	"interaction_range": 200,
+ 	"full_reload": 100,
+ 	"reload_speed": 2,
+ 	"damage": 35,
+ 	"fullenergy": 100,
+ 	"energyrecharge": 2,
+ 	"magnetic_charge": 0,
+ 	"magnetic_range": 200,
+ 	"bodybounce" : 0.00,
+ 	"bodyrotation_speed": 0,
+ 	"fric_coeff": 0.300,
+ 	"ai_timepercall": 100, 
+ 	"maxboostpower" : 2.9,
+
+}
+
+BASICMUSHROOM = {
+	
+	"character_class" : "mushroom",
+	"mass" : 1.4,
+	"maxhealth" : 100,
+	"shield": 0,
+ 	"shielrecharge": 0,
+ 	"weapon_range": 0,
+ 	"interaction_range": 0,
+ 	"full_reload": 0,
+ 	"reload_speed": 0,
+ 	"damage": 0,
+ 	"fullenergy": 0,
+ 	"energyrecharge": 0,
+ 	"magnetic_charge": 0,
+ 	"magnetic_range": 0,
+ 	"bodybounce" : 0.04,
+ 	"bodyrotation_speed": 0,
+ 	"fric_coeff": 0.300,
+ 	"ai_timepercall": 0, 
+ 	"maxboostpower" : 0,
+
+}
+
 BASICJELLY = {
 	
 	"character_class" : "jelly",
@@ -12,7 +60,7 @@ BASICJELLY = {
  	"damage": 65,
  	"fullenergy": 170,
  	"energyrecharge": 10.5,
- 	"magnetic_charge": -10,
+ 	"magnetic_charge": 0,
  	"magnetic_range": 200,
  	"bodybounce" : 0.08,
  	"bodyrotation_speed": 0,
@@ -36,7 +84,7 @@ BASICSTALAGMITE = {
  	"damage": 10,
  	"fullenergy": 120,
  	"energyrecharge": 0.1,
- 	"magnetic_charge": 10,
+ 	"magnetic_charge": 0,
  	"magnetic_range": 200,
  	"bodybounce" : 0.0,
  	"bodyrotation_speed": 0.01,
@@ -73,12 +121,39 @@ BASICSTRUCT = {
 
 }
 
+
+MIDDLE = function(){ 
+
+	return({
+	
+	"posx" : 0,
+	"posy" : 0,
+	"velx" : 0,
+	"vely" : 0,
+ 	"accx" : 0,
+ 	"accy" : 0, });
+ 	
+}
+
 ONSCREENRANDOM = function(){ 
 
 	return({
 	
 	"posx" : (Math.random() * ((window.innerWidth) ) )  - (window.innerWidth/2),
 	"posy" : (Math.random() * ((window.innerHeight) ) )   - (window.innerHeight/2),
+	"velx" : 0,
+	"vely" : 0,
+ 	"accx" : 0,
+ 	"accy" : 0, });
+ 	
+}
+
+ONMAPRANDOM = function(map_width, map_height){ 
+
+	return({
+	
+	"posx" : (Math.random() * ((map_width) ) )  - (map_height/2),
+	"posy" : (Math.random() * ((map_width) ) )  - (map_height/2),
 	"velx" : 0,
 	"vely" : 0,
  	"accx" : 0,
@@ -125,4 +200,6 @@ STRUCTSTEAM = ["structs"];
 FRIENDSOFALL = ["jellies", "stalagmites", "structs"];
 
 NOTEAM = [];
+
+PLAYERTEAM = [];
 

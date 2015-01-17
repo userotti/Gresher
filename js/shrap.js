@@ -28,7 +28,9 @@ Shrap = gamecore.DualPooled('Shrap',
  	//visual aspects
  	sprite: 0,
  	body: 0,
+ 	body_container: 0,
  	scale: 0,
+ 	y_offset: 0,
 
  	//animation
  	bodybounce: 0,
@@ -57,8 +59,9 @@ Shrap = gamecore.DualPooled('Shrap',
 
  	init: function()
 	{
-	   
- 		this.body = new PIXI.SmaatGraphics();
+	 	this.body_container = new PIXI.SmaatObjectContainer();  
+ 		this.body = new PIXI.Sprite();
+
  		this.pos = new PIXI.Point();
 		this.vel = new PIXI.Point();
 	 	this.acc = new PIXI.Point();
@@ -91,8 +94,8 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.pos.x = posparams.posx;
 		this.pos.y = posparams.posy;
 
-		this.body.position.x = this.pos.x;
-		this.body.position.y = this.pos.y;
+		this.body_container.position.x = this.pos.x;
+		this.body_container.position.y = this.pos.y;
 
 		this.vel.x = posparams.velx;
 		this.vel.y = posparams.vely;
@@ -100,11 +103,14 @@ Shrap = gamecore.DualPooled('Shrap',
 		this.acc.x = 0;
 		this.acc.y = 0;
 
-		this.body.rotation = posparams.rotation;
+		this.body_container.rotation = posparams.rotation;
 
 		
+		this.y_offset = posparams.y_offset;	
+		//this.body.rotation = 
+		
  	},	
-
+/*
  	drawweaponflame: function(length,starty,sidewidth, midheight, angle,color){
 
  		this.body.beginFill(color, 1);	
@@ -115,7 +121,7 @@ Shrap = gamecore.DualPooled('Shrap',
 			this.body.lineTo(Math.cos(angle)*length, starty + (Math.sin(angle)*length));
 		this.body.endFill();
  	},
-
+*/
  	
 
  	buildBody: function(){
@@ -126,107 +132,64 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.body.scale.x = this.scale;
 		this.body.scale.y = this.scale;
 		this.body.alpha = this.startalpha;
-		this.body.clear();
+
+		//this.body.clear();
 
 		switch (this.shrap_class){
 
-		case "jelly" : 
-
-				for (var i = 0; i <  3; i++) {
-
-					x = Math.floor(Math.random() * 10)-5;
-					y = Math.floor(Math.random() * 10)-5;
-					radius = 2;
-
-					this.body.beginFill(color_rooi1(i+4), 1);
-						this.body.drawCircle(x, y, radius);
-						this.body.endFill();
-						this.body.beginFill(color_rooi1(i+5), 1);
-						this.body.drawCircle(x/2, y/2, radius*1.5);
-					this.body.endFill();	
-			
-				}
+		case "bot1_flash" : 
 				
-				break;
+				var texture = PIXI.Texture.fromFrame("bot1_flash.png");
+				this.body.setTexture(texture);
 
-		case "stalagmite" :	
+				console.log("this.y_offset", this.y_offset);
+				this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 			this.body.position.y = -((texture.height*this.body.scale.y)/2) - this.y_offset;
+				
+		break;
 
-			for (var i = 0; i <  5; i++) {
+		case "spark" :	
 
-				x1 = ((Math.random()*10)-5);
-				y1 = ((Math.random()*10)-5);
+				var texture = PIXI.Texture.fromFrame("spark1.png");
+				this.body.setTexture(texture);
 
-				x2 = ((Math.random()*10)-5);
-				y2 = ((Math.random()*10)-5);
-
-				this.body.beginFill(color_blou1(Math.floor((i/1.8)) +6), 1);	
-					this.body.moveTo(x1,y1);
-					this.body.lineTo(x2,y2);
-					this.body.lineTo(-x1-x2,-y1-y2);
-					this.body.lineTo(x1,y1);
-				this.body.endFill();	
-
-			};	
+				this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 			this.body.position.y = -((texture.height*this.body.scale.y)/2);
 			
-			break;	
+		break;
+
+		case "mushroom" : 
+
+				var texture = texturegroups.getMushroomShrap();
+				this.body.setTexture(texture);
+
+				this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 			this.body.position.y = -((texture.height*this.body.scale.y)/2);
+				
+		break;
+
 
 		case "smoke" :	
 
 			var x,y
+			var texture = PIXI.Texture.fromFrame("smoke1.png");
+			this.body.setTexture(texture);
 
-			x = -1;
-			y = -1;
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
 
-			this.body.beginFill(0xb4a2a1, 1);
-			this.body.drawRect(-2+x,-4+y, 4, 8);
-			this.body.drawRect(-4+x,-2+y, 8, 4);
-			this.body.endFill();
-			
-		break;	
-
-		case "spark" :	
-
-				x1 = ((Math.random()*5)-2.5);
-				y1 = ((Math.random()*5)-2.5);
-
-				x2 = ((Math.random()*5)-2.5);
-				y2 = ((Math.random()*5)-2.5);
-					
-				this.body.beginFill(0xffff00, 1);	
-					this.body.moveTo(x1,y1);
-					this.body.lineTo(x2,y2);
-					this.body.lineTo(-x1-x2,-y1-y2);
-					this.body.lineTo(x1,y1);
-				this.body.endFill();	
-			
-		break;	
-
-		case "jelly_weapon" :	
-
-			
-			this.drawweaponflame(45, 15, 7, 7, Math.PI/2, 0xffaa33);
-			this.drawweaponflame(25, 15, 4, 4, Math.PI/2  -  Math.PI/(Math.random()*5 + 3), 0xffbb22);
-			this.drawweaponflame(25, 15, 4, 4, Math.PI/2  +  Math.PI/(Math.random()*5 + 3), 0xffbb22);
-
-		break;					
 		
-		case "stalagmite_weapon" :	
 
-			
-			this.drawweaponflame(65, 15, 7, 7, Math.PI/2, 0x66aaee);
-			this.drawweaponflame(45, 15, 4, 4, Math.PI/2  -  Math.PI/(Math.random()*2 + 3), 0x44aaee);
-			this.drawweaponflame(45, 15, 4, 4, Math.PI/2  +  Math.PI/(Math.random()*2 + 3), 0x44aaee);
-			
-		break;		
+		break;	
+
 		}
 
-		//this.body.cacheAsBitmap = true;
-
+		this.body_container.addChild(this.body);
  	},
 
  	updateAnimation: function(){
 
- 		this.body.rotation += this.bodyrotation_speed; 
+ 		this.body_container.rotation += this.bodyrotation_speed; 
  		this.body.scale.x += this.scaleup_speed;
  		this.body.scale.y += this.scaleup_speed;
  		
@@ -254,8 +217,9 @@ Shrap = gamecore.DualPooled('Shrap',
  		this.pos.x += this.vel.x;
  		this.pos.y += this.vel.y;
 
- 		this.body.position.x = this.pos.x;
- 		this.body.position.y = this.pos.y;
+ 		this.body_container.position.x = this.pos.x;
+ 		this.body_container.position.y = this.pos.y;
+
  	
  	},
 
@@ -277,7 +241,7 @@ Shrap = gamecore.DualPooled('Shrap',
 
  	releaseMePlease: function(){
 
- 		this.body.clear();
+ 		//this.body.clear();
 		this.releaseMeFromList = true;
 
  	},
