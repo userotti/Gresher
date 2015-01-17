@@ -59,10 +59,10 @@ GameScene.prototype.buildHud = function(){
 
 }
 
-GameScene.prototype.checkInteractionRangeCollision = function(at,tt){
+GameScene.prototype.checkRangeCollision = function(ct,tt, range){
 
-    if (this.checkBoundingboxCollision(at,tt, at.interaction_range)){
-        return this.checkDistCollision(at,tt, at.interaction_range);
+    if (this.checkBoundingboxCollision(ct,tt, range)){
+        return this.checkDistCollision(ct,tt, range);
     }
     return false;
 }
@@ -88,22 +88,54 @@ GameScene.prototype.checkDistCollision = function(at,tt,radius){
 
 };
 
-GameScene.prototype.sortTargetsAndFriends = function(current_tower){
+GameScene.prototype.sortTargetsFriendsPushPullArrays = function(current_tower){
     
     this.target_tower = gamecore.DualPool.getPool(Tower).getUsedList().first;  
-    this.attacker_tower = current_tower;
+    this.current_tower = current_tower;
+
+    this.current_tower.obj.targets.length = 0;
+    this.current_tower.obj.friends.length = 0;
+    this.current_tower.obj.pushing_pulling_me.length = 0;
     
     while( this.target_tower ){
-        if (this.attacker_tower != this.target_tower){
-            if (this.checkInteractionRangeCollision(this.attacker_tower.obj,this.target_tower.obj) ){
-                this.attacker_tower.obj.addToTargetsOrFriends(this.target_tower.obj); 
+        if (this.current_tower != this.target_tower){
+            if (this.checkRangeCollision(this.current_tower.obj,this.target_tower.obj, this.current_tower.obj.interaction_range) ){
+                this.addToTargetsOrFriends(this.current_tower.obj, this.target_tower.obj); 
             }
+            if (this.checkRangeCollision(this.current_tower.obj,this.target_tower.obj, this.target_tower.obj.magnetic_range) ){
+                this.addBeingPushPulledMe(this.current_tower.obj, this.target_tower.obj); 
+            }else{
+                
+            }    
+
         }    
 
     this.target_tower = this.target_tower.nextLinked;
     }
     
 }
+
+GameScene.prototype.addToTargetsOrFriends = function(current_tower, target_tower){
+    if (!this.checkTeam(current_tower, target_tower)){
+        current_tower.targets.push(target_tower);
+    }else{
+        current_tower.friends.push(target_tower);    
+    }   
+},
+
+GameScene.prototype.addBeingPushPulledMe = function(current_tower, target_tower){
+       current_tower.pushing_pulling_me.push(target_tower);
+},
+
+
+
+GameScene.prototype.checkTeam = function(current_tower, target_tower){
+    for (var i=0; i < current_tower.teams.length; i++){
+         if (target_tower.teams.indexOf(current_tower.teams[i]) != -1)
+            return true;
+    }
+    return false;
+},
 
 GameScene.prototype.recycleDeadTowers = function(current_tower){
 
@@ -129,7 +161,7 @@ GameScene.prototype.updateTowers = function(){
             while( this.current_tower )
             {
                 this.current_tower.obj.update();
-                this.sortTargetsAndFriends(this.current_tower);
+                this.sortTargetsFriendsPushPullArrays(this.current_tower);
                 this.current_tower = this.current_tower.nextLinked;
             }
 

@@ -42,7 +42,7 @@ Level.prototype.buildLevel = function()
 	         t = Tower.create(BASICJELLY, ONSCREENSMALLRANDOM(), JELLIESTEAM, BASICJELLY_GEDAGTE, this.effects_layer, this);
 	         this.addTowerToWorld(t.sprite);
 	    };
-	    for (var i = 0; i < 3; i++) {
+	    for (var i = 0; i < 1; i++) {
 	         t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, BASICSTALAGMITE_GEDAGTE, this.effects_layer, this);
 	     	 this.addTowerToWorld(t.sprite);  
 	    };
