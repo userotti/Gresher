@@ -35,9 +35,11 @@ Tower = gamecore.DualPooled('Tower',
  	reload_speed: 0,
  	damage: 0,
  	
- 	magneticcharge: 0,
- 	magneticweapon_range: 0,
+ 	magnetic_charge: 0,
+ 	magnetic_range: 0,
+ 	magnetic_force: 0,
  	maxboostpower: 0,
+
  	alive: false,
  	dying: false,
 
@@ -59,6 +61,8 @@ Tower = gamecore.DualPooled('Tower',
  	vel: 0,
  	acc: 0,
  	boostforce: 0,
+ 	final_force: 0,
+
  	movementfric: 0,
  	fric_coeff: 0,
  	staticfric: 0,
@@ -72,7 +76,7 @@ Tower = gamecore.DualPooled('Tower',
  	boostangle: 0,
  	boosting: false,
 
- 	closeenoughtodestination: 50,
+ 	closeenoughtodestination: 20,
 
  	//tween 
  	moving: false,
@@ -112,6 +116,9 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.acc = new PIXI.Point();
 	 	
 	 	this.boostforce = new PIXI.Point();
+	 	this.final_force = new PIXI.Point();
+	 	this.magnetic_force = new PIXI.Point();
+	 	
 	 	this.movementfric = new PIXI.Point();
 	 	this.staticfric = new PIXI.Point();
 	 	this.boosttarget = new PIXI.Point();
@@ -122,6 +129,8 @@ Tower = gamecore.DualPooled('Tower',
 		this.teams = [];
 		this.targets = [];
 		this.friends = [];
+		this.pushing_pulling_me = [];
+
 
 		this.normal_colorMatrix =  [
     		1,0,0,0,
@@ -162,8 +171,8 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.fullenergy = charparams.fullenergy;
 	 	this.energyrecharge = charparams.energyrecharge;
 	 	this.currentenergy = 0;
-	 	this.magneticcharge = charparams.magneticcharge;
- 		this.magneticweapon_range = charparams.magneticweapon_range;
+	 	this.magnetic_charge = charparams.magnetic_charge;
+ 		this.magnetic_range = charparams.magnetic_range;
  		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
@@ -343,6 +352,10 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
+	distToTowerNoSqrt: function(other_tower){
+ 		return Math.sqrt(Math.pow(this.pos.x-other_tower.pos.x,2) + Math.pow(this.pos.y-other_tower.pos.y,2));
+
+ 	},
  	
 
  	/*ANIMATION FUNCTIONS */
@@ -353,17 +366,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	},
 
- 	addToTargetsOrFriends: function(target_tower){
-
- 		if (!this.checkTeam(target_tower)){
- 			
- 			this.targets.push(target_tower);
- 		}else{
- 			this.friends.push(target_tower);	
- 			
- 		}	
-
- 	},
+ 	
 
  	shoot: function(target_tower){
  	
@@ -381,6 +384,10 @@ Tower = gamecore.DualPooled('Tower',
 			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
 			var dynamicPan = panning/800 * -1;
 
+/*<<<<<<< HEAD
+
+=======
+>>>>>>> Added Electromagnetic forces to the towers. Not sure how its gonna be used. maybe only for collecting things.*/
 			// Setting a min limit
 			if(dynamicVolume <= 0.025){
 				dynamicVolume = 0.025;
@@ -405,15 +412,7 @@ Tower = gamecore.DualPooled('Tower',
 
 	},
 
-	checkTeam: function(target_tower){
-
-		for (var i=0; i < this.teams.length; i++){
-			 if (target_tower.teams.indexOf(this.teams[i]) != -1)
-			 	return true;
-		}
-		return false;
-
-	},
+	
 
  	bodyHitFlash: function(length){
 
@@ -423,18 +422,6 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 
 	},
-	
-	distanceFrom: function(other){
-		
-		
-		
-		this.health = this.health - attacker.damage;
-		this.bodyHitFlash(5);
-		this.level.makeHitShards(attacker.damage/15, this.pos.x, this.pos.y, this.character_class);
-	 	this.level.makeSparks(attacker.damage/10, this.pos.x, this.pos.y);
-
-	},
-	
 
 	iveBeenHitBy: function(attacker){
 
@@ -491,11 +478,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
  		}
 
- 		if (this.boostpower == 0){
- 			this.towerbody.rotation += this.bodyrotation_speed;
- 		}else{
- 			this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
- 		}
+ 		this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
  		
  		if (this.body_flash.counter > 0){
  			this.body_flash.counter--;
@@ -541,7 +524,7 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
 
- 	updateBoost: function(){
+ 	updateForce: function(){
  		
  		
  		if ((this.currentenergy == 0) || (this.checkboostdist())){
@@ -557,6 +540,35 @@ Tower = gamecore.DualPooled('Tower',
 			this.boostforce.y = 0;
 		}	
 
+		this.magnetic_force.x = 0;
+		this.magnetic_force.y = 0;
+
+		var total_mag_force = 0;
+		var dist = 0
+
+
+		for(var j = 0; j < this.pushing_pulling_me.length; j++){
+			dist = this.distToTowerNoSqrt(this.pushing_pulling_me[j]);
+			if (dist > 50){
+				total_mag_force = (this.pushing_pulling_me[j].magnetic_charge * this.magnetic_charge)/dist;
+				angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
+
+				this.magnetic_force.x += Math.cos(angle) * total_mag_force;
+				this.magnetic_force.y += Math.sin(angle) * total_mag_force;
+			}else{
+				/*total_mag_force = 50;
+				angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
+
+				this.magnetic_force.x += Math.cos(angle) * total_mag_force;
+				this.magnetic_force.y += Math.sin(angle) * total_mag_force;*/
+			}
+			
+		}
+
+
+
+		this.final_force.x = this.boostforce.x + this.magnetic_force.x;
+		this.final_force.y = this.boostforce.y +  this.magnetic_force.y;
 	 	
 		
 	},
@@ -570,8 +582,8 @@ Tower = gamecore.DualPooled('Tower',
 
  	updateMove: function(){
 	 
-	 		this.acc.x = (this.boostforce.x + this.movementfric.x) / (this.mass*4); 
-	 		this.acc.y = (this.boostforce.y + this.movementfric.y) / (this.mass*4);
+	 		this.acc.x = (this.final_force.x + this.movementfric.x) / (this.mass*4); 
+	 		this.acc.y = (this.final_force.y + this.movementfric.y) / (this.mass*4);
 
 	 		this.vel.x += this.acc.x;
 	 		this.vel.y += this.acc.y;
@@ -589,7 +601,7 @@ Tower = gamecore.DualPooled('Tower',
 
  	updatePhysicsMovement: function(){
 
- 			this.updateBoost();
+ 			this.updateForce();
  			this.updateFric();
  			this.updateMove();
  		
@@ -598,8 +610,7 @@ Tower = gamecore.DualPooled('Tower',
  	updateAI: function(){
 
 		this.mind.update();
- 		this.targets.length = 0;
-		this.friends.length = 0;
+ 		
 
  	},
 
@@ -621,6 +632,8 @@ Tower = gamecore.DualPooled('Tower',
  	},
 
  	update: function(){
+ 		
+ 		
  		
  		this.age += 1;
  		this.updatePhysicsMovement();
