@@ -12,7 +12,7 @@ BASICBOT = {
  	"damage": 35,
  	"fullenergy": 100,
  	"energyrecharge": 2,
- 	"magnetic_charge": 7.5,
+ 	"magnetic_charge": -7.5,
  	"magnetic_range": 100,
  	"push_pullable" : false,
  	"bodybounce" : 0.00,
