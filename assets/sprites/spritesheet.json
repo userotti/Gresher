@@ -20,7 +20,7 @@
 },
 "booster1.png":
 {
-	"frame": {"x":466,"y":2004,"w":50,"h":50},
+	"frame": {"x":568,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -29,7 +29,7 @@
 },
 "booster2.png":
 {
-	"frame": {"x":414,"y":2004,"w":50,"h":50},
+	"frame": {"x":308,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -38,7 +38,7 @@
 },
 "bot1.png":
 {
-	"frame": {"x":2,"y":2004,"w":100,"h":100},
+	"frame": {"x":104,"y":2004,"w":100,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
@@ -47,7 +47,7 @@
 },
 "bot1_flash.png":
 {
-	"frame": {"x":518,"y":2004,"w":50,"h":50},
+	"frame": {"x":620,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -56,7 +56,7 @@
 },
 "brom1.png":
 {
-	"frame": {"x":597,"y":2004,"w":25,"h":25},
+	"frame": {"x":672,"y":2004,"w":25,"h":25},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
@@ -65,7 +65,7 @@
 },
 "brom2.png":
 {
-	"frame": {"x":624,"y":2004,"w":25,"h":25},
+	"frame": {"x":699,"y":2004,"w":25,"h":25},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
@@ -74,7 +74,7 @@
 },
 "brom3.png":
 {
-	"frame": {"x":570,"y":2004,"w":25,"h":25},
+	"frame": {"x":726,"y":2004,"w":25,"h":25},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
@@ -83,7 +83,7 @@
 },
 "mushroom1.png":
 {
-	"frame": {"x":104,"y":2004,"w":100,"h":100},
+	"frame": {"x":2,"y":2004,"w":100,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
@@ -92,7 +92,7 @@
 },
 "mushroom_sharp1.png":
 {
-	"frame": {"x":258,"y":2004,"w":50,"h":50},
+	"frame": {"x":516,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -101,7 +101,7 @@
 },
 "mushroom_sharp2.png":
 {
-	"frame": {"x":310,"y":2004,"w":50,"h":50},
+	"frame": {"x":360,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -110,7 +110,7 @@
 },
 "smoke1.png":
 {
-	"frame": {"x":206,"y":2004,"w":50,"h":50},
+	"frame": {"x":464,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -119,11 +119,20 @@
 },
 "spark1.png":
 {
-	"frame": {"x":362,"y":2004,"w":50,"h":50},
+	"frame": {"x":412,"y":2004,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
 	"sourceSize": {"w":50,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"worker2.png":
+{
+	"frame": {"x":206,"y":2004,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
 	"pivot": {"x":0.5,"y":0.5}
 }},
 "meta": {
@@ -133,6 +142,6 @@
 	"format": "RGBA8888",
 	"size": {"w":4006,"h":2106},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:26efa5b5ae314bb27dccff5931b8f3e8:44fd7797010f5cac77e573758a1a1fa4:729adc6043343cfda41c447ce8f464d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:34b79e449361b272c805493d323b5d68:ec746ae65cf9975cecb223bf48efc1cc:729adc6043343cfda41c447ce8f464d6$"
 }
 }

@@ -235,7 +235,7 @@ Tower = gamecore.DualPooled('Tower',
  		case "bot1" : 
 
 
-			var texture = PIXI.Texture.fromFrame("bot1.png");
+			var texture = PIXI.Texture.fromFrame("worker2.png");
 	 		this.body.setTexture(texture);
 	    	
 	 		this.body.scale.x = 0.50;
@@ -324,12 +324,13 @@ Tower = gamecore.DualPooled('Tower',
 			this.body.position.x = -((texture.width*this.body.scale.x)/2);
 	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
 
-	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
 	 		this.can_push_pull_me.push("bot1");
 	 		this.can_push_pull_me.push("mushroom");
 	 		this.can_push_pull_me.push("bromite");
+
+	 		this.towerbody.rotation = Math.random() * Math.PI * 2 ;
 	 		
 			break;			
 	
@@ -469,9 +470,16 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
  		}
 
- 		if (this.myfakespeed > 0.1)
- 			this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
- 		
+ 		if (this.character_class != "bromite"){
+	 		if (this.myfakespeed > 0.1){
+	 			/*if((this.boostforce.x + this.boostforce.y) > 0){
+	 				this.towerbody.rotation = Math.atan2(this.boostforce.x, this.boostforce.y);	
+	 			}else{*/
+	 				this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);
+	 			//}
+	 		}
+	 	}	
+ 			
  		if (this.body_flash.counter > 0){
  			this.body_flash.counter--;
  		}else{
