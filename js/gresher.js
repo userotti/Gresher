@@ -15,7 +15,8 @@ Gresher = function()
             {id: "solar_seas_basic", src: "Solar-seas-A-mix-1.mp3"},
             {id: "laser_shot", src: "Game-Shot.mp3"},
             {id: "nes_laser_shot", src: "energy-6.wav"},
-            {id: "nes_laser_shot2", src: "energy-2.wav"}
+            {id: "nes_laser_shot2", src: "energy-2.wav"},
+            {id: "blurm", src: "energy-5.wav"}
         ]
     
     this.image_file_loader;     

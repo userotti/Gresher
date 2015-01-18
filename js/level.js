@@ -150,7 +150,6 @@ Level.prototype.makeSparks = function(amount, x, y){
 
 Level.prototype.makeSmoke = function(amount, x, y, width, scale_x){
 
-	var radius = width + scale_x;
 
 	for (var i = 0; i < amount; i++){
 		s = Shrap.create(BASICSMOKESHRAP(), SMOKESHRAP(x, y));
@@ -159,10 +158,24 @@ Level.prototype.makeSmoke = function(amount, x, y, width, scale_x){
 
 },
 
+Level.prototype.makeBooster = function(amount, x, y, vx, vy, tcharacter_class, y_offset){
+
+	var dist_rotation = Math.atan2(vy, vx) + Math.PI;
+	var y_offset_adjusted = y_offset - 10;
+
+	if (tcharacter_class == "bot1"){
+		for (var i = 0; i < amount; i++){
+			s = Shrap.create(BOOSTERSHRAP_LOOK(), BOOSTERSHRAP_POS(x + Math.cos(dist_rotation) * y_offset_adjusted, y +Math.sin(dist_rotation) * y_offset_adjusted));
+			this.effects_layer.addChild(s.body_container);
+		}
+	}		
+
+},
+
 
 Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_class, y_offset){
 
-	console.log(y_offset);
+	
 	var rotation = Math.atan2(x-tx, y-ty) + Math.PI;
 
 	if (tcharacter_class == "bot1"){

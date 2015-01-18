@@ -1,4 +1,19 @@
 
+BOOSTERSHRAP_LOOK = function(){
+	
+	return ({
+		"shrap_class" : "booster",
+	 	"bodybounce" : 0.00,
+	 	"bodyrotation_speed": 0.1,
+	 	"fric_coeff": 0.07,
+	    "startalpha" : 0.7,
+	    "alphadecrease" : 0.03,
+	    "scaleup_speed" : 0.0002,
+	    "scale" : 0.18,
+	
+	})
+	
+}
 
 
 MUSHROOMSHRAP = {
@@ -190,6 +205,23 @@ SMOKESHRAP = function(px,py){
  	
 }
 
+BOOSTERSHRAP_POS = function(px,py){ 
+
+	return({
+	
+	"posx" : px,
+	"posy" : py,
+	"velx" : 1 - (Math.random()*2),
+	"vely" : 1 - (Math.random()*2),
+ 	"accx" : 0,
+ 	"accy" : 0,
+ 	"rotation": 0.5 - (Math.random()*(Math.PI*2)),
+ 
+ 	"y_offset": 0
+
+ 	});
+ 	
+}
 FLASHSHRAP = function(px,py, rot, y_offset){ 
 
 	return({

@@ -142,7 +142,7 @@ Shrap = gamecore.DualPooled('Shrap',
 				var texture = PIXI.Texture.fromFrame("bot1_flash.png");
 				this.body.setTexture(texture);
 
-				console.log("this.y_offset", this.y_offset);
+				
 				this.body.position.x = -((texture.width*this.body.scale.x)/2);
 	 			this.body.position.y = -((texture.height*this.body.scale.y)/2) - this.y_offset;
 				
@@ -181,6 +181,19 @@ Shrap = gamecore.DualPooled('Shrap',
 		
 
 		break;	
+
+		case "booster" :	
+
+			var x,y
+			var texture = texturegroups.getBoosterFlame();
+			this.body.setTexture(texture);
+
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+
+		
+
+		break;
 
 		}
 

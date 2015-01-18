@@ -281,7 +281,7 @@ GameScene.prototype.updateHud = function(){
 
 GameScene.prototype.sceneUpdate = function()
 {
-    this.camera.zoom = 1.1;// - (1 * ((Math.pow(this.player.vel.x,2) + Math.pow(this.player.vel.y,2))));
+    this.camera.zoom = 1.5;// - (1 * ((Math.pow(this.player.vel.x,2) + Math.pow(this.player.vel.y,2))));
     this.updateTowers();
     this.updateEffects();
     this.updateHud();
