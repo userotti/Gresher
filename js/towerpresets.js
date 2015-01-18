@@ -12,8 +12,11 @@ BASICBOT = {
  	"damage": 35,
  	"fullenergy": 100,
  	"energyrecharge": 2,
- 	"magnetic_charge": -7.5,
- 	"magnetic_range": 100,
+ 	"magnetic_charge": -1.5,
+ 	"magnetic_range": 50,
+ 	"magnetic_inner_range": 30,
+
+
  	"push_pullable" : false,
  	"bodybounce" : 0.00,
  	"bodyrotation_speed": 0,
@@ -40,8 +43,10 @@ BASICBROMITE_CHAR = function(){
 	 	"damage": 0,
 	 	"fullenergy": 0,
 	 	"energyrecharge": 0,
-	 	"magnetic_charge": -5,
-	 	"magnetic_range": 100,
+	 	"magnetic_charge": 0.2,
+	 	"magnetic_range": 20,
+	 	"magnetic_inner_range": 0,
+
 	 	"push_pullable" : true,
 	 	"bodybounce" : 0.00,
 	 	"bodyrotation_speed": 1 - (Math.random()*2),
@@ -66,8 +71,10 @@ BASICMUSHROOM = {
  	"damage": 0,
  	"fullenergy": 0,
  	"energyrecharge": 0,
- 	"magnetic_charge": 8,
- 	"magnetic_range": 100,
+ 	"magnetic_charge": 2.5,
+ 	"magnetic_range": 90,
+ 	"magnetic_inner_range": 10,
+
  	"push_pullable" : false,
  	"bodybounce" : 0.04,
  	"bodyrotation_speed": 0,
@@ -78,83 +85,6 @@ BASICMUSHROOM = {
 
 }
 
-BASICJELLY = {
-	
-	"character_class" : "jelly",
-	"mass" : 1.4,
-	"maxhealth" : 250,
-	"shield": 0,
- 	"shielrecharge": 0,
- 	"weapon_range": 120,
- 	"interaction_range": 200,
- 	"full_reload": 100,
- 	"reload_speed": 0.5,
- 	"damage": 65,
- 	"fullenergy": 170,
- 	"energyrecharge": 10.5,
- 	"magnetic_charge": 0,
- 	"magnetic_range": 200,
- 	"push_pullable" : false,
- 	"bodybounce" : 0.08,
- 	"bodyrotation_speed": 0,
- 	"fric_coeff": 0.300,
- 	"ai_timepercall": 100, 
- 	"maxboostpower" : 2.9,
-
-}
-
-BASICSTALAGMITE = {
-	
-	"character_class" : "stalagmite",
-	"mass" : 1,
-	"maxhealth" : 3000,
- 	"shield": 0,
- 	"shielrecharge": 0,
- 	"weapon_range": 210,
- 	"interaction_range": 250,
- 	"full_reload": 100,
- 	"reload_speed": 0.5,
- 	"damage": 10,
- 	"fullenergy": 120,
- 	"energyrecharge": 0.1,
- 	"magnetic_charge": 0,
- 	"magnetic_range": 200,
- 	"push_pullable" : false,
- 	"bodybounce" : 0.0,
- 	"bodyrotation_speed": 0.01,
- 	"fric_coeff": 0.350,
- 	"ai_timepercall": 50,
- 	"maxboostpower" : 0.65,
-
-}
-
-
-
-BASICSTRUCT = {
-	
-	"character_class" : "struct",
-	"mass" : 1,
-	"maxhealth" : 100,
- 	"shield": 0,
- 	"shielrecharge": 0,
- 	"weapon_range": 50,
- 	"interaction_range": 250,
- 	"full_reload": 30,
- 	"reload_speed": 1,
- 	"damage": 3,
- 	"fullenergy": 30,
- 	"energyrecharge": 1,
- 	"magnetic_charge": 0,
- 	"magnetic_range": 0,
- 	"push_pullable" : false,
- 	"bodybounce" : 0.00,
- 	"bodyrotation_speed": 0.1,
- 	"fric_coeff": 0.20,
- 	"ai_timepercall": 100,
- 	"maxboostpower" : 0.5,
- 
-
-}
 
 
 MIDDLE = function(){ 

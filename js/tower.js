@@ -37,6 +37,8 @@ Tower = gamecore.DualPooled('Tower',
  	
  	magnetic_charge: 0,
  	magnetic_range: 0,
+ 	magnetic_inner_range: 0,
+ 	
  	magnetic_force: 0,
  	maxboostpower: 0,
  	push_pullable: false,
@@ -178,6 +180,7 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.currentenergy = 0;
 	 	this.magnetic_charge = charparams.magnetic_charge;
  		this.magnetic_range = charparams.magnetic_range;
+ 		this.magnetic_inner_range = charparams.magnetic_inner_range;
  		this.push_pullable = charparams.push_pullable;
 
  		this.scale = charparams.mass;
@@ -243,6 +246,9 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
+	 			this.can_push_pull_me.push("bot1");
+	 		this.can_push_pull_me.push("mushroom");
+	 		
 
 	 		
 		break;
@@ -281,7 +287,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
-	 		 		
+	 		this.can_push_pull_me.push("mushroom"); 		
 
 
 		break;
@@ -323,6 +329,7 @@ Tower = gamecore.DualPooled('Tower',
 
 	 		this.can_push_pull_me.push("bot1");
 	 		this.can_push_pull_me.push("mushroom");
+	 		this.can_push_pull_me.push("bromite");
 	 		
 			break;			
 	
@@ -535,8 +542,9 @@ Tower = gamecore.DualPooled('Tower',
 			if (this.allowedToPushPullMe(this.pushing_pulling_me[j].character_class)){
 
 				dist = this.distToTowerNoSqrt(this.pushing_pulling_me[j]);
-				if (dist > 50){
-					total_mag_force = (this.pushing_pulling_me[j].magnetic_charge * this.magnetic_charge)/dist;
+				if (dist > this.pushing_pulling_me[j].magnetic_inner_range){
+
+					total_mag_force = (this.pushing_pulling_me[j].magnetic_charge)
 					angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
 
 					this.magnetic_force.x += Math.cos(angle) * total_mag_force;
