@@ -16,7 +16,9 @@ Gresher = function()
             {id: "laser_shot", src: "Game-Shot.mp3"},
             {id: "nes_laser_shot", src: "energy-6.wav"},
             {id: "nes_laser_shot2", src: "energy-2.wav"},
-            {id: "blurm", src: "energy-5.wav"}
+            {id: "blurm", src: "energy-5.wav"},
+            {id: "death", src: "energy-3.wav"},
+            
         ]
     
     this.image_file_loader;     

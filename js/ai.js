@@ -397,6 +397,20 @@ BASICJELLY_GEDAGTE = {
 
 };
 
+BASICBROMITE_GEDAGTE = {
+	
+	"player" : false,
+	"moveradius" : 0,
+	"alone" : "chill",
+	"withfriends" : "chill",
+	"withtargets" : "chill",
+	"withfriendstargets" : "chill",
+
+	"friendmemory" : 0,
+	"targetmemory" : 0,
+
+};
+
 BASICMUSHROOM_GEDAGTE = {
 	
 	"player" : false,

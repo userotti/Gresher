@@ -21,6 +21,12 @@ TextureGroups = function(){
 		"spark1.png"
 	]
 
+	this.bromites = [
+		"brom1.png",
+		"brom2.png",
+		"brom3.png"
+	]
+
 
 }
 TextureGroups.prototype.constructor = TextureGroups;
@@ -42,5 +48,9 @@ TextureGroups.prototype.getMushroomShrap = function(){
 
 TextureGroups.prototype.getBoosterFlame = function(){
 	return PIXI.Texture.fromFrame(this.booster_flames[Math.floor(this.booster_flames.length*Math.random())]);
+}
+
+TextureGroups.prototype.getBromite = function(){
+	return PIXI.Texture.fromFrame(this.bromites[Math.floor(this.bromites.length*Math.random())]);
 }
 

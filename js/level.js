@@ -22,7 +22,7 @@ Level.prototype.constructor = Level;
 Level.prototype.buildLevel = function()
 {
 	
-	this.player = Tower.create(BASICBOT, MIDDLE(), PLAYERTEAM, BASICJELLY_PLAYER, this.effects_layer, this);
+	this.player = Tower.create(BASICBOT, MIDDLE(), BOT1TEAM, BASICJELLY_PLAYER, this.effects_layer, this);
 	this.player.controlled = true;
 	this.addTowerToWorld(this.player.sprite);
 
@@ -58,11 +58,22 @@ Level.prototype.buildLevel = function()
 		this.map_width = 4000;
 		this.map_height = 4000;
 		
-		for (var i = 0; i < 100; i++) {
-	         t = Tower.create(BASICMUSHROOM, ONMAPRANDOM(this.map_width, this.map_height), NOTEAM, BASICMUSHROOM_GEDAGTE, this.effects_layer, this);
-	         this.addTowerToWorld(t.sprite);
+		for (var i = 0; i < 50; i++) {
+	         mush = Tower.create(BASICMUSHROOM, ONMAPRANDOM(this.map_width, this.map_height), NOTEAM, BASICMUSHROOM_GEDAGTE, this.effects_layer, this);
+	         this.addTowerToWorld(mush.sprite);
+	         brom = Tower.create(BASICBROMITE_CHAR(), ONMAP_PRECISE(mush.pos.x, mush.pos.y), BROMITE_TEAM, BASICBROMITE_GEDAGTE, this.effects_layer, this);
+	         this.addTowerToWorld(brom.sprite);
+	    
 	    };
 
+	    for (var i = 0; i < 20; i++) {
+	    	t = Tower.create(BASICBROMITE_CHAR(), ONMAPRANDOM(this.map_width, this.map_height), BROMITE_TEAM, BASICBROMITE_GEDAGTE, this.effects_layer, this);
+	        this.addTowerToWorld(t.sprite);
+	    
+	        
+	    };
+
+	    
 	break;
 	
 	}

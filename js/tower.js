@@ -39,6 +39,7 @@ Tower = gamecore.DualPooled('Tower',
  	magnetic_range: 0,
  	magnetic_force: 0,
  	maxboostpower: 0,
+ 	push_pullable: false,
 
  	alive: false,
  	dying: false,
@@ -130,6 +131,7 @@ Tower = gamecore.DualPooled('Tower',
 		this.targets = [];
 		this.friends = [];
 		this.pushing_pulling_me = [];
+		this.can_push_pull_me = [];
 
 
 		this.normal_colorMatrix =  [
@@ -176,6 +178,8 @@ Tower = gamecore.DualPooled('Tower',
 	 	this.currentenergy = 0;
 	 	this.magnetic_charge = charparams.magnetic_charge;
  		this.magnetic_range = charparams.magnetic_range;
+ 		this.push_pullable = charparams.push_pullable;
+
  		this.scale = charparams.mass;
  		this.bodybounce = charparams.bodybounce;
  		this.bodyrotation_speed = charparams.bodyrotation_speed;
@@ -240,7 +244,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
-
+	 		
 		break;
 
 		case "mushroom" : 
@@ -257,6 +261,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 	 		this.towerbody.rotation = (Math.PI*2) * Math.random();
 	 		this.towerbody.addChild(this.body);
+ 			 		
 
 
 		break;
@@ -276,6 +281,8 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
+	 		 		
+
 
 		break;
 
@@ -293,6 +300,30 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.rotation = Math.PI;
 	 		this.towerbody.addChild(this.body);
 
+	 			 		
+
+			break;			
+	
+		
+
+		case "bromite" :	
+
+			console.log("ASd");
+			var texture = texturegroups.getBromite();
+	 		this.body.setTexture(texture);
+	    	
+	 		this.body.scale.x = 0.15;
+	 		this.body.scale.y = 0.15;
+			
+			this.body.position.x = -((texture.width*this.body.scale.x)/2);
+	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
+
+	 		this.towerbody.rotation = Math.PI;
+	 		this.towerbody.addChild(this.body);
+
+	 		this.can_push_pull_me.push("bot1");
+	 		this.can_push_pull_me.push("mushroom");
+	 		
 			break;			
 	
 		}
@@ -388,6 +419,11 @@ Tower = gamecore.DualPooled('Tower',
 		this.level.makeHitShards(4, this.pos.x, this.pos.y, this.character_class);
 		this.level.makeSparks(5, this.pos.x, this.pos.y);
 		
+		if (this.character_class === 'mushroom'){
+			createjs.Sound.play("death", {loop:0, 
+			volume:0.7});
+		}	
+
 	},
 
 	timeToDieAndBeRemoved:function(){
@@ -426,7 +462,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.towerbody.scale.y = this.scale+(Math.cos(this.animcounter))*(this.bodybounce*this.scale);
  		}
 
- 		if (this.boostpower > 0)
+ 		if (this.myfakespeed > 0.1)
  			this.towerbody.rotation = Math.atan2(this.vel.x, this.vel.y);	
  		
  		if (this.body_flash.counter > 0){
@@ -495,21 +531,24 @@ Tower = gamecore.DualPooled('Tower',
 
 
 		for(var j = 0; j < this.pushing_pulling_me.length; j++){
-			dist = this.distToTowerNoSqrt(this.pushing_pulling_me[j]);
-			if (dist > 50){
-				total_mag_force = (this.pushing_pulling_me[j].magnetic_charge * this.magnetic_charge)/dist;
-				angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
-
-				this.magnetic_force.x += Math.cos(angle) * total_mag_force;
-				this.magnetic_force.y += Math.sin(angle) * total_mag_force;
-			}else{
-				/*total_mag_force = 50;
-				angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
-
-				this.magnetic_force.x += Math.cos(angle) * total_mag_force;
-				this.magnetic_force.y += Math.sin(angle) * total_mag_force;*/
-			}
 			
+			if (this.allowedToPushPullMe(this.pushing_pulling_me[j].character_class)){
+
+				dist = this.distToTowerNoSqrt(this.pushing_pulling_me[j]);
+				if (dist > 50){
+					total_mag_force = (this.pushing_pulling_me[j].magnetic_charge * this.magnetic_charge)/dist;
+					angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
+
+					this.magnetic_force.x += Math.cos(angle) * total_mag_force;
+					this.magnetic_force.y += Math.sin(angle) * total_mag_force;
+				}else{
+					/*total_mag_force = 50;
+					angle = Math.atan2(this.pos.y-this.pushing_pulling_me[j].pos.y, this.pos.x-this.pushing_pulling_me[j].pos.x)
+
+					this.magnetic_force.x += Math.cos(angle) * total_mag_force;
+					this.magnetic_force.y += Math.sin(angle) * total_mag_force;*/
+				}
+			}		
 		}
 
 
@@ -518,6 +557,21 @@ Tower = gamecore.DualPooled('Tower',
 		this.final_force.y = this.boostforce.y +  this.magnetic_force.y;
 	 	
 		
+	},
+
+	allowedToPushPullMe: function(char_class){
+
+		//console.log("this.character_class: ", this.character_class);
+		//console.log("char_class: ", char_class);
+		
+		if (this.can_push_pull_me.indexOf(char_class) == -1){
+			//console.log("false");
+			return false;
+		}else{
+			//console.log("true");
+			return true;
+		}
+
 	},
 
  	updateFric: function(){
@@ -581,7 +635,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		this.level.makeBooster(1, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this.character_class, (this.body.texture.width/2)*this.body.scale.x);	
 	 		
 	 		if ((this.age % 6) == 0){
-	 			createjs.Sound.play("blurm", {loop:0,	volume:0.6});	
+	 			createjs.Sound.play("blurm", {loop:0,	volume:0.7});	
 	 		}
 	 		
 	 	}

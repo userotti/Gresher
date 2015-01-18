@@ -204,6 +204,11 @@
             <filename>working_files/bot1_flash.png</filename>
             <filename>working_files/smoke1.png</filename>
             <filename>working_files/mushroom1.png</filename>
+            <filename>working_files/spark1.png</filename>
+            <filename>working_files/mushroom_sharp2.png</filename>
+            <filename>working_files/mushroom_sharp1.png</filename>
+            <filename>working_files/booster1.png</filename>
+            <filename>working_files/booster2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
