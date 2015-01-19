@@ -650,7 +650,8 @@ Tower = gamecore.DualPooled('Tower',
 	 	if (this.boosting == true){
 	 		this.level.makeBooster(1, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this.character_class, (this.body.texture.width/2)*this.body.scale.x);	
 	 		
-	 		if ((this.age % 6) == 0){
+	 			
+	 		if ((this.age % 8) == 0){
 	 			createjs.Sound.play("blurm", {loop:0,	volume:0.7});	
 	 		}
 	 		
