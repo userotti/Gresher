@@ -652,7 +652,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 	 			
 	 		if ((this.age % 8) == 0){
-	 			createjs.Sound.play("blurm", {loop:0,	volume:0.7});	
+	 			createjs.Sound.play("blurm", {loop:0,	volume:0.5});	
 	 		}
 	 		
 	 	}
