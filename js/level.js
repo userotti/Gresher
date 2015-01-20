@@ -38,7 +38,8 @@ Level.prototype.buildLevel = function()
 	        t = Tower.create(BASICSTALAGMITE, ONSCREENRANDOM(), STALAGMITETEAM, PLAYERFOLLOWJELLY_GEDAGTE, this.effects_layer, this);
 	    	this.addTowerToWorld(t.sprite);	   
 	    };
-
+	    
+		
 	break;
 
 	case "2":	
@@ -75,6 +76,21 @@ Level.prototype.buildLevel = function()
 
 	    
 	break;
+	
+	case "4":	
+			this.map_width = 4000;
+			this.map_height = 4000;
+				
+		    for (var i = 0; i < 170; i++) {
+		    	t = Tower.create(BASICBROMITE_CHAR(), ONMAPRANDOM(this.map_width, this.map_height), BROMITE_TEAM, BASICBROMITE_GEDAGTE, this.effects_layer, this);
+		        this.addTowerToWorld(t.sprite);
+		    
+		        
+		    };
+	
+		    
+		break;
+	
 	
 	}
     

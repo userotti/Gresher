@@ -372,13 +372,13 @@ Tower = gamecore.DualPooled('Tower',
 
 			// Making range from 0 to 1+
 			// Also making it from 0.5 to 0-
-			var dynamicVolume = 0.6 - (dist/500000); // Random 500K mark? //This sounds perfect
+			var dynamicVolume = 1 - (dist/500000); // Random 500K mark? //This sounds perfect
 			var dynamicPan = panning/800 * -1;
 
 
 			// Setting a min limit
-			if(dynamicVolume <= 0.025){
-				dynamicVolume = 0.025;
+			if(dynamicVolume <= 0){
+				dynamicVolume = 0;
 			}
 			
 			
@@ -652,7 +652,7 @@ Tower = gamecore.DualPooled('Tower',
 	 		
 	 			// Engine Idle
 	 				 		if ((this.age % 8) == 0){
-					 			createjs.Sound.play("engine-rumble", {loop:0,	volume:0.2});	
+					 			createjs.Sound.play("engine-rumble", {loop:0,	volume:1});	
 					 		}
 	 		
 	 	}

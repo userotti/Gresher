@@ -8,7 +8,7 @@ GameScene = function(stage)
     this.colidables_layer = new PIXI.SmaatObjectContainer();
     this.effects_layer = new PIXI.SmaatObjectContainer();
     
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"3");
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"4");
 		
 		// ?? Refer to MusicVolume from gresher?		
     gresher.music = createjs.Sound.play("music-1", {loop:-1,volume: 0});
@@ -304,7 +304,7 @@ GameScene.prototype.mouseClick = function(mousepos)
     
     if (this.level.player.currentenergy == this.level.player.fullenergy){
     
-    		createjs.Sound.play("boost", {loop:0,	volume:0.6});	
+    		createjs.Sound.play("boost", {loop:0,	volume:0.2});	
     
         this.level.player.startBoost(this.level.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.level.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
     }
