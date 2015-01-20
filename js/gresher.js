@@ -94,7 +94,7 @@ Gresher.prototype.fileLoaded = function(event) {
 //setup the PIXI renderer and Stage
 Gresher.prototype.setupPIXIStage = function()
 {
-    this.stage = new PIXI.Stage(0x0a1c43, true);
+    this.stage = new PIXI.Stage(0x111d3a, true); // Old Blue 0a1c43
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth/*window.devicePixelRatio*/,window.innerHeight/*window.devicePixelRatio*/);//, document.getElementById("main-canvas"), true, true);
     this.renderer.view.id = "main-canvas";
     this.renderer.view.style.display = "block";
