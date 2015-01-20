@@ -84,11 +84,21 @@ Level.prototype.buildLevel = function()
 
 Level.prototype.buildBackground = function()
 {
+	this.space_platform = new PIXI.SmaatObjectContainer(); 
 	this.space_rubble = new PIXI.SmaatObjectContainer(); 
 	this.space_rubble_deeper = new PIXI.SmaatObjectContainer();
 	this.space_rubble_deeper_deeper = new PIXI.SmaatObjectContainer(); 
 	
-	// BOTTOM BACKGROUND
+	layerPlatform = new PIXI.Sprite;
+	layerPlatform.setTexture(PIXI.Texture.fromFrame("platform.png"));
+	layerPlatform.scale.x = 1;
+	layerPlatform.scale.y = layerPlatform.scale.x
+	layerPlatform.alpha = 1;
+	layerPlatform.position.x = -(this.map_width/4)*layerPlatform.scale.x + 775;
+	layerPlatform.position.y = -(this.map_height/4)*layerPlatform.scale.y + 788;
+	this.space_platform.addChild(layerPlatform);
+	
+	
 	layerTop = new PIXI.Sprite;
 	layerTop.setTexture(PIXI.Texture.fromFrame("background_b.png"));
 	layerTop.scale.x = 1.2;
@@ -100,28 +110,22 @@ Level.prototype.buildBackground = function()
 	//layerBottom.tint = 0xccccee;
 	layerTop.position.x = -(this.map_width/4)*layerTop.scale.x;
 	layerTop.position.y = -(this.map_height/4)*layerTop.scale.y;
-
 	this.space_rubble.addChild(layerTop);
 	
-	// MID BACKGROUND
 	layerMid = new PIXI.Sprite;
 	layerMid.setTexture(PIXI.Texture.fromFrame("background_b.png"));
 	layerMid.scale.x = 1;
 	layerMid.scale.y = layerMid.scale.x
 	layerMid.alpha = 0.01;
-	//layerBottom.tint = 0xccccee;
 	layerMid.position.x = -(this.map_width/4)*layerMid.scale.x;
 	layerMid.position.y = -(this.map_height/4)*layerMid.scale.y;
-
 	this.space_rubble_deeper.addChild(layerMid);
 	
-	// TOP BACKGROUND
 	layerBottom = new PIXI.Sprite;
 	layerBottom.setTexture(PIXI.Texture.fromFrame("background_b.png"));
 	layerBottom.scale.x = 0.6;
 	layerBottom.scale.y = layerBottom.scale.x
 	layerBottom.alpha = 0.02;
-	//layerBottom.tint = 0xccccee;
 	layerBottom.position.x = -(this.map_width/4)*layerBottom.scale.x;
 	layerBottom.position.y = -(this.map_height/4)*layerBottom.scale.y;
 
@@ -131,7 +135,7 @@ Level.prototype.buildBackground = function()
 	this.background_layer.addChild(this.space_rubble_deeper_deeper);
 	this.background_layer.addChild(this.space_rubble_deeper);
 	this.background_layer.addChild(this.space_rubble);
-
+	this.background_layer.addChild(this.space_platform);
 	
 	
 	
@@ -246,6 +250,9 @@ Level.prototype.doLevel = function()
 	
 	this.space_rubble.position.x = this.player.pos.x*0.5;
 	this.space_rubble.position.y = this.player.pos.y*0.5;
+	
+	this.space_platform.position.x = this.player.pos.x*0;
+	this.space_platform.position.y = this.player.pos.y*0;
 		
 }
 

@@ -209,6 +209,9 @@
             <filename>working_files/booster2.png</filename>
             <filename>working_files/background_a.png</filename>
             <filename>working_files/background_b.png</filename>
+            <filename>working_files/worker.png</filename>
+            <filename>working_files/worker2.png</filename>
+            <filename>working_files/platform.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
