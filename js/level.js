@@ -85,30 +85,50 @@ Level.prototype.buildLevel = function()
 Level.prototype.buildBackground = function()
 {
 	this.space_rubble = new PIXI.SmaatObjectContainer(); 
-	this.space_rubble_deeper = new PIXI.SmaatObjectContainer(); 
+	this.space_rubble_deeper = new PIXI.SmaatObjectContainer();
+	this.space_rubble_deeper_deeper = new PIXI.SmaatObjectContainer(); 
+	
+	// BOTTOM BACKGROUND
+	layerTop = new PIXI.Sprite;
+	layerTop.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerTop.scale.x = 1.2;
+	layerTop.scale.y = layerTop.scale.x
+	layerTop.alpha = 0.08;
+	//layerTop.pivot.x = 0;
+	//layerTop.pivot.y = 0;
+	//layerTop.rotation = 90 * (Math.PI / 180);
+	//layerBottom.tint = 0xccccee;
+	layerTop.position.x = -(this.map_width/4)*layerTop.scale.x;
+	layerTop.position.y = -(this.map_height/4)*layerTop.scale.y;
 
-	test = new PIXI.Sprite;
-	test.setTexture(PIXI.Texture.fromFrame("big_back.png"));
-	test.scale.x = 1.0;
-	test.scale.y = test.scale.x
-	test.alpha = 1//0.03;
-		//test.tint = 0xccccee;
-	test.position.x = -(this.map_width/4)*test.scale.x;
-	test.position.y = -(this.map_height/4)*test.scale.y;
+	this.space_rubble.addChild(layerTop);
+	
+	// MID BACKGROUND
+	layerMid = new PIXI.Sprite;
+	layerMid.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerMid.scale.x = 1;
+	layerMid.scale.y = layerMid.scale.x
+	layerMid.alpha = 0.01;
+	//layerBottom.tint = 0xccccee;
+	layerMid.position.x = -(this.map_width/4)*layerMid.scale.x;
+	layerMid.position.y = -(this.map_height/4)*layerMid.scale.y;
 
-	this.space_rubble_deeper.addChild(test);
+	this.space_rubble_deeper.addChild(layerMid);
+	
+	// TOP BACKGROUND
+	layerBottom = new PIXI.Sprite;
+	layerBottom.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerBottom.scale.x = 0.6;
+	layerBottom.scale.y = layerBottom.scale.x
+	layerBottom.alpha = 0.02;
+	//layerBottom.tint = 0xccccee;
+	layerBottom.position.x = -(this.map_width/4)*layerBottom.scale.x;
+	layerBottom.position.y = -(this.map_height/4)*layerBottom.scale.y;
 
-	test2 = new PIXI.Sprite;
-	test2.setTexture(PIXI.Texture.fromFrame("big_back2.png"));
-	test2.scale.x = 1.2;
-	test2.scale.y = test2.scale.x
-	test2.alpha = 1//0.06;
-		//test.tint = 0xccccee;
-	test2.position.x = -(this.map_width/4)*test2.scale.x;
-	test2.position.y = -(this.map_height/4)*test2.scale.y;
-
-	this.space_rubble.addChild(test2);
-
+	this.space_rubble_deeper_deeper.addChild(layerBottom);
+	
+	
+	this.background_layer.addChild(this.space_rubble_deeper_deeper);
 	this.background_layer.addChild(this.space_rubble_deeper);
 	this.background_layer.addChild(this.space_rubble);
 
@@ -217,12 +237,15 @@ Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_cla
 
 Level.prototype.doLevel = function()
 {
-
-	this.space_rubble_deeper.position.x = this.player.pos.x*0.9;
-	this.space_rubble_deeper.position.y = this.player.pos.y*0.9;
 	
-	this.space_rubble.position.x = this.player.pos.x*0.6;
-	this.space_rubble.position.y = this.player.pos.y*0.6;
+	this.space_rubble_deeper_deeper.position.x = this.player.pos.x*0.95;
+	this.space_rubble_deeper_deeper.position.y = this.player.pos.y*0.95;
+	
+	this.space_rubble_deeper.position.x = this.player.pos.x*0.80;
+	this.space_rubble_deeper.position.y = this.player.pos.y*0.80;
+	
+	this.space_rubble.position.x = this.player.pos.x*0.5;
+	this.space_rubble.position.y = this.player.pos.y*0.5;
 		
 }
 

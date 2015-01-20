@@ -9,8 +9,9 @@ GameScene = function(stage)
     this.effects_layer = new PIXI.SmaatObjectContainer();
     
     this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"3");
-
-    createjs.Sound.play("solar_seas_basic", {loop:-1,volume: 0.3});
+		
+		// ?? Refer to MusicVolume from gresher?		
+    gresher.music = createjs.Sound.play("music-1", {loop:-1,volume: 0});
 
     this.world.addChild(this.background_layer);
     this.world.addChild(this.colidables_layer);
@@ -299,7 +300,12 @@ GameScene.prototype.mouseClick = function(mousepos)
     this.mouseclickposdist = Math.sqrt(Math.pow(((this.camera.screen_midx) - this.mouseclickpos.x),2) + Math.pow(((this.camera.screen_midy) - this.mouseclickpos.y),2));
     this.mouseclickposhoek = Math.atan2(((this.camera.screen_midy) - this.mouseclickpos.y), ((this.camera.screen_midx) - this.mouseclickpos.x) ) - this.camera.rotation;
     
+    
+    
     if (this.level.player.currentenergy == this.level.player.fullenergy){
+    
+    		createjs.Sound.play("boost", {loop:0,	volume:0.6});	
+    
         this.level.player.startBoost(this.level.player.pos.x - (Math.cos(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom, this.level.player.pos.y - (Math.sin(this.mouseclickposhoek)*this.mouseclickposdist)/this.camera.zoom);
     }
     

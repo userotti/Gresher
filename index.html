@@ -38,8 +38,13 @@
 
 </head>
 <body>
-
-
+	
+	<div style=" position: fixed; right:  0; color: #fff; font-family: Arial; font-size: 10px; z-index: 999; ">
+		<div style=" padding: 0.2em 0.5em; ">
+		<u>M</u>usic On/Off
+		</div>
+	</div>
+	
 	<script>
 //console.log("fsdfsd");
 	//device resize call
@@ -70,7 +75,7 @@
 
 	window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 	window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
-	window.addEventListener('keypress', function(event) { console.log("Key PRessed"); keypressed() }, false);
+	window.addEventListener('keypress', function(event) { keypressed() }, false);
 	//make the fps stats
 
 	stats = new Stats();
@@ -89,9 +94,19 @@
 
 	
 	keypressed = function(){
-		console.log("Toggle Pause");
-		gresher.paused = !(gresher.paused);
-  
+	
+		console.log("Key Pressed");
+		
+		console.log(event.keyCode);
+		if (event.keyCode == 109) { // M
+			if(gresher.music.volume  == 0){
+				gresher.music.volume = 0.5;
+			} else {
+				gresher.music.volume = 0;
+			}
+		} else {
+			gresher.paused = !(gresher.paused);
+	  }
 
 	}
 

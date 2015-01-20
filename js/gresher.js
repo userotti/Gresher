@@ -7,16 +7,16 @@ Gresher = function()
     this.paused = false;
     this.setupPIXIStage();
     //this.currentscene = new GameScene(this.stage);
-
+    
     //load sound file sound_file_manifest
     this.sound_file_load_queue;
     this.sound_file_manifest = [
-            {id: "solar_seas_minimal", src: "Solar-seas-A-mix-3-minimal.mp3"},
-            {id: "solar_seas_basic", src: "Solar-seas-A-mix-1.mp3"},
-            {id: "laser_shot", src: "Game-Shot.mp3"},
-            {id: "nes_laser_shot", src: "energy-15.wav"},
-            {id: "nes_laser_shot2", src: "energy-2.wav"},
-            {id: "blurm", src: "energy-5.wav"},
+            {id: "music-1", src: "music-1.mp3"},
+            {id: "music-2", src: "Solar-seas-A-mix-3-minimal.mp3"},
+            {id: "laser-shot-1", src: "energy-2.wav"},
+            {id: "laser-shot-2", src: "energy-3.wav"},
+            {id: "engine-rumble", src: "energy-5-e.wav"},
+            {id: "boost", src: "boost-8.wav"},
             {id: "death", src: "energy-3.wav"},
             
         ]

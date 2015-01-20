@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.6.0</string>
         <key>fileName</key>
-        <string>/Users/christian/sites/Gresher/assets/sprites/spritesheet.tps</string>
+        <string>/Users/fox/Sites/Gresher/assets/sprites/spritesheet.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -193,8 +193,6 @@
             <filename>working_files/brom3.png</filename>
             <filename>working_files/brom2.png</filename>
             <filename>working_files/brom1.png</filename>
-            <filename>working_files/big_back.png</filename>
-            <filename>working_files/big_back2.png</filename>
             <filename>working_files/grom5.png</filename>
             <filename>working_files/grom4.png</filename>
             <filename>working_files/grom3.png</filename>
@@ -209,6 +207,8 @@
             <filename>working_files/mushroom_sharp1.png</filename>
             <filename>working_files/booster1.png</filename>
             <filename>working_files/booster2.png</filename>
+            <filename>working_files/background_a.png</filename>
+            <filename>working_files/background_b.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

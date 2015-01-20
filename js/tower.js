@@ -383,11 +383,11 @@ Tower = gamecore.DualPooled('Tower',
 			
 			
 			if (this.character_class === 'bot1'){
-				createjs.Sound.play("nes_laser_shot", {loop:0,
+				createjs.Sound.play("laser-shot-1", {loop:0,
 				pan: dynamicPan,
 				volume:dynamicVolume});
 			} else if (this.character_class === 'stalagmite'){
-				createjs.Sound.play("nes_laser_shot2", {loop:0, 
+				createjs.Sound.play("laser-shot-2", {loop:0, 
 				pan: dynamicPan,
 				volume:dynamicVolume});
 			}	
@@ -650,10 +650,10 @@ Tower = gamecore.DualPooled('Tower',
 	 	if (this.boosting == true){
 	 		this.level.makeBooster(1, this.pos.x, this.pos.y, this.vel.x, this.vel.y, this.character_class, (this.body.texture.width/2)*this.body.scale.x);	
 	 		
-	 			
-	 		if ((this.age % 8) == 0){
-	 			createjs.Sound.play("blurm", {loop:0,	volume:0.5});	
-	 		}
+	 			// Engine Idle
+	 				 		if ((this.age % 8) == 0){
+					 			createjs.Sound.play("engine-rumble", {loop:0,	volume:0.2});	
+					 		}
 	 		
 	 	}
  	},
