@@ -116,7 +116,7 @@ Level.prototype.buildBackground = function()
 	
 	
 	layerTop = new PIXI.Sprite;
-	layerTop.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerTop.setTexture(PIXI.Texture.fromFrame("background_a.png"));
 	layerTop.scale.x = 1.2;
 	layerTop.scale.y = layerTop.scale.x
 	layerTop.alpha = 0.08;
@@ -129,7 +129,7 @@ Level.prototype.buildBackground = function()
 	this.space_rubble.addChild(layerTop);
 	
 	layerMid = new PIXI.Sprite;
-	layerMid.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerMid.setTexture(PIXI.Texture.fromFrame("background_a.png"));
 	layerMid.scale.x = 1;
 	layerMid.scale.y = layerMid.scale.x
 	layerMid.alpha = 0.01;
@@ -138,7 +138,7 @@ Level.prototype.buildBackground = function()
 	this.space_rubble_deeper.addChild(layerMid);
 	
 	layerBottom = new PIXI.Sprite;
-	layerBottom.setTexture(PIXI.Texture.fromFrame("background_b.png"));
+	layerBottom.setTexture(PIXI.Texture.fromFrame("background_a.png"));
 	layerBottom.scale.x = 0.6;
 	layerBottom.scale.y = layerBottom.scale.x
 	layerBottom.alpha = 0.02;
