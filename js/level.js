@@ -105,7 +105,7 @@ Level.prototype.buildBackground = function()
 	this.space_rubble_deeper = new PIXI.SmaatObjectContainer();
 	this.space_rubble_deeper_deeper = new PIXI.SmaatObjectContainer(); 
 	
-	layerPlatform = new PIXI.Sprite;
+	/*layerPlatform = new PIXI.Sprite;
 	layerPlatform.setTexture(PIXI.Texture.fromFrame("platform.png"));
 	layerPlatform.scale.x = 1;
 	layerPlatform.scale.y = layerPlatform.scale.x
@@ -113,39 +113,82 @@ Level.prototype.buildBackground = function()
 	layerPlatform.position.x = -(this.map_width/4)*layerPlatform.scale.x + 775;
 	layerPlatform.position.y = -(this.map_height/4)*layerPlatform.scale.y + 788;
 	this.space_platform.addChild(layerPlatform);
-	
-	
+	*/
+	/*this.normal_colorMatrix =  [
+    		1,0,0,0,
+		    0,1,0,0,
+		    0,0,1,0,
+		    0,0,0,1
+  		];
+
+  		this.white_colorMatrix =  [
+    		1,0,0,1,
+		    0,1,0,1,
+		    0,0,1,1,
+		    0,0,0,1
+  		];
+
+	this.layerTop_filter = new PIXI.ColorMatrixFilter();
+  	this.layerTop_filter.matrix = this.normal_colorMatrix;
+  		
+  	this.layerTop.filters = [this.layerTop_filter];*/
+
+  	//0x111d3a
 	layerTop = new PIXI.Sprite;
-	layerTop.setTexture(PIXI.Texture.fromFrame("background_a.png"));
-	layerTop.scale.x = 1.2;
+	layerTop.setTexture(PIXI.Texture.fromFrame("background_black_dot.png"));
+	layerTop.scale.x = 0.5;
 	layerTop.scale.y = layerTop.scale.x
-	layerTop.alpha = 0.08;
-	//layerTop.pivot.x = 0;
-	//layerTop.pivot.y = 0;
-	//layerTop.rotation = 90 * (Math.PI / 180);
-	//layerBottom.tint = 0xccccee;
-	layerTop.position.x = -(this.map_width/4)*layerTop.scale.x;
-	layerTop.position.y = -(this.map_height/4)*layerTop.scale.y;
-	this.space_rubble.addChild(layerTop);
+	layerTop.alpha = 1;
+	layerTop.position.x = -(layerTop.texture.width*layerTop.scale.x)/2;
+	layerTop.position.y = -(layerTop.texture.height*layerTop.scale.y)/2;
+	
+	var vibe = 0.07
+	colorMatrix =  [
+    		1,0,0,0.0666666667+vibe,
+		    0,1,0,0.11372549+vibe,
+		    0,0,1,0.22745098+vibe,
+		    0,0,0,1
+  	];
+
+	layerTop_filter = new PIXI.ColorMatrixFilter();
+  	layerTop_filter.matrix = colorMatrix;
+  	layerTop.filters = [layerTop_filter];
+
+  	this.space_rubble.addChild(layerTop);
+	
+
 	
 	layerMid = new PIXI.Sprite;
 	layerMid.setTexture(PIXI.Texture.fromFrame("background_a.png"));
 	layerMid.scale.x = 1;
 	layerMid.scale.y = layerMid.scale.x
-	layerMid.alpha = 0.01;
+	layerMid.alpha = 1;
 	layerMid.position.x = -(this.map_width/4)*layerMid.scale.x;
 	layerMid.position.y = -(this.map_height/4)*layerMid.scale.y;
+	
+	var vibe = 0.07
+	colorMatrix =  [
+    		1,0,0,0.0666666667+vibe,
+		    0,1,0,0.11372549+vibe,
+		    0,0,1,0.22745098+vibe,
+		    0,0,0,1
+  	];
+
+	layerTop_filter = new PIXI.ColorMatrixFilter();
+  	layerTop_filter.matrix = colorMatrix;
+  	layerTop.filters = [layerTop_filter];
+
 	this.space_rubble_deeper.addChild(layerMid);
 	
 	layerBottom = new PIXI.Sprite;
 	layerBottom.setTexture(PIXI.Texture.fromFrame("background_a.png"));
-	layerBottom.scale.x = 0.6;
+	layerBottom.scale.x = 0.8;
 	layerBottom.scale.y = layerBottom.scale.x
-	layerBottom.alpha = 0.02;
+	layerBottom.alpha = 1;
 	layerBottom.position.x = -(this.map_width/4)*layerBottom.scale.x;
 	layerBottom.position.y = -(this.map_height/4)*layerBottom.scale.y;
 
-	this.space_rubble_deeper_deeper.addChild(layerBottom);
+	//this.space_rubble_deeper_deeper.addChild(layerBottom);
 	
 	
 	this.background_layer.addChild(this.space_rubble_deeper_deeper);
@@ -258,14 +301,14 @@ Level.prototype.makeWeaponFlames = function(amount, x, y, tx, ty, tcharacter_cla
 Level.prototype.doLevel = function()
 {
 	
-	this.space_rubble_deeper_deeper.position.x = this.player.pos.x*0.95;
-	this.space_rubble_deeper_deeper.position.y = this.player.pos.y*0.95;
+	this.space_rubble_deeper_deeper.position.x = this.player.pos.x*1;
+	this.space_rubble_deeper_deeper.position.y = this.player.pos.y*1;
 	
-	this.space_rubble_deeper.position.x = this.player.pos.x*0.80;
-	this.space_rubble_deeper.position.y = this.player.pos.y*0.80;
+	this.space_rubble_deeper.position.x = this.player.pos.x*0.90;
+	this.space_rubble_deeper.position.y = this.player.pos.y*0.90;
 	
-	this.space_rubble.position.x = this.player.pos.x*0.5;
-	this.space_rubble.position.y = this.player.pos.y*0.5;
+	this.space_rubble.position.x = this.player.pos.x*0.7;
+	this.space_rubble.position.y = this.player.pos.y*0.7;
 	
 	this.space_platform.position.x = this.player.pos.x*0;
 	this.space_platform.position.y = this.player.pos.y*0;

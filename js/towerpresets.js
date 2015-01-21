@@ -12,8 +12,8 @@ BASICBOT = {
  	"damage": 35,
  	"fullenergy": 100,
  	"energyrecharge": 2,
- 	"magnetic_charge": -1.0,
- 	"magnetic_range": 250,
+ 	"magnetic_charge": -0.5,
+ 	"magnetic_range": 50,
  	"magnetic_inner_range": 30,
 
 

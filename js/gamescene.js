@@ -8,7 +8,7 @@ GameScene = function(stage)
     this.colidables_layer = new PIXI.SmaatObjectContainer();
     this.effects_layer = new PIXI.SmaatObjectContainer();
     
-    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"4");
+    this.level = new Level(this.effects_layer,this.colidables_layer,this.background_layer,"3");
 		
 		// ?? Refer to MusicVolume from gresher?		
     gresher.music = createjs.Sound.play("music-1", {loop:-1,volume: 0});

@@ -259,7 +259,7 @@ Tower = gamecore.DualPooled('Tower',
 			var texture = PIXI.Texture.fromFrame("mushroom1.png");
 	 		this.body.setTexture(texture);
 	    	
-	    	this.body.scale.x = 0.25 + (0.10 * Math.random());
+	    	this.body.scale.x = 0.20 + (0.07 * Math.random());
 	 		this.body.scale.y = this.body.scale.x;
 			
 			this.body.position.x = -((texture.width*this.body.scale.x)/2);
@@ -271,46 +271,6 @@ Tower = gamecore.DualPooled('Tower',
 
 
 		break;
-	
-
-		case "jelly" : //getGrom
-
-			var texture = texturegroups.getGrom();
-	 		this.body.setTexture(texture);
-	    	
-	 		this.body.scale.x = 0.25;
-	 		this.body.scale.y = 0.25;
-			
-			this.body.position.x = -((texture.width*this.body.scale.x)/2);
-	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
-	 		
-	 		this.towerbody.rotation = Math.PI;
-	 		this.towerbody.addChild(this.body);
-
-	 		this.can_push_pull_me.push("mushroom"); 		
-
-
-		break;
-
-		case "stalagmite" :	
-
-			var texture = PIXI.Texture.fromFrame("clawbot.png");
-	 		this.body.setTexture(texture);
-	    	
-	 		this.body.scale.x = 0.25;
-	 		this.body.scale.y = 0.25;
-			
-			this.body.position.x = -((texture.width*this.body.scale.x)/2);
-	 		this.body.position.y = -((texture.height*this.body.scale.y)/2);
-
-	 		this.towerbody.rotation = Math.PI;
-	 		this.towerbody.addChild(this.body);
-
-	 			 		
-
-			break;			
-	
-		
 
 		case "bromite" :	
 
